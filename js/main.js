@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Typewriter Animation ---
     const typewriterElement = document.getElementById('typewriter');
     if (typewriterElement) {
-        const words = ["Full Stack Junior", "Développeur PHP", "Expert Laravel", "Passionné Web"];
+        const words = ["Full Stack Junior", "Développeur PHP"];
         let wordIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
