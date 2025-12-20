@@ -221,24 +221,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Typewriter Animation ---
     const typewriterElement = document.getElementById('typewriter');
     if (typewriterElement) {
-        const textToType = "Full Stack Junior";
+        const words = ["Full Stack Junior", "Développeur PHP", "Expert Laravel", "Passionné Web"];
+        let wordIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
 
         function typeWriter() {
-            const currentText = textToType;
+            const currentWord = words[wordIndex];
 
-            if (!isDeleting && charIndex < currentText.length) {
-                typewriterElement.textContent += currentText.charAt(charIndex);
+            if (!isDeleting && charIndex < currentWord.length) {
+                typewriterElement.textContent += currentWord.charAt(charIndex);
                 charIndex++;
                 setTimeout(typeWriter, 100);
             } else if (isDeleting && charIndex > 0) {
-                typewriterElement.textContent = currentText.substring(0, charIndex - 1);
+                typewriterElement.textContent = currentWord.substring(0, charIndex - 1);
                 charIndex--;
                 setTimeout(typeWriter, 50);
             } else {
-                isDeleting = !isDeleting;
-                setTimeout(typeWriter, isDeleting ? 2000 : 500);
+                if (!isDeleting) {
+                    isDeleting = true;
+                    setTimeout(typeWriter, 2000);
+                } else {
+                    isDeleting = false;
+                    wordIndex = (wordIndex + 1) % words.length;
+                    setTimeout(typeWriter, 500);
+                }
             }
         }
         setTimeout(typeWriter, 1000);
