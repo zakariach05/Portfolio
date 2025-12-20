@@ -90,6 +90,23 @@ input:-webkit-autofill:active {
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
+
 .custom-btn-cv i {
     margin-right: 10px !important;
+}
+
+/* Logo 05 Styles */
+#logo-05 {
+    color: white !important;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.3); /* Visibility in Light Mode */
+    transition: all 0.3s ease;
+}
+
+.dark #logo-05 {
+    text-shadow: none;
+}
+
+/* Custom Cursor Animation */
+.border-transparent {
+    border-color: transparent !important;
 }

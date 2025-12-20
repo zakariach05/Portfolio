@@ -138,17 +138,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Navbar Brand Animation (ZC.) ---
-    const brandLogo = document.querySelector('nav a.text-2xl');
-    if (brandLogo) {
-        // Initial entrance
+    const brandLogo = document.querySelector('nav a.group');
+    const logo05 = document.getElementById('logo-05');
+
+    if (brandLogo && logo05) {
+        // Initial entrance for ZC.
         anime({
-            targets: brandLogo,
+            targets: 'nav a.group span:first-child',
             translateY: [-20, 0],
             opacity: [0, 1],
             duration: 1000,
             delay: 200,
-            easing: 'easeOutElastic(1, .8)'
+            easing: 'easeOutElastic(1, .8)',
+            complete: function () {
+                // Start typing "05" after "ZC." appears
+                typeLogo05();
+            }
         });
+
+        function typeLogo05() {
+            const text = "05";
+            let i = 0;
+            logo05.textContent = "";
+
+            // Cursor flicker effect
+            const cursorInterval = setInterval(() => {
+                logo05.classList.toggle('border-transparent');
+            }, 400);
+
+            const typingInterval = setInterval(() => {
+                if (i < text.length) {
+                    logo05.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                    // Wait a bit then remove the cursor
+                    setTimeout(() => {
+                        clearInterval(cursorInterval);
+                        logo05.classList.remove('border-r-2');
+                        logo05.classList.remove('pr-0.5');
+                    }, 1500);
+                }
+            }, 300); // Slow typing for "05"
+        }
 
         // Hover effect
         brandLogo.addEventListener('mouseenter', () => {
