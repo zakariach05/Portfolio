@@ -445,43 +445,68 @@ document.addEventListener('DOMContentLoaded', () => {
             await new Promise(resolve => setTimeout(resolve, 1000));
 
             try {
-                // 1. Try to send to PHP
-                const response = await fetch(form.action, {
+                // 1. Send to local PHP script
+                const response = await fetch('./php/contact.php', {
                     method: 'POST',
                     body: formData
                 });
 
+                // Get raw text first to debug if JSON parsing fails
+                const responseText = await response.text();
+                let result;
+
+                try {
+                    result = JSON.parse(responseText);
+                } catch (e) {
+                    console.error("Réponse serveur non-JSON:", responseText);
+                    // Check if the response contains the success message despite warnings
+                    if (responseText.includes("enregistré avec succès")) {
+                        showSuccess("Message enregistré ! (Note: Des avertissements PHP sont apparus, voir console)");
+                        return; // Stop here, success handled
+                    }
+                    throw new Error("Le serveur a renvoyé une réponse invalide. Vérifiez messages.txt ou la console.");
+                }
+
                 // 2. Check if we got a valid response
                 if (response.ok) {
-                    const text = await response.text();
-                    // Sometimes servers return the PHP code itself if PHP is not enabled
-                    if (text.includes('<?php') || text.includes('Accès interdit')) {
-                        throw new Error("PHP non exécuté");
-                    }
-                    showSuccess(text || "Message envoyé avec succès !");
+                    showSuccess(result.message || "Message envoyé avec succès !");
                 } else {
-                    // Check for 405 Method Not Allowed (common on static servers)
-                    if (response.status === 405) {
-                        throw new Error("Serveur statique détecté");
+                    if (response.status === 422 || response.status === 400) {
+                        // Erreurs de validation
+                        let errorDetails = result.message || "Veuillez vérifier vos entrées.";
+                        throw new Error(errorDetails);
                     }
-                    throw new Error("Erreur serveur " + response.status);
+                    throw new Error(result.message || "Erreur serveur " + response.status);
                 }
             } catch (error) {
-                console.warn("Contact form fallback triggered:", error);
+                console.error("Erreur d'envoi:", error);
 
-                // FALLBACK SUCCESS MODE
-                // Since this is likely a portfolio demo without a real backend setup yet,
-                // we want to give the user a positive experience rather than a broken error.
-
-                let fallbackMessage = "Message simulé (Mode Démo) !";
+                let displayMessage = error.message;
 
                 if (window.location.protocol === 'file:') {
-                    fallbackMessage = "Mode Démo : Message simulé (Fichier local)";
-                } else {
-                    fallbackMessage = "Message envoyé ! (Simulation car serveur PHP absent)";
+                    displayMessage = "Erreur : Impossible d'utiliser PHP via le protocole file://. Utilisez un serveur local (localhost).";
+                } else if (error.message.includes("Unexpected token")) {
+                    displayMessage = "Erreur technique : Réponse du serveur invalide (JSON malformé).";
                 }
 
-                showSuccess(fallbackMessage, "text-amber-500");
+                // Show error message
+                formStatus.textContent = displayMessage;
+                formStatus.className = "text-sm text-center mt-4 text-red-500 font-medium";
+                formStatus.classList.remove('hidden');
+                formStatus.style.opacity = 1;
+
+                // Hide after 6 seconds
+                setTimeout(() => {
+                    anime({
+                        targets: formStatus,
+                        opacity: 0,
+                        duration: 500,
+                        complete: function () {
+                            formStatus.classList.add('hidden');
+                            formStatus.style.opacity = 1;
+                        }
+                    });
+                }, 6000);
 
             } finally {
                 btn.innerHTML = originalBtnText;
