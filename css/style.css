@@ -173,3 +173,247 @@ input:-webkit-autofill:active {
 .dark .tech-item:hover .tech-label {
     color: #60a5fa;
 }
+
+/* --- New Modern Pill Navbar --- */
+#main-header {
+    position: relative;
+    width: 100%;
+    z-index: 1000;
+    background: transparent;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+}
+
+#main-header>* {
+    pointer-events: auto;
+    /* Re-enable clicks for the logo, navbar, and buttons */
+}
+
+.navbar-pill-wrapper {
+    position: relative;
+    z-index: 1000;
+    width: auto;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar-pill {
+    position: relative;
+    padding: 2px;
+    border-radius: 999px;
+    background: transparent;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-pill::before {
+    content: '';
+    position: absolute;
+    top: -150%;
+    left: -150%;
+    width: 400%;
+    height: 400%;
+    background: conic-gradient(from 0deg,
+            transparent 0%,
+            #3b82f6 10%,
+            #9333ea 20%,
+            #3b82f6 30%,
+            transparent 40%,
+            transparent 100%);
+    animation: rotate-border 4s linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes rotate-border {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(0, 0) rotate(360deg);
+    }
+}
+
+.navbar-pill-inner {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 999px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+    .navbar-pill-inner {
+        padding: 10px 24px;
+        gap: 2rem;
+    }
+}
+
+.dark .navbar-pill-inner {
+    background: rgba(15, 23, 42, 0.7);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Hover & Scale Effect */
+.navbar-pill-wrapper:hover .navbar-pill {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Nav Link Item Styles (+3px) */
+.nav-link-item {
+    font-size: 14px;
+    /* Base mobile size approx 11+3 */
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+    .nav-link-item {
+        font-size: 17px;
+        /* desktop size 14+3 */
+    }
+}
+
+/* Hover effect on links */
+.nav-link-item:hover {
+    transform: translateY(-1px);
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+/* External Controls Styles */
+.navbar-external-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 1000;
+}
+
+.navbar-external-controls a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#theme-toggle {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#theme-toggle:hover {
+    transform: rotate(15deg) scale(1.1);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.dark #theme-toggle:hover {
+    box-shadow: 0 0 20px rgba(250, 204, 21, 0.2);
+}
+
+/* Utility to hide horizontal scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Mobile Menu Overlay Removed */
+
+@media (max-width: 768px) {
+    #main-header {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .navbar-pill-wrapper {
+        position: fixed;
+        bottom: 20px;
+        /* Positioned at the bottom as requested */
+        top: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 95%;
+        z-index: 1001;
+        max-width: 500px;
+    }
+
+    .navbar-pill {
+        width: 100%;
+    }
+
+    .navbar-pill-inner {
+        width: 100%;
+        padding: 12px 15px;
+        justify-content: center;
+        background: rgba(15, 23, 42, 0.8) !important;
+        /* Darker for better visibility at bottom */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar-external-controls {
+        width: auto;
+        gap: 10px;
+    }
+
+    .navbar-external-controls a {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    /* Hide text on very small screens for buttons */
+    .navbar-external-controls a span {
+        display: none;
+    }
+}
+
+/* Back to Top Button */
+#scroll-top {
+    position: fixed;
+    bottom: 90px;
+    /* Moved up to not overlap bottom navbar on mobile */
+    right: 20px;
+    z-index: 999;
+    width: 45px;
+    height: 45px;
+    background: #3b82f6;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+}
+
+@media (min-width: 768px) {
+    #scroll-top {
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+    }
+}
+
+#scroll-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#scroll-top:hover {
+    background: #2563eb;
+    transform: scale(1.1);
+}

@@ -27,36 +27,45 @@ if (empty($name) OR empty($message) OR !filter_var($email, FILTER_VALIDATE_EMAIL
 $recipient = "chamekhzakaria95@gmail.com";
 
 // Email content
-$email_subject = "Nouveau contact portfolio : $subject";
-$email_content = "Nom: $name\n";
-$email_content .= "Email: $email\n\n";
-$email_content .= "Message:\n$message\n";
+$email_subject = "🚀 Nouveau Message Portfolio : $subject";
+$email_content = "Vouz avez reçu un nouveau message depuis votre portfolio.\n\n";
+$email_content .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+$email_content .= "👤 Nom: $name\n";
+$email_content .= "📧 Email: $email\n";
+$email_content .= "📝 Sujet: $subject\n";
+$email_content .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+$email_content .= "💬 Message:\n$message\n\n";
+$email_content .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
 
-// Email headers
-$headers = "From: $name <$email>";
+// Email headers (Modern and less likely to be marked as spam)
+$headers = "From: Portfolio Contact <contact@zakariach05.com>\r\n";
+$headers .= "Reply-To: $email\r\n";
+$headers .= "MIME-Version: 1.0\r\n";
+$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+$headers .= "X-Mailer: PHP/" . phpversion();
 
 // Attempt to send email
-// We use the @ operator to suppress warnings if mail server is not configured
 $mail_sent = @mail($recipient, $email_subject, $email_content, $headers);
 
 if ($mail_sent) {
+    // Optional: Send confirmation email to the user
+    $user_subject = "Confirmation de réception : " . $name;
+    $user_content = "Bonjour $name,\n\nMerci de m'avoir contacté ! J'ai bien reçu votre message concernant '$subject' et je vous répondrai dès que possible.\n\nCordialement,\nZakaria Chamekh";
+    $user_headers = "From: Zakaria Chamekh <chamekhzakaria95@gmail.com>\r\n";
+    @mail($email, $user_subject, $user_content, $user_headers);
+
     http_response_code(200);
-    echo "Merci ! Votre message a été envoyé.";
+    echo "Succès : Votre message a été envoyé directement à Zakaria !";
 } else {
     // FALLBACK FOR LOCALHOST / DEV ENVIRONMENTS
-    // If mail() fails (common on local WAMP/XAMPP without SMTP config), 
-    // we log the message to a text file instead of failing.
-    
     $log_file = "../messages.txt";
     $log_entry = "--- Nouveau Message [" . date("Y-m-d H:i:s") . "] ---\n";
     $log_entry .= "Nom: $name\nEmail: $email\nSujet: $subject\nMessage: $message\n";
     $log_entry .= "-------------------------------------------\n\n";
     
-    // Write to file
     file_put_contents($log_file, $log_entry, FILE_APPEND);
 
-    // Return 200 OK so the frontend shows success
     http_response_code(200);
-    echo "Merci ! Votre message a été bien enregistré (Mode Démo/Local).";
+    echo "Note : Le message a été sauvegardé en local (Mode Démo). L'email sera envoyé une fois le site hébergé en ligne !";
 }
 ?>

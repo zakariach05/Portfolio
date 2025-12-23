@@ -32,78 +32,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Anime.js animation for theme icon
     function animateThemeIcon(mode) {
-        anime({
-            targets: [themeToggleBtn, mobileThemeToggleBtn],
-            rotate: '1turn',
-            duration: 800,
-            easing: 'easeInOutSine'
-        });
+        const targets = [];
+        if (themeToggleBtn) targets.push(themeToggleBtn);
+        if (mobileThemeToggleBtn) targets.push(mobileThemeToggleBtn);
+
+        if (targets.length > 0) {
+            anime({
+                targets: targets,
+                rotate: '1turn',
+                duration: 800,
+                easing: 'easeInOutSine'
+            });
+        }
     }
 
     if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
     if (mobileThemeToggleBtn) mobileThemeToggleBtn.addEventListener('click', toggleTheme);
 
 
-    // --- Mobile Menu Toggle ---
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileLinks = document.querySelectorAll('.mobile-link');
-
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-            const icon = mobileMenuBtn.querySelector('i');
-
-            // Simple icon swap
-            if (mobileMenu.classList.contains('hidden')) {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            } else {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-
-                // Anime.js entrance for menu items when opening
-                anime({
-                    targets: '.mobile-link',
-                    translateX: [-50, 0],
-                    opacity: [0, 1],
-                    delay: anime.stagger(100),
-                    easing: 'easeOutQuad'
-                });
-            }
-        });
-    }
-
-    mobileLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-            const icon = mobileMenuBtn.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-        });
-    });
-
-    // --- Navbar Scroll Effect ---
-    const navbar = document.getElementById('navbar');
-    if (navbar) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('shadow-lg');
-                // Check if dark mode is active to apply correct background
-                if (html.classList.contains('dark')) {
-                    navbar.classList.add('bg-slate-900/95');
-                    navbar.classList.remove('bg-white/90');
-                } else {
-                    navbar.classList.add('bg-white/95');
-                    navbar.classList.remove('bg-slate-900/90');
-                }
-            } else {
-                navbar.classList.remove('shadow-lg');
-                navbar.classList.remove('bg-slate-900/95');
-                navbar.classList.remove('bg-white/95');
-            }
-        });
-    }
+    // --- Mobile Menu Toggle (Removed: Links now always visible) ---
+    // --- Navbar Scroll Effect (Removed: Navbar is now part of the header and scrolls with the page) ---
 
 
     // --- GSAP Animations ---
@@ -138,13 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Navbar Brand Animation (ZC.) ---
-    const brandLogo = document.querySelector('nav a.group');
+    const brandLogo = document.querySelector('header a.group');
     const logo05 = document.getElementById('logo-05');
 
     if (brandLogo && logo05) {
         // Initial entrance for ZC.
         anime({
-            targets: 'nav a.group span:first-child',
+            targets: 'header a.group span:first-child',
             translateY: [-20, 0],
             opacity: [0, 1],
             duration: 1000,
@@ -538,6 +486,18 @@ document.addEventListener('DOMContentLoaded', () => {
             } finally {
                 btn.innerHTML = originalBtnText;
                 btn.disabled = false;
+            }
+        });
+    }
+
+    // --- Scroll to Top Visibility ---
+    const scrollTopBtn = document.getElementById('scroll-top');
+    if (scrollTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
             }
         });
     }
