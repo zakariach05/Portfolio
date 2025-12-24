@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggleBtn = document.getElementById('theme-toggle');
     const mobileThemeToggleBtn = document.getElementById('mobile-theme-toggle');
     const html = document.documentElement;
+    const brandLogo = document.querySelector('header a.group');
+    const logo05El = document.getElementById('logo-05');
 
     // Check for saved user preference, if any
     const savedTheme = localStorage.getItem('theme');
@@ -56,81 +58,125 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- GSAP Animations ---
 
-    if (document.querySelector('.hero-content h1')) {
-        const tl = gsap.timeline();
-        tl.from('.hero-content h1', {
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            ease: "power3.out"
-        })
-            .from('.hero-content h2', {
-                y: 30,
+    // --- Splash Screen Logic ---
+    const splashScreen = document.getElementById('splash-screen');
+    const splashLogo = document.getElementById('splash-logo');
+
+    function startHeroAnimations() {
+        if (document.querySelector('.hero-content h1')) {
+            const tl = gsap.timeline();
+            tl.from('.hero-content h1', {
+                y: 50,
                 opacity: 0,
-                duration: 0.8,
+                duration: 1,
                 ease: "power3.out"
-            }, "-=0.5")
-            .from('.hero-content p', {
-                y: 20,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power3.out"
-            }, "-=0.5")
-            .from('.hero-content div a', {
-                y: 20,
-                opacity: 0,
-                stagger: 0.2,
-                duration: 0.8,
-                ease: "power3.out"
-            }, "-=0.5");
+            })
+                .from('.hero-content h2', {
+                    y: 30,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power3.out"
+                }, "-=0.5")
+                .from('.hero-content p', {
+                    y: 20,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power3.out"
+                }, "-=0.5")
+                .from('.hero-content div a', {
+                    y: 20,
+                    opacity: 0,
+                    stagger: 0.2,
+                    duration: 0.8,
+                    ease: "power3.out"
+                }, "-=0.5");
+        }
+
+        // --- Navbar Brand Animation (ZC.) ---
+        const brandLogo = document.querySelector('header a.group');
+        const logo05 = document.getElementById('logo-05');
+
+        if (brandLogo && logo05) {
+            anime({
+                targets: 'header a.group span:first-child',
+                translateY: [-20, 0],
+                opacity: [0, 1],
+                duration: 1000,
+                delay: 200,
+                easing: 'easeOutElastic(1, .8)',
+                complete: function () {
+                    typeLogo05();
+                }
+            });
+        }
     }
 
-    // --- Navbar Brand Animation (ZC.) ---
-    const brandLogo = document.querySelector('header a.group');
-    const logo05 = document.getElementById('logo-05');
 
-    if (brandLogo && logo05) {
-        // Initial entrance for ZC.
-        anime({
-            targets: 'header a.group span:first-child',
-            translateY: [-20, 0],
-            opacity: [0, 1],
-            duration: 1000,
-            delay: 200,
-            easing: 'easeOutElastic(1, .8)',
-            complete: function () {
-                // Start typing "05" after "ZC." appears
-                typeLogo05();
+    if (splashScreen && splashLogo) {
+        document.body.style.overflow = 'hidden';
+
+        const splashTl = gsap.timeline({
+            onComplete: () => {
+                document.body.style.overflow = '';
+                startHeroAnimations();
             }
         });
 
-        function typeLogo05() {
-            const text = "05";
-            let i = 0;
-            logo05.textContent = "";
-
-            // Cursor flicker effect
-            const cursorInterval = setInterval(() => {
-                logo05.classList.toggle('border-transparent');
-            }, 400);
-
-            const typingInterval = setInterval(() => {
-                if (i < text.length) {
-                    logo05.textContent += text.charAt(i);
-                    i++;
-                } else {
-                    clearInterval(typingInterval);
-                    // Wait a bit then remove the cursor
-                    setTimeout(() => {
-                        clearInterval(cursorInterval);
-                        logo05.classList.remove('border-r-2');
-                        logo05.classList.remove('pr-0.5');
-                    }, 1500);
+        splashTl.from(splashLogo, {
+            scale: 0.8,
+            opacity: 0,
+            duration: 1,
+            ease: "back.out(1.7)"
+        })
+            .to(splashLogo, {
+                scale: 60,
+                opacity: 0,
+                duration: 1.2,
+                ease: "power4.in"
+            }, "+=0.8")
+            .to(splashScreen, {
+                opacity: 0,
+                duration: 0.8,
+                onComplete: () => {
+                    splashScreen.style.display = 'none';
                 }
-            }, 300); // Slow typing for "05"
-        }
+            }, "-=0.7");
+    } else {
+        startHeroAnimations();
+    }
 
-        // Hover effect
+
+
+    function typeLogo05() {
+        const logo05 = document.getElementById('logo-05');
+        if (!logo05) return;
+        const text = "05";
+        let i = 0;
+        logo05.textContent = "";
+
+        // Cursor flicker effect
+        const cursorInterval = setInterval(() => {
+            logo05.classList.toggle('border-transparent');
+        }, 400);
+
+        const typingInterval = setInterval(() => {
+            if (i < text.length) {
+                logo05.textContent += text.charAt(i);
+                i++;
+            } else {
+                clearInterval(typingInterval);
+                // Wait a bit then remove the cursor
+                setTimeout(() => {
+                    clearInterval(cursorInterval);
+                    logo05.classList.remove('border-r-2');
+                    logo05.classList.remove('pr-0.5');
+                }, 1500);
+            }
+        }, 300); // Slow typing for "05"
+    }
+
+    // Hover effect
+    if (brandLogo) {
         brandLogo.addEventListener('mouseenter', () => {
             anime({
                 targets: brandLogo,
@@ -608,15 +654,175 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Scroll to Top Visibility ---
+    // --- Scroll to Top Visibility & Progress ---
     const scrollTopBtn = document.getElementById('scroll-top');
-    if (scrollTopBtn) {
+    const progressCircle = document.querySelector('.progress-ring__circle');
+
+    if (scrollTopBtn && progressCircle) {
+        const radius = 22;
+        const circumference = radius * 2 * Math.PI;
+        progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+
         window.addEventListener('scroll', () => {
+            const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = Math.min(Math.max(window.scrollY / scrollTotal, 0), 1);
+            const offset = circumference - (scrollPercent * circumference);
+
+            // Update Progress Circle
+            progressCircle.style.strokeDashoffset = offset;
+
+            // Visibility Logic
             if (window.scrollY > 500) {
                 scrollTopBtn.classList.add('show');
+                scrollTopBtn.style.transform = `translateY(0)`;
             } else {
                 scrollTopBtn.classList.remove('show');
+                scrollTopBtn.style.transform = `translateY(20px)`;
             }
+
+            // Progressive Border / Color Change
+            if (scrollPercent > 0.95) {
+                progressCircle.style.stroke = '#0077ffff'; // Green at the bottom
+                progressCircle.style.strokeWidth = '4';
+            } else if (scrollPercent > 0.5) {
+                progressCircle.style.stroke = '#2141ceff'; // Purple in the middle
+                progressCircle.style.strokeWidth = '3.5';
+            } else {
+                progressCircle.style.stroke = '#2402e6ff'; // Blue at the top
+                progressCircle.style.strokeWidth = '3';
+            }
+        });
+    }
+
+
+    // --- Global Scroll Reveal Text Animation (GSAP) ---
+    const revealElements = document.querySelectorAll('.scroll-reveal-text');
+    revealElements.forEach(el => {
+        gsap.to(el, {
+            scrollTrigger: {
+                trigger: el,
+                start: "top 90%",
+                end: "bottom 20%",
+                scrub: 10, // Very slow
+            },
+            color: "var(--reveal-target)",
+            opacity: 1
+        });
+
+        const strongTags = el.querySelectorAll('strong');
+        if (strongTags.length > 0) {
+            gsap.to(strongTags, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%",
+                    end: "bottom 20%",
+                    scrub: 10,
+                },
+                color: "#10b981", // Green
+                fontWeight: "700"
+            });
+        }
+    });
+
+
+
+    // --- Custom Mouse Cursor Interaction ---
+    const cursor = document.querySelector('.custom-cursor');
+    const dot = document.querySelector('.cursor-dot');
+    const follower = document.querySelector('.cursor-follower');
+
+    if (cursor && dot && follower) {
+        let mouseX = 0;
+        let mouseY = 0;
+        let dotX = 0;
+        let dotY = 0;
+        let followerX = 0;
+        let followerY = 0;
+
+        // Easing factors
+        const dotEasing = 1;
+        const followerEasing = 0.15;
+
+        const moveCursor = (clientX, clientY) => {
+            mouseX = clientX;
+            mouseY = clientY;
+            cursor.style.opacity = '1';
+        };
+
+        window.addEventListener('mousemove', (e) => moveCursor(e.clientX, e.clientY));
+
+        // Mobile Touch Support
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                moveCursor(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 0) {
+                moveCursor(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+
+        function animateCursor() {
+            dotX += (mouseX - dotX) * dotEasing;
+            dotY += (mouseY - dotY) * dotEasing;
+            dot.style.left = `${dotX}px`;
+            dot.style.top = `${dotY}px`;
+
+            followerX += (mouseX - followerX) * followerEasing;
+            followerY += (mouseY - followerY) * followerEasing;
+            follower.style.left = `${followerX}px`;
+            follower.style.top = `${followerY}px`;
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Hover Effect using Event Delegation
+        const handleHover = (target) => {
+            cursor.classList.remove('active-project-view', 'active-link');
+
+            if (!target) return;
+
+            const projectCard = target.closest('.project-card');
+            const link = target.closest('a, button, .nav-link-item, .tech-item');
+
+            if (projectCard) {
+                // Any hover on the project card or its internal links shows "VIEW"
+                cursor.classList.add('active-project-view');
+            } else if (link) {
+                // Hovering any other interactive element
+                cursor.classList.add('active-link');
+            }
+        };
+
+        document.addEventListener('mouseover', (e) => handleHover(e.target));
+        document.addEventListener('mouseout', () => handleHover(null));
+
+        // Touch Interaction for mobile
+        document.addEventListener('touchstart', (e) => handleHover(e.target), { passive: true });
+        document.addEventListener('touchend', () => setTimeout(() => handleHover(null), 300), { passive: true });
+
+        // Click interaction for project cards
+        document.addEventListener('click', (e) => {
+            const projectCard = e.target.closest('.project-card');
+            if (projectCard) {
+                // Find the first link (usually the demo link) and navigate to it
+                const demoLink = projectCard.querySelector('a');
+                if (demoLink && !e.target.closest('a')) {
+                    window.open(demoLink.href, '_blank');
+                }
+            }
+        });
+
+
+        // Hide cursor when leaving window
+        document.addEventListener('mouseleave', () => {
+            cursor.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', () => {
+            cursor.style.opacity = '1';
         });
     }
 });

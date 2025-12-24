@@ -64,6 +64,16 @@
 <body
     class="bg-gray-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans overflow-x-hidden transition-colors duration-300 w-full">
 
+    <!-- Splash Screen -->
+    <div id="splash-screen"
+        class="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-slate-900 transition-opacity duration-700">
+        <div id="splash-logo" class="flex items-center text-4xl md:text-6xl font-bold">
+            <span
+                class="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent">ZC.</span>
+            <span class="text-blue-600 dark:text-white ml-2">05</span>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <!-- Header / Navigation Section -->
     <!-- Header / Navigation Section -->
@@ -101,17 +111,16 @@
                 <div class="navbar-pill-inner">
                     <div
                         class="flex items-center justify-center gap-4 sm:gap-6 lg:space-x-8 px-4 md:px-0 overflow-x-auto no-scrollbar">
-                        <a href="#home"
-                            class="hidden md:block nav-link-item hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 font-semibold whitespace-nowrap">Accueil</a>
-                        <a href="#about"
-                            class="nav-link-item hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 font-semibold whitespace-nowrap">À
-                            Propos</a>
-                        <a href="#skills"
-                            class="nav-link-item hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 font-semibold whitespace-nowrap">Compétences</a>
-                        <a href="#experience"
-                            class="nav-link-item hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 font-semibold whitespace-nowrap">Parcours</a>
-                        <a href="#projects"
-                            class="nav-link-item hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 font-semibold whitespace-nowrap">Projets</a>
+                        <a href="#home" class="hidden md:block nav-link-item font-semibold whitespace-nowrap"
+                            data-text="Accueil"><span>Accueil</span></a>
+                        <a href="#about" class="nav-link-item font-semibold whitespace-nowrap"
+                            data-text="À Propos"><span>À Propos</span></a>
+                        <a href="#skills" class="nav-link-item font-semibold whitespace-nowrap"
+                            data-text="Compétences"><span>Compétences</span></a>
+                        <a href="#experience" class="nav-link-item font-semibold whitespace-nowrap"
+                            data-text="Parcours"><span>Parcours</span></a>
+                        <a href="#projects" class="nav-link-item font-semibold whitespace-nowrap"
+                            data-text="Projets"><span>Projets</span></a>
                     </div>
                 </div>
             </nav>
@@ -138,6 +147,9 @@
 
         <!-- 3D Particles Container -->
         <div id="particles-container" class="absolute inset-0 w-full h-full -z-5 pointer-events-none"></div>
+
+
+
 
         <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div class="hero-content">
@@ -201,21 +213,22 @@
                 <div class="md:col-span-1 flex justify-center">
                     <div
                         class="w-64 h-64 bg-white dark:bg-slate-700 rounded-2xl overflow-hidden border-2 border-gray-100 dark:border-slate-600 rotate-3 shadow-xl transition-colors group">
-                        <img src="img/profile.jpg" alt="Zakaria Chamekh"
+                        <img src="img/apropos2.jpg" alt="Zakaria Chamekh"
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     </div>
                 </div>
                 <div class="md:col-span-2">
                     <h3 class="text-2xl font-bold mb-4 text-blue-600 dark:text-blue-400">Qui suis-je ?</h3>
-                    <p class="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-                        Développeur Full Stack junior basé à <strong
-                            class="text-slate-900 dark:text-white">Casablanca</strong>, je suis spécialisé dans les
-                        technologies modernes comme <strong class="text-slate-900 dark:text-white">React, Laravel et
+                    <p class="scroll-reveal-text mb-6 leading-relaxed">
+                        Développeur Full Stack junior basé à <strong>Casablanca</strong>, je suis spécialisé dans les
+                        technologies modernes comme <strong>React, Laravel et
                             WordPress</strong>.
                     </p>
-                    <p class="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-                        Motivé et autonome, j'ai acquis une précieuse expérience lors de mon stage chez Sparkvision, où
-                        j'ai pu perfectionner mes compétences en développement WordPress et en optimisation SEO. Je suis
+                    <p class="scroll-reveal-text mb-6 leading-relaxed">
+                        Motivé et autonome, j'ai acquis une précieuse expérience lors de mon stage chez
+                        <strong>Sparkvision</strong>, où
+                        j'ai pu perfectionner mes compétences en développement <strong>WordPress</strong> et en
+                        optimisation <strong>SEO</strong>. Je suis
                         constamment en veille technologique pour rester à jour avec les dernières tendances du web.
                     </p>
                     <div class="grid grid-cols-2 gap-4 mt-8">
@@ -594,10 +607,14 @@
                             <p class="text-slate-600 dark:text-slate-400 mt-1 mb-4">Sparkvision</p>
                             <ul
                                 class="list-disc list-outside ml-4 space-y-2 text-slate-600 dark:text-slate-300 text-sm">
-                                <li>Réalisation complète d’un site vitrine sous WordPress.</li>
-                                <li>Personnalisation de thème et intégration de plugins.</li>
-                                <li>Collaboration à distance et gestion de projet.</li>
-                                <li>Optimisation SEO de base pour le référencement.</li>
+                                <li class="scroll-reveal-text mb-2">Réalisation complète d’un <strong>site
+                                        vitrine</strong> sous <strong>WordPress</strong>.</li>
+                                <li class="scroll-reveal-text mb-2">Personnalisation de <strong>thème</strong> et
+                                    intégration de <strong>plugins</strong>.</li>
+                                <li class="scroll-reveal-text mb-2">Collaboration à <strong>distance</strong> et gestion
+                                    de <strong>projet</strong>.</li>
+                                <li class="scroll-reveal-text mb-2">Optimisation <strong>SEO</strong> de base pour le
+                                    référencement.</li>
                             </ul>
                         </div>
                     </div>
@@ -962,10 +979,23 @@
     <!-- Main JS -->
     <script src="js/main.js"></script>
     <script src="js/particles.js"></script>
-    <!-- Scroll to Top Button -->
-    <a href="#home" id="scroll-top" title="Retour en haut">
+    <!-- Scroll to Top Button with Progress -->
+    <a href="#home" id="scroll-top" class="scroll-top-progress" title="Retour en haut">
+        <svg class="progress-ring" width="50" height="50">
+            <circle class="progress-ring__circle" stroke="currentColor" stroke-width="3" fill="transparent" r="22"
+                cx="25" cy="25" />
+        </svg>
         <i class="fas fa-arrow-up"></i>
     </a>
+
+
+    <!-- Custom Mouse Cursor -->
+    <div class="custom-cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-follower">
+            <span class="view-text">View</span>
+        </div>
+    </div>
 
 </body>
 
