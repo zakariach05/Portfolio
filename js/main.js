@@ -515,6 +515,99 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Timeline Scroll Animation (Education) ---
+    const eduTimeline = document.getElementById('education-timeline');
+    const eduBall = document.getElementById('education-scroll-ball');
+
+    if (eduTimeline && eduBall) {
+        const eduAnimation = anime({
+            targets: eduBall,
+            top: ['0%', '100%'],
+            translateY: ['0px', '-20px'], // Subtract height at end to stay on line
+            autoplay: false,
+            easing: 'linear',
+            duration: 1000
+        });
+
+        ScrollTrigger.create({
+            trigger: eduTimeline,
+            start: "top 60%",
+            end: "bottom 60%",
+            scrub: true,
+            onUpdate: (self) => {
+                eduAnimation.seek(self.progress * 1000);
+            }
+        });
+    }
+
+    // --- Timeline Scroll Animation (Experience) ---
+    const expTimeline = document.getElementById('experience-timeline');
+    const expBall = document.getElementById('experience-scroll-ball');
+
+    if (expTimeline && expBall) {
+        const expAnimation = anime.timeline({
+            autoplay: false,
+            duration: 1000,
+            easing: 'linear'
+        }).add({
+            targets: expBall,
+            top: ['0%', '100%'],
+            translateY: ['0px', '-20px']
+        });
+
+        ScrollTrigger.create({
+            trigger: expTimeline,
+            start: "top 60%",
+            end: "bottom 60%",
+            scrub: true,
+            onUpdate: (self) => {
+                expAnimation.seek(self.progress * 1000);
+            }
+        });
+    }
+
+    // --- Show More Projects ---
+    const showMoreBtn = document.getElementById('show-more-projects');
+    const showMoreText = document.getElementById('show-more-text');
+    const showMoreIcon = document.getElementById('show-more-icon');
+
+    if (showMoreBtn) {
+        showMoreBtn.addEventListener('click', () => {
+            if (showMoreText.textContent === "Voir plus") {
+                const hiddenProjects = document.querySelectorAll('.project-card.hidden');
+                hiddenProjects.forEach((project, index) => {
+                    project.classList.remove('hidden');
+                    project.classList.add('extra-project');
+
+                    anime({
+                        targets: project,
+                        opacity: [0, 1],
+                        translateY: [50, 0],
+                        rotateX: [20, 0],
+                        scale: [0.9, 1],
+                        duration: 800,
+                        easing: 'easeOutExpo',
+                        delay: index * 100,
+                        complete: () => {
+                            project.style.transform = '';
+                        }
+                    });
+                });
+                showMoreText.textContent = "Voir moins";
+                showMoreIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+            } else {
+                const extraProjects = document.querySelectorAll('.project-card.extra-project');
+                extraProjects.forEach((project) => {
+                    project.classList.add('hidden');
+                    project.classList.remove('extra-project');
+                });
+                showMoreText.textContent = "Voir plus";
+                showMoreIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+
     // --- Scroll to Top Visibility ---
     const scrollTopBtn = document.getElementById('scroll-top');
     if (scrollTopBtn) {
@@ -526,5 +619,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
 });

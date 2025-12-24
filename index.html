@@ -62,13 +62,13 @@
 </head>
 
 <body
-    class="bg-gray-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans overflow-x-hidden transition-colors duration-300">
+    class="bg-gray-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans overflow-x-hidden transition-colors duration-300 w-full">
 
     <!-- Navigation -->
     <!-- Header / Navigation Section -->
     <!-- Header / Navigation Section -->
     <header
-        class="w-full py-4 md:py-6 px-4 md:px-12 flex flex-wrap md:flex-nowrap items-center justify-between gap-y-4 md:gap-x-12 relative z-50 transition-all duration-500"
+        class="w-full py-4 md:py-6 px-4 md:px-12 flex flex-wrap md:flex-nowrap items-center justify-between gap-y-4 md:gap-x-12 absolute top-0 z-50 transition-all duration-500"
         id="main-header">
 
         <!-- Logo (Left on all screens) -->
@@ -102,7 +102,7 @@
                     <div
                         class="flex items-center justify-center gap-4 sm:gap-6 lg:space-x-8 px-4 md:px-0 overflow-x-auto no-scrollbar">
                         <a href="#home"
-                            class="nav-link-item hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 font-semibold whitespace-nowrap">Accueil</a>
+                            class="hidden md:block nav-link-item hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 font-semibold whitespace-nowrap">Accueil</a>
                         <a href="#about"
                             class="nav-link-item hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 font-semibold whitespace-nowrap">À
                             Propos</a>
@@ -127,7 +127,7 @@
 
     <!-- Hero Section -->
     <section id="home"
-        class="min-h-screen flex items-center pt-32 md:pt-10 relative overflow-hidden bg-white dark:bg-slate-900 transition-colors duration-300">
+        class="min-h-screen flex items-center pt-32 md:pt-32 relative overflow-hidden bg-white dark:bg-slate-900 transition-colors duration-300">
         <!-- Background Elements -->
         <div
             class="absolute top-20 right-0 w-72 h-72 bg-purple-500/10 dark:bg-purple-600/20 rounded-full blur-3xl -z-10 animate-blob">
@@ -157,10 +157,10 @@
                     Développeur passionné par la création d’applications web performantes, modernes et intuitives.
                     Transformons vos idées en réalité digitale.
                 </p>
-                <div class="flex flex-wrap gap-4" style="margin-top: 20px;">
+                <div class="flex flex-wrap gap-4" style="margin-top: 10px;">
                     <a href="Zakaria_Chamekh.pdf" download="CV_Zakaria_Chamekh.pdf"
                         style="display: inline-flex; align-items: center; background-color: #059669; color: white; padding: 12px 30px; border-radius: 8px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;"
-                        onmouseover="this.style.backgroundColor='#047857'; this.style.transform='translateY(-2px)'"
+                        onmouseover="this.style.backgroundColor='#047857'; this.style.transform='translateY(-1px)'"
                         onmouseout="this.style.backgroundColor='#059669'; this.style.transform='translateY(0)'">
                         <i class="fas fa-download" style="margin-right: 10px;"></i> Télécharger mon CV
                     </a>
@@ -535,9 +535,15 @@
                     <h3 class="text-2xl font-bold mb-8 flex items-center text-slate-800 dark:text-white">
                         <i class="fas fa-user-graduate text-blue-500 mr-3"></i> Formation
                     </h3>
-                    <div class="relative border-l-2 border-gray-300 dark:border-slate-700 ml-3 space-y-12">
+                    <div id="education-timeline"
+                        class="relative border-l-2 border-gray-300 dark:border-slate-700 ml-3 space-y-12">
+                        <!-- Scroll Animated Ball -->
+                        <div id="education-scroll-ball"
+                            class="absolute -left-[11px] top-0 w-5 h-5 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50 z-10 pointer-events-none">
+                        </div>
+
                         <div class="relative pl-8">
-                            <div class="absolute -left-[9px] top-0 w-4 h-4 bg-blue-500 rounded-full"></div>
+                            <div class="absolute -left-[9px] top-0 w-4 h-4 bg-blue-500/30 rounded-full"></div>
                             <span class="text-sm text-blue-600 dark:text-blue-400 font-medium">2025 – 2026 (En
                                 cours)</span>
                             <h4 class="text-xl font-bold mt-1 text-slate-800 dark:text-white">Licence en Développement
@@ -546,7 +552,8 @@
                         </div>
 
                         <div class="relative pl-8">
-                            <div class="absolute -left-[9px] top-0 w-4 h-4 bg-gray-400 dark:bg-slate-600 rounded-full">
+                            <div
+                                class="absolute -left-[9px] top-0 w-4 h-4 bg-gray-400/30 dark:bg-slate-600/30 rounded-full">
                             </div>
                             <span class="text-sm text-slate-500 dark:text-slate-400 font-medium">2023 – 2025</span>
                             <h4 class="text-xl font-bold mt-1 text-slate-800 dark:text-white">Diplôme Développement
@@ -555,7 +562,8 @@
                         </div>
 
                         <div class="relative pl-8">
-                            <div class="absolute -left-[9px] top-0 w-4 h-4 bg-gray-400 dark:bg-slate-600 rounded-full">
+                            <div
+                                class="absolute -left-[9px] top-0 w-4 h-4 bg-gray-400/30 dark:bg-slate-600/30 rounded-full">
                             </div>
                             <span class="text-sm text-slate-500 dark:text-slate-400 font-medium">2023</span>
                             <h4 class="text-xl font-bold mt-1 text-slate-800 dark:text-white">Baccalauréat Sciences
@@ -570,9 +578,15 @@
                     <h3 class="text-2xl font-bold mb-8 flex items-center text-slate-800 dark:text-white">
                         <i class="fas fa-briefcase text-purple-500 mr-3"></i> Expérience
                     </h3>
-                    <div class="relative border-l-2 border-gray-300 dark:border-slate-700 ml-3">
+                    <div id="experience-timeline"
+                        class="relative border-l-2 border-gray-300 dark:border-slate-700 ml-3">
+                        <!-- Scroll Animated Ball (Purple) -->
+                        <div id="experience-scroll-ball"
+                            class="absolute -left-[11px] top-0 w-5 h-5 bg-purple-500 rounded-full shadow-lg shadow-purple-500/50 z-10 pointer-events-none">
+                        </div>
+
                         <div class="relative pl-8">
-                            <div class="absolute -left-[9px] top-0 w-4 h-4 bg-purple-500 rounded-full"></div>
+                            <div class="absolute -left-[9px] top-0 w-4 h-4 bg-purple-500/30 rounded-full"></div>
                             <span class="text-sm text-purple-600 dark:text-purple-400 font-medium">Mars 2025
                                 (Stage)</span>
                             <h4 class="text-xl font-bold mt-1 text-slate-800 dark:text-white">Stagiaire Développeur Web
@@ -606,7 +620,7 @@
                 <!-- Project 1 -->
                 <!-- Project 1 -->
                 <div
-                    class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
+                    class="project-card group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
                     <div class="h-48 bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
                         <img src="img/Project_casa_du_papel.png" alt="La Casa De Papel"
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -641,31 +655,33 @@
 
                 <!-- Project 2 -->
                 <div
-                    class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
+                    class="project-card group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
                     <div class="h-48 bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
-                        <img src="img/Bibliotique.png" alt="Bibliotique"
+                        <img src="img/meteo.png" alt="meteo"
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-6">
                         <h3
-                            class="text-xl font-bold mb-2 text-slate-800 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                            Bibliotique</h3>
+                            class="text-xl font-bold mb-2 text-slate-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            05 Météo App</h3>
                         <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
-                            Application de gestion de bibliothèque moderne pour gérer votre collection de livres avec
-                            style.
+                            05 Météo intègre une barre de recherche intelligente permettant de trouver rapidement un
+                            pays ou une ville, ainsi qu’une carte interactive pour
+                            visualiser leur localisation et afficher instantanément les prévisions météorologiques
+                            correspondantes.
                         </p>
                         <div class="flex flex-wrap gap-2 mb-6">
                             <span
-                                class="text-xs py-1 px-2 rounded bg-cyan-100 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">JavaScript</span>
+                                class="text-xs py-1 px-2 rounded bg-cyan-100 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">JavaScript-API</span>
                             <span
                                 class="text-xs py-1 px-2 rounded bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">CSS3</span>
                         </div>
                         <div
                             class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-slate-700">
-                            <a href="https://bibliotique.vercel.app/" target="_blank"
+                            <a href="https://05-meteo.vercel.app/" target="_blank"
                                 class="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center text-slate-600 dark:text-slate-400"><i
-                                    class="fas fa-external-link-alt mr-2"></i> vercel</a>
-                            <a href="https://github.com/zakariach05/Bibliotique" target="_blank"
+                                    class="fas fa-external-link-alt mr-2"></i>05-meteo.vercel.app</a>
+                            <a href="https://github.com/zakariach05/Meteo-App" target="_blank"
                                 class="text-sm font-medium hover:text-slate-900 dark:hover:text-white text-gray-500 dark:text-slate-400 flex items-center"><i
                                     class="fab fa-github mr-2"></i> Code</a>
                         </div>
@@ -674,7 +690,7 @@
 
                 <!-- Project 3 -->
                 <div
-                    class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
+                    class="project-card group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
                     <div class="h-48 bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
                         <img src="img/sparkvision.PNG" alt="Spark Vision"
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -707,9 +723,43 @@
                     </div>
                 </div>
 
-                <!-- Project 4 -->
+                <!-- Project 4-->
                 <div
-                    class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
+                    class="project-card hidden group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
+                    <div class="h-48 bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
+                        <img src="img/Bibliotique.png" alt="Bibliotique"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h3
+                            class="text-xl font-bold mb-2 text-slate-800 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                            Bibliotique</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
+                            Application de gestion de bibliothèque moderne pour gérer votre collection de livres avec
+                            style.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span
+                                class="text-xs py-1 px-2 rounded bg-cyan-100 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">JavaScript</span>
+                            <span
+                                class="text-xs py-1 px-2 rounded bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">CSS3</span>
+                        </div>
+                        <div
+                            class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-slate-700">
+                            <a href="https://bibliotique.vercel.app/" target="_blank"
+                                class="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center text-slate-600 dark:text-slate-400"><i
+                                    class="fas fa-external-link-alt mr-2"></i> vercel</a>
+                            <a href="https://github.com/zakariach05/Bibliotique" target="_blank"
+                                class="text-sm font-medium hover:text-slate-900 dark:hover:text-white text-gray-500 dark:text-slate-400 flex items-center"><i
+                                    class="fab fa-github mr-2"></i> Code</a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Project 5 -->
+                <div
+                    class="project-card hidden group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
                     <div class="h-48 bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
                         <img src="img/portfolio.png" alt="Portfolio"
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -745,39 +795,14 @@
                 </div>
                 <!-- Project 5 -->
 
-                <div
-                    class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
-                    <div class="h-48 bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
-                        <img src="img/meteo.png" alt="meteo"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <div class="p-6">
-                        <h3
-                            class="text-xl font-bold mb-2 text-slate-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                            05 Météo App</h3>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
-                            05 Météo intègre une barre de recherche intelligente permettant de trouver rapidement un
-                            pays ou une ville, ainsi qu’une carte interactive pour
-                            visualiser leur localisation et afficher instantanément les prévisions météorologiques
-                            correspondantes.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-cyan-100 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">JavaScript-API</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">CSS3</span>
-                        </div>
-                        <div
-                            class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-slate-700">
-                            <a href="https://05-meteo.vercel.app/" target="_blank"
-                                class="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center text-slate-600 dark:text-slate-400"><i
-                                    class="fas fa-external-link-alt mr-2"></i>05-meteo.vercel.app</a>
-                            <a href="https://github.com/zakariach05/Meteo-App" target="_blank"
-                                class="text-sm font-medium hover:text-slate-900 dark:hover:text-white text-gray-500 dark:text-slate-400 flex items-center"><i
-                                    class="fab fa-github mr-2"></i> Code</a>
-                        </div>
-                    </div>
-                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <button id="show-more-projects"
+                    class="inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all duration-300 shadow-lg shadow-blue-600/20 hover:scale-105 active:scale-95 font-semibold gap-2">
+                    <span id="show-more-text">Voir plus</span>
+                    <i id="show-more-icon" class="fas fa-chevron-down"></i>
+                </button>
             </div>
         </div>
     </section>

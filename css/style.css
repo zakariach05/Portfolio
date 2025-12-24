@@ -1,6 +1,15 @@
 /* Custom Styles */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
+
+html,
+body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -81,6 +90,7 @@ input:-webkit-autofill:active {
     /* Force on top */
     cursor: pointer !important;
     border: none !important;
+    margin-top: -5px !important;
 }
 
 .custom-btn-cv:hover {
@@ -176,7 +186,6 @@ input:-webkit-autofill:active {
 
 /* --- New Modern Pill Navbar --- */
 #main-header {
-    position: relative;
     width: 100%;
     z-index: 1000;
     background: transparent;
@@ -338,13 +347,15 @@ input:-webkit-autofill:active {
     .navbar-pill-wrapper {
         position: fixed;
         bottom: 20px;
-        /* Positioned at the bottom as requested */
-        top: auto;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 95%;
+        /* Positioned at the bottom */
+        left: 0;
+        right: 0;
+        width: 100%;
+        transform: none;
+        display: flex;
+        justify-content: center;
+        margin: 0;
         z-index: 1001;
-        max-width: 500px;
     }
 
     .navbar-pill {
@@ -355,8 +366,7 @@ input:-webkit-autofill:active {
         width: 100%;
         padding: 12px 15px;
         justify-content: center;
-        background: rgba(15, 23, 42, 0.8) !important;
-        /* Darker for better visibility at bottom */
+        /* Background removed to inherit desktop/dark mode styles correctly */
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
