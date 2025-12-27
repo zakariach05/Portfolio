@@ -135,6 +135,42 @@ input:-webkit-autofill:active {
     }
 }
 
+/* Animation Lune Arrière-plan */
+@keyframes float-rotate {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    33% {
+        transform: translate(30px, -50px) rotate(10deg);
+    }
+
+    66% {
+        transform: translate(-20px, 20px) rotate(-5deg);
+    }
+
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+}
+
+/* Effet lampe / Flash blanc */
+@keyframes moon-glow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0)) brightness(1);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.6)) brightness(1.3);
+    }
+}
+
+.animate-moon-bg {
+    animation: float-rotate 20s infinite ease-in-out, moon-glow 2s infinite ease-in-out;
+}
+
 .animate-marquee {
     display: flex;
     white-space: nowrap;
@@ -333,6 +369,23 @@ input:-webkit-autofill:active {
     cursor: pointer;
 }
 
+/* Navbar Hover Effect: Gray out others */
+/* Quand on survole le conteneur, tous les liens deviennent gris/transparents */
+.navbar-pill-inner:hover .nav-link-item {
+    opacity: 0.4;
+    color: #94a3b8;
+    transition: all 0.3s ease;
+}
+
+/* Sauf le lien spécifiquement survolé qui reste (ou redevient) pleinement visible */
+.navbar-pill-inner .nav-link-item:hover {
+    opacity: 1;
+    color: inherit;
+    /* Garde sa couleur originale (ou celle définie ailleurs pour le hover) */
+    transform: scale(1.05);
+    /* Petit bonus de scale pour l'emphase */
+}
+
 /* External Controls Styles */
 .navbar-external-controls {
     display: flex;
@@ -509,18 +562,17 @@ input:-webkit-autofill:active {
 /* --- Custom Mouse Cursor Styles --- */
 @media (pointer: fine) {
     body {
-        cursor: none;
+        cursor: default;
+        /* Remet la souris par défaut */
     }
 
     button,
-    .tech-item {
-        cursor: none !important;
-    }
-
+    .tech-item,
     a,
     .nav-link-item,
     .project-card {
         cursor: pointer !important;
+        /* Force la main sur les liens */
     }
 
     .custom-cursor {
@@ -533,25 +585,12 @@ input:-webkit-autofill:active {
         z-index: 10000;
     }
 
+    /* Le petit point est caché car on utilise la souris native */
     .cursor-dot {
-        position: fixed;
-        width: 5px;
-        height: 5px;
-        background-color: #3b82f6;
-        /* Blue in white mode */
-        box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        pointer-events: none;
-        z-index: 10001;
-        transition: transform 0.1s ease-out, opacity 0.3s ease, background-color 0.3s ease;
+        display: none;
     }
 
-    .dark .cursor-dot {
-        background-color: white;
-        /* White in dark mode */
-    }
-
+    /* On garde le follower (le cercle) pour les effets */
     .cursor-follower {
         position: fixed;
         width: 30px;
@@ -685,4 +724,49 @@ input:-webkit-autofill:active {
     .custom-cursor.active-project-view .view-text {
         font-size: 6px;
     }
+}
+
+/* --- TEXT REVEAL EFFECT --- */
+/* Zoom sur le texte et effet Outline (Transparent avec contour) */
+.hover-reveal {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hover-reveal:hover {
+    transform: scale(1.05);
+    /* Zoom in */
+    color: transparent;
+    -webkit-text-stroke: 1px currentColor;
+    /* Garde la couleur originale mais en contour */
+}
+
+/* Correctif pour le texte dégradé : ne pas perdre le dégradé */
+.hover-reveal:hover #typewriter {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 0px;
+}
+
+/* Curseur Reveal (Cercle Transparent) */
+@media (pointer: fine) {
+    .custom-cursor.active-text-reveal .cursor-follower {
+        width: 300px;
+        height: 300px;
+        background-color: transparent;
+        /* Fond transparent */
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        /* Bordure subtile bleue */
+        backdrop-filter: blur(2px);
+        /* Légère déformation visuelle */
+        mix-blend-mode: normal;
+        /* Plus d'inversion */
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .custom-cursor.active-text-reveal .cursor-dot {
+        opacity: 1;
+        /* On garde le petit point visible pour la précision */
+        background-color: #3b82f6;
+        /* Point bleu */
+    }
+
 }

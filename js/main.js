@@ -60,7 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Splash Screen Logic ---
     const splashScreen = document.getElementById('splash-screen');
-    const splashLogo = document.getElementById('splash-logo');
+    const splashGlobe = document.getElementById('splash-globe');
+    const splashText = document.getElementById('splash-text');
 
     function startHeroAnimations() {
         if (document.querySelector('.hero-content h1')) {
@@ -112,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    if (splashScreen && splashLogo) {
+    if (splashScreen && splashGlobe) {
         document.body.style.overflow = 'hidden';
 
         const splashTl = gsap.timeline({
@@ -122,25 +123,42 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        splashTl.from(splashLogo, {
-            scale: 0.8,
+        // 1. Globe Zoom In & Text Reveal (Intro ~1s)
+        splashTl.from(splashGlobe, {
+            scale: 0,
             opacity: 0,
             duration: 1,
-            ease: "back.out(1.7)"
+            ease: "elastic.out(1, 0.7)"
         })
-            .to(splashLogo, {
-                scale: 60,
-                opacity: 0,
-                duration: 1.2,
-                ease: "power4.in"
-            }, "+=0.8")
-            .to(splashScreen, {
+            .from(splashText, {
+                y: -20,
                 opacity: 0,
                 duration: 0.8,
+                ease: "power2.out"
+            }, "-=0.8")
+
+            // 2. Massive Zoom Transition (Vite fait!)
+            .to(splashGlobe, {
+                scale: 80,
+                opacity: 0,
+                duration: 0.6,
+                ease: "power4.in"
+            }, "+=0.2")
+
+            .to(splashText, {
+                opacity: 0,
+                scale: 1.5,
+                duration: 0.3
+            }, "-=0.6")
+
+            .to(splashScreen, {
+                opacity: 0,
+                duration: 0.4,
                 onComplete: () => {
                     splashScreen.style.display = 'none';
                 }
-            }, "-=0.7");
+            }, "-=0.1");
+
     } else {
         startHeroAnimations();
     }
@@ -781,16 +799,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Hover Effect using Event Delegation
         const handleHover = (target) => {
-            cursor.classList.remove('active-project-view', 'active-link');
+            cursor.classList.remove('active-project-view', 'active-link', 'active-text-reveal');
 
             if (!target) return;
 
             const projectCard = target.closest('.project-card');
             const link = target.closest('a, button, .nav-link-item, .tech-item');
+            const textReveal = target.closest('.hover-reveal'); // Check for H1/H2 with reveal class
 
             if (projectCard) {
                 // Any hover on the project card or its internal links shows "VIEW"
                 cursor.classList.add('active-project-view');
+            } else if (textReveal) {
+                // Hover on H1/H2 Hero Text
+                cursor.classList.add('active-text-reveal');
             } else if (link) {
                 // Hovering any other interactive element
                 cursor.classList.add('active-link');

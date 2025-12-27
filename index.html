@@ -66,11 +66,21 @@
 
     <!-- Splash Screen -->
     <div id="splash-screen"
-        class="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-slate-900 transition-opacity duration-700">
-        <div id="splash-logo" class="flex items-center text-4xl md:text-6xl font-bold">
+        class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white dark:bg-slate-900 overflow-hidden">
+
+        <!-- Background Globe -->
+        <div id="splash-globe" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <img src="img/globe.png" alt="Globe"
+                class="w-[50vw] h-[50vw] md:w-[30vw] md:h-[30vw] object-cover rounded-full opacity-90 drop-shadow-2xl">
+        </div>
+
+        <!-- Text Split (ZC left, 05 right) -->
+        <!-- Text Split (ZC left, 05 right) on Desktop / Top on Mobile -->
+        <div id="splash-text"
+            class="relative z-10 w-full flex items-center justify-center gap-4 md:gap-[35vw] mb-64 md:mb-0 text-5xl md:text-8xl font-bold">
             <span
-                class="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent">ZC.</span>
-            <span class="text-blue-600 dark:text-white ml-2">05</span>
+                class="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent drop-shadow-sm">ZC.</span>
+            <span class="text-blue-600 dark:text-white drop-shadow-sm">05</span>
         </div>
     </div>
 
@@ -145,8 +155,12 @@
             class="absolute bottom-20 left-0 w-72 h-72 bg-blue-500/10 dark:bg-blue-600/20 rounded-full blur-3xl -z-10 animate-blob animation-delay-2000">
         </div>
 
-        <!-- 3D Particles Container -->
-        <div id="particles-container" class="absolute inset-0 w-full h-full -z-5 pointer-events-none"></div>
+        <!-- 3D Particles Container / Moon Background -->
+        <!-- <div id="particles-container" class="absolute inset-0 w-full h-full -z-5 pointer-events-none"></div> -->
+        <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -z-5 pointer-events-none opacity-20 dark:opacity-30 mix-blend-screen w-[400px] h-[400px]">
+            <img src="img/moon.png" alt="Moon Background" class="w-full h-full object-contain animate-moon-bg">
+        </div>
 
 
 
@@ -156,13 +170,15 @@
                 <span id="hero-greeting"
                     class="inline-block py-2 px-5 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xl md:text-2xl font-medium mb-6 border border-blue-200 dark:border-blue-500/20">
                 </span>
-                <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4 text-slate-900 dark:text-white">
+                <h1
+                    class="hover-reveal text-4xl md:text-6xl font-bold leading-tight mb-4 text-slate-900 dark:text-white cursor-default inline-block">
                     Développeur Web <br>
                     <span id="typewriter"
                         class="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent"></span><span
                         class="text-blue-600 dark:text-blue-400 animate-pulse">|</span>
                 </h1>
-                <h2 class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-6 font-light">
+                <h2
+                    class="hover-reveal text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-6 font-light cursor-default inline-block">
                     Spécialisé en React, Laravel et WordPress
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300 text-lg mb-8 max-w-lg leading-relaxed">
@@ -180,7 +196,7 @@
             </div>
             <div class="hero-image relative hidden md:block">
                 <div
-                    class="relative w-80 h-96 mx-auto bg-gradient-to-b from-blue-500 to-purple-600 rounded-2xl p-1 shadow-2xl rotate-3 hover:rotate-0 transition-all duration-500">
+                    class="relative w-80 h-96 ml-auto mr-10 -mt-16 bg-gradient-to-b from-blue-500 to-purple-600 rounded-2xl p-1 shadow-2xl rotate-3 hover:rotate-0 transition-all duration-500">
                     <div
                         class="bg-white dark:bg-slate-900 w-full h-full rounded-xl overflow-hidden flex items-center justify-center transition-colors duration-300 relative group">
 
@@ -1024,7 +1040,7 @@
 
     <!-- Main JS -->
     <script src="js/main.js"></script>
-    <script src="js/particles.js"></script>
+    <!-- <script src="js/particles.js"></script> -->
     <!-- Scroll to Top Button with Progress -->
     <a href="#home" id="scroll-top" class="scroll-top-progress" title="Retour en haut">
         <svg class="progress-ring" width="50" height="50">
