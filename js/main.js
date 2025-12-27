@@ -137,13 +137,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 ease: "power2.out"
             }, "-=0.8")
 
-            // 2. Massive Zoom Transition (Vite fait!)
+            // 2. Massive Zoom Transition (Top Speed après 2s!)
             .to(splashGlobe, {
                 scale: 80,
                 opacity: 0,
-                duration: 0.6,
+                filter: "brightness(20)", // Flash
+                duration: 0.4, // Top Speed (encore plus vite)
                 ease: "power4.in"
-            }, "+=0.2")
+            }, "+=1") // Attendre 1s de plus (Intro 1s + Pause 1s = 2s)
 
             .to(splashText, {
                 opacity: 0,
