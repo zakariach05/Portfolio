@@ -69,26 +69,26 @@ document.addEventListener('DOMContentLoaded', () => {
             tl.from('.hero-content h1', {
                 y: 50,
                 opacity: 0,
-                duration: 1,
+                duration: 2,
                 ease: "power3.out"
             })
                 .from('.hero-content h2', {
                     y: 30,
                     opacity: 0,
-                    duration: 0.8,
+                    duration: 2,
                     ease: "power3.out"
                 }, "-=0.5")
                 .from('.hero-content p', {
                     y: 20,
                     opacity: 0,
-                    duration: 0.8,
+                    duration: 2,
                     ease: "power3.out"
                 }, "-=0.5")
                 .from('.hero-content div a', {
                     y: 20,
                     opacity: 0,
                     stagger: 0.2,
-                    duration: 0.8,
+                    duration: 2,
                     ease: "power3.out"
                 }, "-=0.5");
         }
