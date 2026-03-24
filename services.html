@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakaria Chamekh | Développeur Web Full Stack Junior</title>
+    <meta name="description"
+        content="Portfolio de Zakaria Chamekh, Développeur Full Stack junior spécialisé en React, Laravel et WordPress à Casablanca.">
+    <link rel="icon" href="NV-IMG/V.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Storm&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Pixels&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Outfit', 'sans-serif'],
+                        rubik: ['Rubik Storm', 'cursive'],
+                        bebas: ['Bebas Neue', 'cursive'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#111111',
+                            900: '#000000',
+                        }
+                    },
+                    animation: {
+                        blob: "blob 7s infinite",
+                    },
+                    keyframes: {
+                        blob: {
+                            "0%": {
+                                transform: "translate(0px, 0px) scale(1)",
+                            },
+                            "33%": {
+                                transform: "translate(30px, -50px) scale(1.1)",
+                            },
+                            "66%": {
+                                transform: "translate(-20px, 20px) scale(0.9)",
+                            },
+                            "100%": {
+                                transform: "translate(0px, 0px) scale(1)",
+                            },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body
+    class="bg-gray-50 text-slate-800 dark:bg-black dark:text-slate-100 font-sans transition-colors duration-300 w-full overflow-x-clip">
+
+    <!-- Splash Screen -->
+    <div id="splash-screen"
+        class="absolute inset-0 z-[9999] flex flex-col items-center justify-center bg-black overflow-hidden">
+
+        <!-- Slot Machine Counter -->
+        <div id="splash-counter"
+            class="text-red-600 text-4xl md:text-6xl font-bold font-sans relative z-20 tabular-nums tracking-widest">
+            0000
+        </div>
+
+        <!-- V Logo (Hidden Initially) -->
+        <div id="splash-v"
+            class="absolute z-20 opacity-0 transform scale-0 text-9xl font-rubik text-red-600 drop-shadow-[0_0_15px_rgba(220,38,38,0.4)]">
+            V
+        </div>
+
+        <!-- Name at Bottom -->
+        <div id="splash-name" class="absolute bottom-10 text-white font-bebas text-xs tracking-widest opacity-80 z-20">
+            ZAKARIA CHAMEKH
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <!-- Header / Navigation Section -->
+    <!-- Header / Navigation Section -->
+    <!-- Header (Simplified Logo & Services) -->
+    <header id="main-header"
+        class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-6 flex justify-between items-center transition-all duration-300">
+
+        <!-- New Stacked Logo -->
+        <a href="#" class="text-2xl font-bold flex flex-col leading-none group order-1 tracking-tighter">
+            <span class="text-black dark:text-white">ZAKARIA</span>
+            <span class="text-gray-500 dark:text-gray-400 text-sm tracking-widest">CHAMEKH</span>
+        </a>
+
+        <!-- Single Services Link with Scramble Effect -->
+        <a href="index.html" class="glitch-link scramble-text order-2">
+            ACCUEIL <span class="arrow">↗</span>
+        </a>
+    </header>
+
+    <!-- Fixed WebGL Canvas — always visible as background -->
+    <canvas id="hero-3d-canvas"
+        style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+
+    <!-- Services Hero Section -->
+    <section id="services-page-hero" class="relative w-full min-h-[50vh] flex items-center justify-center pt-32 pb-16"
+        style="z-index:20;">
+        <div class="container mx-auto px-6 relative z-10 flex flex-col items-center text-center">
+            <h1
+                class="text-[12vw] md:text-8xl font-[900] tracking-tighter text-white uppercase leading-none drop-shadow-2xl mix-blend-exclusion mb-6">
+                Mes <span class="text-red-500">Services</span>
+            </h1>
+            <p class="text-lg md:text-2xl text-gray-400 max-w-2xl">
+                Des solutions techniques de pointe pour donner vie à vos projets et dominer l'écosystème web digital.
+            </p>
+        </div>
+    </section>
+
+    <!-- Services Grid Section -->
+    <section id="services-grid" class="py-16 md:py-24 relative overflow-clip" style="z-index:30;">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+                <!-- Service 1: Custom Web App -->
+                <div
+                    class="p-8 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 hover:border-red-500 transition-all duration-300 group shadow-2xl">
+                    <div
+                        class="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
+                        <i class="fas fa-code text-3xl text-red-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Développement Web Avancé</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Conception d'applications web ultra-performantes, sécurisées et dynamiques en utilisant les
+                        standards modernes du web.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">REACT</span>
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">LARAVEL</span>
+                    </div>
+                </div>
+
+                <!-- Service 2: Creative & 3D -->
+                <div
+                    class="p-8 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 hover:border-red-500 transition-all duration-300 group shadow-2xl">
+                    <div
+                        class="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
+                        <i class="fas fa-cube text-3xl text-red-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Web Créatif & 3D</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Intégration d'expériences 3D interactives et d'animations fluides, offrant un niveau
+                        d'interaction premium très immersif.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">THREE.JS</span>
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">GSAP</span>
+                    </div>
+                </div>
+
+                <!-- Service 3: E-commerce -->
+                <div
+                    class="p-8 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 hover:border-red-500 transition-all duration-300 group shadow-2xl">
+                    <div
+                        class="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
+                        <i class="fas fa-shopping-cart text-3xl text-red-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Boutiques E-commerce</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Création de plateformes e-commerce à fort taux de conversion. Processus de paiement intégrés,
+                        gestion de stock simplifiée et dashboard admin.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">WORDPRESS</span>
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">TAILWIND</span>
+                    </div>
+                </div>
+
+                <!-- Service 4: UI/UX -->
+                <div
+                    class="p-8 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 hover:border-red-500 transition-all duration-300 group shadow-2xl">
+                    <div
+                        class="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
+                        <i class="fas fa-pen-nib text-3xl text-red-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Design UI / UX Minimaliste</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Design réfléchi, centré sur l'esthétique premium et l'expérience utilisateur, avec des
+                        interfaces claires (Figma pixel perfect).
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">FIGMA</span>
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">PROTOTYPING</span>
+                    </div>
+                </div>
+
+                <!-- Service 5: SEO -->
+                <div
+                    class="p-8 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 hover:border-red-500 transition-all duration-300 group shadow-2xl">
+                    <div
+                        class="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
+                        <i class="fas fa-rocket text-3xl text-red-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Optimisation SEO & Web Perf</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Accélération drastique des temps de chargement (Lighthouse +95) et structure de code propre pour
+                        booster votre visibilité Google.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">SEO TECHNIQUE</span>
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">ANALYTICS</span>
+                    </div>
+                </div>
+
+                <!-- Service 6: Maintenance -->
+                <div
+                    class="p-8 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 hover:border-red-500 transition-all duration-300 group shadow-2xl">
+                    <div
+                        class="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
+                        <i class="fas fa-server text-3xl text-red-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Maintenance & Infrastructure</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Maintien de vos applicatifs en conditions optimales : correctifs sécuritaires de type backend,
+                        gestion VPS, et support à long terme.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">BACKEND PHP</span>
+                        <span class="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">MAINTENANCE
+                            API</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="racing-stripe w-full opacity-30 mt-10"></div>
+
+    <!-- Contact Call to Action inline -->
+    <section class="py-24 relative overflow-clip text-center" style="z-index:30;">
+        <div class="container mx-auto px-6 relative z-10">
+            <h2 class="text-3xl md:text-5xl font-black text-white uppercase mb-8 tracking-wide">Prêt à dominer votre
+                marché digital ?</h2>
+            <a href="index.html#contact"
+                class="inline-block bg-red-600 border-2 border-transparent text-white px-10 py-4 font-bold rounded-full uppercase tracking-widest hover:bg-transparent hover:border-red-600 transition-all duration-300">
+                Discuter de Mon Projet
+            </a>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER F1 PREMIUM ========== -->
+    <footer id="f1-footer" style="position:relative;z-index:30;">
+
+        <div class="footer-frame-container">
+            <div class="footer-frame-container">
+                <!-- Main Footer Content -->
+                <div class="footer-main">
+
+                    <!-- LEFT: Navigation -->
+                    <nav class="footer-col footer-nav" aria-label="Footer navigation">
+                        <p class="footer-col-label">PAGES</p>
+                        <ul>
+                            <li><a href="#home" class="glitch-link footer-link" data-text="Home"><span>Home</span></a>
+                            </li>
+                            <li><a href="#projects" class="glitch-link footer-link"
+                                    data-text="Work"><span>Work</span></a>
+                            </li>
+                            <li><a href="#about" class="glitch-link footer-link"
+                                    data-text="About"><span>About</span></a>
+                            </li>
+                            <li><a href="#contact" class="glitch-link footer-link"
+                                    data-text="Contact"><span>Contact</span></a></li>
+                            <li><a href="Zakaria_Chamekh.pdf" download
+                                    class="glitch-link footer-link footer-link-accent" data-text="CV ↗"><span>CV
+                                        ↗</span></a></li>
+                        </ul>
+                    </nav>
+
+                    <!-- CENTER: Main Hero Block -->
+                    <div class="footer-col footer-center" id="footer-parallax">
+                        <!-- Tagline massive -->
+                        <h2 class="footer-tagline">
+                            ALWAYS<br>
+                            <span class="footer-tagline-red">DELIVERING</span><br>
+                            THE CODE.
+                        </h2>
+                        <!-- Photo créateur -->
+                        <div class="footer-photo-wrap">
+                            <img src="NV-IMG/footer-img.png" alt="Zakaria Chamekh" class="footer-photo" loading="lazy"
+                                decoding="async" onerror="this.style.display='none'">
+                        </div>
+                        <!-- CTA Button -->
+                        <a href="#contact" class="footer-cta-btn">
+                            Business Enquiries
+                            <span class="footer-cta-arrow">↗</span>
+                        </a>
+                    </div>
+
+                    <!-- RIGHT: Social Links -->
+                    <nav class="footer-col footer-social" aria-label="Social links">
+                        <p class="footer-col-label">FOLLOW ON</p>
+                        <ul>
+                            <li><a href="#" class="glitch-link footer-link"
+                                    data-text="LinkedIn"><span>LinkedIn</span></a>
+                            </li>
+                            <li><a href="#" class="glitch-link footer-link" data-text="GitHub"><span>GitHub</span></a>
+                            </li>
+                            <li><a href="#" class="glitch-link footer-link"
+                                    data-text="Instagram"><span>Instagram</span></a>
+                            </li>
+                            <li><a href="#" class="glitch-link footer-link" data-text="Twitter / X"><span>Twitter /
+                                        X</span></a></li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Bottom Copyright Bar (Now inside frame) -->
+                <div class="footer-bottom-bar">
+                    <span class="footer-copy">&copy; 2025 Zakaria Chamekh. All rights reserved.</span>
+                    <div class="footer-bottom-links">
+                    </div>
+                </div>
+            </div>
+
+    </footer>
+
+    <!-- Section ZAKARIA Finale Premium -->
+    <section class="w-full h-fit bg-black flex items-center justify-center relative overflow-clip py-8 md:py-12"
+        style="z-index: 50;" id="zakaria-finale-section">
+
+        <!-- Entrance Wrapper -->
+        <div id="zakaria-reveal" class="w-full flex justify-center"
+            style="opacity: 0; transform: translateY(50px); transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1);">
+
+            <!-- SVG Handwriting Simulation -->
+            <svg viewBox="0 0 1500 220" class="w-full h-auto overflow-visible select-none">
+                <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle"
+                    class="font-sans font-[900] uppercase zakaria-svg-text">
+                    <tspan class="draw-char">Z</tspan>
+                    <tspan class="draw-char">A</tspan>
+                    <tspan class="draw-char">K</tspan>
+                    <tspan class="draw-char">A</tspan>
+                    <tspan class="draw-char">R</tspan>
+                    <tspan class="draw-char">I</tspan>
+                    <tspan class="draw-char">A</tspan>
+                </text>
+            </svg>
+
+        </div>
+
+        <style>
+            .zakaria-svg-text {
+                font-size: 190px;
+                letter-spacing: 0.1em;
+            }
+
+            .draw-char {
+                fill: transparent;
+                stroke: white;
+                stroke-width: 2.5px;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                opacity: 1;
+                /* Managed by GSAP */
+                transition: filter 0.5s ease;
+            }
+
+            /* Very subtle glow class triggered by GSAP when filled */
+            .draw-char.filled-glow {
+                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+            }
+        </style>
+
+        <script>
+            setTimeout(() => {
+                const section = document.getElementById('zakaria-finale-section');
+                const reveal = document.getElementById('zakaria-reveal');
+                if (!reveal || !section || typeof gsap === 'undefined') return;
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            // Section reveal
+                            reveal.style.opacity = '1';
+                            reveal.style.transform = 'translateY(0)';
+
+                            // Initialize GSAP Loop once
+                            if (!window.zakariaAnimLoop) {
+                                window.zakariaAnimLoop = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+
+                                window.zakariaAnimLoop
+                                    // 1. Draw outline left to right
+                                    .to(".draw-char", {
+                                        strokeDashoffset: 0,
+                                        duration: 2,
+                                        stagger: 0.15,
+                                        ease: "power2.inOut"
+                                    })
+                                    // 2. Fill in white
+                                    .to(".draw-char", {
+                                        fill: "#ffffff",
+                                        stroke: "transparent",
+                                        duration: 0.8,
+                                        stagger: 0.1,
+                                        ease: "power1.inOut",
+                                        onStart: function () {
+                                            document.querySelectorAll('.draw-char').forEach(el => el.classList.add('filled-glow'));
+                                        }
+                                    }, "-=1.2")
+                                    // 3. Wait (keep visible)
+                                    .to({}, { duration: 2.5 })
+                                    // 4. Fade out smoothly to erase
+                                    .to(".draw-char", {
+                                        opacity: 0,
+                                        duration: 0.8,
+                                        stagger: 0.05,
+                                        ease: "power2.inOut",
+                                        onComplete: function () {
+                                            // Reset for next stroke drawing
+                                            gsap.set(".draw-char", {
+                                                fill: "transparent",
+                                                stroke: "white",
+                                                strokeDashoffset: 1000
+                                            });
+                                            document.querySelectorAll('.draw-char').forEach(el => el.classList.remove('filled-glow'));
+                                        }
+                                    })
+                                    // 5. Restore opacity instantly so they can be drawn again
+                                    .to(".draw-char", { opacity: 1, duration: 0 });
+                            }
+
+                        } else {
+                            const rect = entry.boundingClientRect;
+                            if (rect.top > 0) {
+                                reveal.style.opacity = '0';
+                                reveal.style.transform = 'translateY(50px)';
+                            }
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                observer.observe(section);
+            }, 100);
+        </script>
+    </section>
+
+
+    <!-- Scripts -->
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+
+    <!-- Main JS -->
+    <script src="js/scroll-manager.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/v-logo.js"></script>
+    <script type="module" src="js/hero-3d.js"></script>
+    <script type="module" src="js/advanced-animations.js"></script>
+    <script type="module" src="js/contact-3d.js"></script>
+    <!-- Scroll to Top Button with Progress -->
+    <a href="#home" id="scroll-top" class="scroll-top-progress" title="Retour en haut">
+        <svg class="progress-ring" width="50" height="50">
+            <circle class="progress-ring__circle" stroke="currentColor" stroke-width="3" fill="transparent" r="22"
+                cx="25" cy="25" />
+        </svg>
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+
+    <!-- Custom Mouse Cursor -->
+    <div class="custom-cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-follower">
+            <span class="view-text">View</span>
+        </div>
+    </div>
+
+</body>
+
+</html>

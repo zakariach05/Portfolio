@@ -48,6 +48,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Scramble Text Effect ---
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const scrambleElements = document.querySelectorAll(".scramble-text");
+
+    scrambleElements.forEach(element => {
+        let interval = null;
+
+        element.onmouseover = event => {
+            let iteration = 0;
+            const originalValue = element.dataset.value;
+            const arrow = element.querySelector('.arrow');
+            const arrowContent = arrow ? arrow.outerHTML : '';
+
+            clearInterval(interval);
+
+            interval = setInterval(() => {
+                element.innerHTML = originalValue
+                    .split("")
+                    .map((letter, index) => {
+                        if (index < iteration) {
+                            return originalValue[index];
+                        }
+                        return letters[Math.floor(Math.random() * 26)];
+                    })
+                    .join("") + (arrowContent ? ` ${arrowContent}` : '');
+
+                if (iteration >= originalValue.length) {
+                    clearInterval(interval);
+                }
+
+                iteration += 1 / 3;
+            }, 30);
+        };
+    });
+
+
     if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
     if (mobileThemeToggleBtn) mobileThemeToggleBtn.addEventListener('click', toggleTheme);
 
@@ -56,12 +92,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Navbar Scroll Effect (Removed: Navbar is now part of the header and scrolls with the page) ---
 
 
-    // --- GSAP Animations ---
+    // --- Lenis Smooth Scroll Setup ---
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smooth: true,
+        smoothTouch: false,
+        touchMultiplier: 1.5,
+        wheelMultiplier: 1.0,
+    });
+
+    // Expose lenis globally so other scripts can use lenis.stop() / lenis.start()
+    window.lenis = lenis;
+
+    // Sync Lenis scroll events into ScrollTrigger
+    lenis.on('scroll', () => { ScrollTrigger.update(); });
+
+    // Integrate Lenis RAF with GSAP ticker
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+
+    // Prevent GSAP lag-smoothing from interfering with Lenis timing
+    gsap.ticker.lagSmoothing(0);
 
     // --- Splash Screen Logic ---
     const splashScreen = document.getElementById('splash-screen');
-    const splashGlobe = document.getElementById('splash-globe');
-    const splashText = document.getElementById('splash-text');
+    const splashCounter = document.getElementById('splash-counter');
+    const splashV = document.getElementById('splash-v');
+    const body = document.body;
 
     function startHeroAnimations() {
         if (document.querySelector('.hero-content h1')) {
@@ -110,59 +169,135 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+
+        // Trigger refresh for animations
+        setTimeout(() => {
+            ScrollTrigger.refresh();
+        }, 500);
+
+        initParallax();
     }
 
+    // --- Parallax Effect ---
+    function initParallax() {
+        if (window.innerWidth > 768) { // Desktop only for performance
+            gsap.utils.toArray('.hero-image, .project-card, .skill-card').forEach((el, i) => {
+                gsap.to(el, {
+                    yPercent: -10,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: true
+                    }
+                });
+            });
+        }
+    }
 
-    if (splashScreen && splashGlobe) {
-        document.body.style.overflow = 'hidden';
+    if (splashScreen && splashCounter) {
+        // Lock Scroll
+        lenis.stop();
+        body.style.overflow = 'hidden';
 
-        const splashTl = gsap.timeline({
-            onComplete: () => {
-                document.body.style.overflow = '';
-                startHeroAnimations();
+        // Phase 1: Slot Machine Counter (Exactly 2s)
+        let startTime = null;
+        const duration = 2000;
+
+        function updateCounter(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const progress = timestamp - startTime;
+
+            if (progress < duration) {
+                // Generate random 4-digit number
+                const randomNum = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+                splashCounter.textContent = randomNum;
+                requestAnimationFrame(updateCounter);
+            } else {
+                // End of Phase 1
+                splashCounter.textContent = "0005";
+                startMorphSequence();
             }
-        });
+        }
+        requestAnimationFrame(updateCounter);
 
-        // 1. Globe Zoom In & Text Reveal (Intro ~1s)
-        splashTl.from(splashGlobe, {
-            scale: 0,
-            opacity: 0,
-            duration: 1,
-            ease: "elastic.out(1, 0.7)"
-        })
-            .from(splashText, {
-                y: -20,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power2.out"
-            }, "-=0.8")
+        function startMorphSequence() {
+            const tl = gsap.timeline();
 
-            // 2. Massive Zoom Transition (Top Speed après 2s!)
-            .to(splashGlobe, {
-                scale: 80,
+            // Phase 2: Morphing (0005 -> V)
+            // Phase 2: Morphing (0005 -> V)
+            tl.to([splashCounter, '#splash-name'], {
+                scale: 0, // Shrink 0005 & Name
                 opacity: 0,
-                filter: "brightness(20)", // Flash
-                duration: 0.4, // Top Speed (encore plus vite)
-                ease: "power4.in"
-            }, "+=1") // Attendre 1s de plus (Intro 1s + Pause 1s = 2s)
+                duration: 0.5,
+                ease: "power2.in"
+            })
+                .to(splashV, {
+                    opacity: 1,
+                    scale: 1, // V appears
+                    duration: 0.6,
+                    ease: "back.out(1.7)"
+                }, "-=0.2")
 
-            .to(splashText, {
-                opacity: 0,
-                scale: 1.5,
-                duration: 0.3
-            }, "-=0.6")
+                // Phase 3: Move to Header
+                // Phase 3: Move to Top Center (Fixed Position)
+                .to(splashV, {
+                    y: () => -(window.innerHeight / 2) + 45, // Center in 90px header (approx)
+                    scale: 0.3, // Size match
+                    color: body.classList.contains('dark') ? '#ffffff' : '#ffffffff', // Optional: match theme? Let's just keep position for now, but maybe sync color if requested later. Keeping styling simple.
+                    duration: 1.2,
+                    ease: "power3.inOut"
+                }, "+=0.2")
 
-            .to(splashScreen, {
-                opacity: 0,
-                duration: 0.4,
-                onComplete: () => {
+                // Phase 4: Revelation (Background Fade Out + Site Fade In)
+                .to(splashScreen, {
+                    backgroundColor: "transparent", // Fade out black bg
+                    duration: 1.2,
+                    ease: "power2.inOut",
+                    onStart: () => {
+                        splashScreen.style.pointerEvents = 'none'; // Allow clicks on site
+                    }
+                }, "-=1.0")
+                .to(body, {
+                    opacity: 1, // Fade in site content
+                    duration: 1.2,
+                    ease: "power2.inOut"
+                }, "-=1.2")
+
+                // Final Step: Ensure everything is interactive
+                .call(() => {
+                    body.style.overflow = '';
+                    lenis.start();
+                    startHeroAnimations();
+                    // Keep V visible and fixed
+                    splashV.style.position = 'absolute';
+                    
+                    // Final safety cleanup: hide splash div entirely so it cannot block pixels
                     splashScreen.style.display = 'none';
-                }
-            }, "-=0.1");
 
+                    // Force recalcluation of page height for ScrollTrigger & Lenis
+                    ScrollTrigger.refresh();
+                    lenis.resize();
+
+                    // Initial signal to the scroll manager
+                    window.dispatchEvent(new CustomEvent('sectionChange', { detail: { index: 0, id: 'home' } }));
+                });
+        }
     } else {
+        // Fallback if splash missing
+        body.style.opacity = 1;
+        body.style.overflow = '';
+        lenis.start();
+        ScrollTrigger.refresh();
+        lenis.resize();
         startHeroAnimations();
     }
+
+    window.addEventListener('resize', () => {
+        lenis.resize();
+        ScrollTrigger.refresh();
+    });
 
 
 
@@ -417,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Scroll Animations for Sections (GSAP)
-    const sections = ['#about', '#skills', '#experience', '#projects', '#contact'];
+    const sections = ['#about', '#expertise', '#projects', '#contact'];
 
     sections.forEach(section => {
         if (document.querySelector(section)) {
@@ -455,181 +590,122 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Form Handling (PHP Link) ---
-    const form = document.getElementById('contact-form');
-    const formStatus = document.getElementById('form-status');
+    // --- Multi-Step Form Logic ---
+    const multiStepForm = document.getElementById('multistep-contact-form');
+    const formSteps = document.querySelectorAll('.form-step');
+    const nextButtons = document.querySelectorAll('.btn-step-next');
+    const progressFill = document.getElementById('step-progress');
+    const currentStepNum = document.getElementById('current-step-num');
+    const successMsg = document.getElementById('form-success-msg');
+    let currentStep = 1;
 
-    if (form) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = form.querySelector('button');
-            const originalBtnText = btn.innerHTML;
+    if (multiStepForm) {
+        const updateProgressBar = (step) => {
+            const progress = (step / formSteps.length) * 100;
+            if (progressFill) progressFill.style.width = `${progress}%`;
+            if (currentStepNum) currentStepNum.textContent = step;
+        };
 
-            // UI Button feedback
-            anime({
-                targets: btn,
-                scale: [1, 0.95, 1],
-                duration: 300,
-                easing: 'easeInOutQuad'
+        const showStep = (step) => {
+            formSteps.forEach(s => s.classList.remove('active'));
+            const activeStep = document.querySelector(`.form-step[data-step="${step}"]`);
+            if (activeStep) {
+                activeStep.classList.add('active');
+                const firstInput = activeStep.querySelector('input, textarea');
+                if (firstInput) firstInput.focus();
+            }
+            updateProgressBar(step);
+        };
+
+        const validateStep = (step) => {
+            const activeStep = document.querySelector(`.form-step[data-step="${step}"]`);
+            const inputs = activeStep.querySelectorAll('input, textarea');
+            let isValid = true;
+            inputs.forEach(input => {
+                if (!input.checkValidity()) {
+                    isValid = false;
+                    input.classList.add('border-red-500');
+                    setTimeout(() => input.classList.remove('border-red-500'), 500);
+                }
             });
+            return isValid;
+        };
 
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi...';
-            btn.disabled = true;
+        nextButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (validateStep(currentStep)) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            });
+        });
 
-            const formData = new FormData(form);
+        // Handle Enter key
+        multiStepForm.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                if (currentStep < formSteps.length) {
+                    if (validateStep(currentStep)) {
+                        currentStep++;
+                        showStep(currentStep);
+                    }
+                } else if (currentStep === formSteps.length) {
+                    multiStepForm.dispatchEvent(new Event('submit'));
+                }
+            }
+        });
 
-            // Helper function to animate success message
-            const showSuccess = (msg, colorClass = "text-green-500") => {
-                formStatus.textContent = msg;
-                formStatus.className = `text-sm text-center mt-4 ${colorClass} font-medium`;
-                formStatus.classList.remove('hidden');
-                form.reset();
+        // Final Submission
+        multiStepForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!validateStep(currentStep)) return;
 
-                anime({
-                    targets: formStatus,
-                    translateY: [10, 0],
-                    opacity: [0, 1],
-                    duration: 500
-                });
+            const submitBtn = multiStepForm.querySelector('.btn-step-submit');
+            const originalText = submitBtn.innerHTML;
 
-                // Hide after 6 seconds
-                setTimeout(() => {
-                    anime({
-                        targets: formStatus,
-                        opacity: 0,
-                        duration: 500,
-                        complete: function () {
-                            formStatus.classList.add('hidden');
-                            formStatus.style.opacity = 1;
-                        }
-                    });
-                }, 6000);
-            };
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ENVOI...';
+            submitBtn.disabled = true;
 
-            // Force wait for realism
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            const formData = new FormData();
+            formData.append('name', document.getElementById('step-name').value);
+            formData.append('email', document.getElementById('step-email').value);
+            formData.append('subject', document.getElementById('step-subject').value);
+            formData.append('message', document.getElementById('step-message').value);
 
             try {
-                // 1. Send to local PHP script
+                // Simulate server delay for effect
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                // Using existing contact.php
                 const response = await fetch('./php/contact.php', {
                     method: 'POST',
                     body: formData
                 });
 
-                // Get raw text first to debug if JSON parsing fails
-                const responseText = await response.text();
-                let result;
-
-                try {
-                    result = JSON.parse(responseText);
-                } catch (e) {
-                    console.error("Réponse serveur non-JSON:", responseText);
-                    // Check if the response contains the success message despite warnings
-                    if (responseText.includes("enregistré avec succès")) {
-                        showSuccess("Message enregistré ! (Note: Des avertissements PHP sont apparus, voir console)");
-                        return; // Stop here, success handled
-                    }
-                    throw new Error("Le serveur a renvoyé une réponse invalide. Vérifiez messages.txt ou la console.");
-                }
-
-                // 2. Check if we got a valid response
                 if (response.ok) {
-                    showSuccess(result.message || "Message envoyé avec succès !");
-                } else {
-                    if (response.status === 422 || response.status === 400) {
-                        // Erreurs de validation
-                        let errorDetails = result.message || "Veuillez vérifier vos entrées.";
-                        throw new Error(errorDetails);
-                    }
-                    throw new Error(result.message || "Erreur serveur " + response.status);
-                }
-            } catch (error) {
-                console.error("Erreur d'envoi:", error);
-
-                let displayMessage = error.message;
-
-                if (window.location.protocol === 'file:') {
-                    displayMessage = "Erreur : Impossible d'utiliser PHP via le protocole file://. Utilisez un serveur local (localhost).";
-                } else if (error.message.includes("Unexpected token")) {
-                    displayMessage = "Erreur technique : Réponse du serveur invalide (JSON malformé).";
-                }
-
-                // Show error message
-                formStatus.textContent = displayMessage;
-                formStatus.className = "text-sm text-center mt-4 text-red-500 font-medium";
-                formStatus.classList.remove('hidden');
-                formStatus.style.opacity = 1;
-
-                // Hide after 6 seconds
-                setTimeout(() => {
+                    multiStepForm.classList.add('hidden');
+                    successMsg.classList.remove('hidden');
                     anime({
-                        targets: formStatus,
-                        opacity: 0,
-                        duration: 500,
-                        complete: function () {
-                            formStatus.classList.add('hidden');
-                            formStatus.style.opacity = 1;
-                        }
+                        targets: successMsg,
+                        opacity: [0, 1],
+                        translateY: [20, 0],
+                        duration: 800,
+                        easing: 'easeOutExpo'
                     });
-                }, 6000);
-
+                } else {
+                    throw new Error("Erreur serveur.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Erreur lors de l'envoi. Veuillez réessayer.");
             } finally {
-                btn.innerHTML = originalBtnText;
-                btn.disabled = false;
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
             }
         });
     }
 
-    // --- Timeline Scroll Animation (Education) ---
-    const eduTimeline = document.getElementById('education-timeline');
-    const eduBall = document.getElementById('education-scroll-ball');
 
-    if (eduTimeline && eduBall) {
-        const eduAnimation = anime({
-            targets: eduBall,
-            top: ['0%', '100%'],
-            translateY: ['0px', '-20px'], // Subtract height at end to stay on line
-            autoplay: false,
-            easing: 'linear',
-            duration: 1000
-        });
-
-        ScrollTrigger.create({
-            trigger: eduTimeline,
-            start: "top 60%",
-            end: "bottom 60%",
-            scrub: true,
-            onUpdate: (self) => {
-                eduAnimation.seek(self.progress * 1000);
-            }
-        });
-    }
-
-    // --- Timeline Scroll Animation (Experience) ---
-    const expTimeline = document.getElementById('experience-timeline');
-    const expBall = document.getElementById('experience-scroll-ball');
-
-    if (expTimeline && expBall) {
-        const expAnimation = anime.timeline({
-            autoplay: false,
-            duration: 1000,
-            easing: 'linear'
-        }).add({
-            targets: expBall,
-            top: ['0%', '100%'],
-            translateY: ['0px', '-20px']
-        });
-
-        ScrollTrigger.create({
-            trigger: expTimeline,
-            start: "top 60%",
-            end: "bottom 60%",
-            scrub: true,
-            onUpdate: (self) => {
-                expAnimation.seek(self.progress * 1000);
-            }
-        });
-    }
 
     // --- Show More Projects ---
     const showMoreBtn = document.getElementById('show-more-projects');
@@ -673,7 +749,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Scroll to Top Visibility & Progress ---
+    // --- Scroll to Top Visibility & Progress (OPTIMISED) ---
     const scrollTopBtn = document.getElementById('scroll-top');
     const progressCircle = document.querySelector('.progress-ring__circle');
 
@@ -682,35 +758,43 @@ document.addEventListener('DOMContentLoaded', () => {
         const circumference = radius * 2 * Math.PI;
         progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
 
-        window.addEventListener('scroll', () => {
+        let scrollTicking = false; // RAF throttle flag
+
+        const updateScrollTop = () => {
             const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
             const scrollPercent = Math.min(Math.max(window.scrollY / scrollTotal, 0), 1);
             const offset = circumference - (scrollPercent * circumference);
 
-            // Update Progress Circle
+            // All DOM mutations INSIDE the RAF — no layout thrashing
             progressCircle.style.strokeDashoffset = offset;
 
-            // Visibility Logic
             if (window.scrollY > 500) {
                 scrollTopBtn.classList.add('show');
-                scrollTopBtn.style.transform = `translateY(0)`;
             } else {
                 scrollTopBtn.classList.remove('show');
-                scrollTopBtn.style.transform = `translateY(20px)`;
             }
 
-            // Progressive Border / Color Change
             if (scrollPercent > 0.95) {
-                progressCircle.style.stroke = '#0077ffff'; // Green at the bottom
+                progressCircle.style.stroke = '#0077ff';
                 progressCircle.style.strokeWidth = '4';
             } else if (scrollPercent > 0.5) {
-                progressCircle.style.stroke = '#2141ceff'; // Purple in the middle
+                progressCircle.style.stroke = '#2141ce';
                 progressCircle.style.strokeWidth = '3.5';
             } else {
-                progressCircle.style.stroke = '#2402e6ff'; // Blue at the top
+                progressCircle.style.stroke = '#2402e6';
                 progressCircle.style.strokeWidth = '3';
             }
-        });
+
+            scrollTicking = false;
+        };
+
+        // passive:true — browser can scroll immediately without waiting for handler
+        window.addEventListener('scroll', () => {
+            if (!scrollTicking) {
+                window.requestAnimationFrame(updateScrollTop);
+                scrollTicking = true;
+            }
+        }, { passive: true });
     }
 
 
@@ -722,7 +806,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 trigger: el,
                 start: "top 90%",
                 end: "bottom 20%",
-                scrub: 10, // Very slow
+                scrub: 1.5, // Reduced from 10 — ticker stays active less time
             },
             color: "var(--reveal-target)",
             opacity: 1
@@ -735,9 +819,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     trigger: el,
                     start: "top 85%",
                     end: "bottom 20%",
-                    scrub: 10,
+                    scrub: 1.5, // Reduced from 10
                 },
-                color: "#10b981", // Green
+                color: "#10b981",
                 fontWeight: "700"
             });
         }
@@ -783,16 +867,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, { passive: true });
 
+        // Use transform:translate instead of left/top — GPU composited, NO reflow
         function animateCursor() {
             dotX += (mouseX - dotX) * dotEasing;
             dotY += (mouseY - dotY) * dotEasing;
-            dot.style.left = `${dotX}px`;
-            dot.style.top = `${dotY}px`;
+            dot.style.transform = `translate(${dotX}px, ${dotY}px)`;
 
             followerX += (mouseX - followerX) * followerEasing;
             followerY += (mouseY - followerY) * followerEasing;
-            follower.style.left = `${followerX}px`;
-            follower.style.top = `${followerY}px`;
+            follower.style.transform = `translate(${followerX}px, ${followerY}px)`;
 
             requestAnimationFrame(animateCursor);
         }
@@ -804,7 +887,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!target) return;
 
-            const projectCard = target.closest('.project-card');
+            const projectCard = target.closest('.project-card-3d');
             const link = target.closest('a, button, .nav-link-item, .tech-item');
             const textReveal = target.closest('.hover-reveal'); // Check for H1/H2 with reveal class
 
@@ -827,15 +910,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('touchstart', (e) => handleHover(e.target), { passive: true });
         document.addEventListener('touchend', () => setTimeout(() => handleHover(null), 300), { passive: true });
 
-        // Click interaction for project cards
+        // Click interaction for project cards (Simplified because they are now <a> tags)
         document.addEventListener('click', (e) => {
-            const projectCard = e.target.closest('.project-card');
-            if (projectCard) {
-                // Find the first link (usually the demo link) and navigate to it
-                const demoLink = projectCard.querySelector('a');
-                if (demoLink && !e.target.closest('a')) {
-                    window.open(demoLink.href, '_blank');
-                }
+            const projectCard = e.target.closest('.project-card-3d');
+            if (projectCard && !e.target.closest('a')) {
+                // If somehow the click wasn't on the <a> itself but on the wrapper
+                const link = projectCard.querySelector('a');
+                if (link) link.click();
             }
         });
 
@@ -847,5 +928,59 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('mouseenter', () => {
             cursor.style.opacity = '1';
         });
+    }
+
+    // --- Optimized Header Fix Scroll Effect ---
+    const mainHeader = document.getElementById('main-header');
+    if (mainHeader) {
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+
+        const updateHeader = () => {
+            if (window.scrollY > 50) {
+                mainHeader.classList.add('bg-white/80', 'dark:bg-black/80', 'backdrop-blur-md', 'py-4', 'shadow-lg');
+                mainHeader.classList.remove('py-6');
+            } else {
+                mainHeader.classList.remove('bg-white/80', 'dark:bg-black/80', 'backdrop-blur-md', 'py-4', 'shadow-lg');
+                mainHeader.classList.add('py-6');
+            }
+            ticking = false;
+        };
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(updateHeader);
+                ticking = true;
+            }
+        }, { passive: true });
+    }
+
+    // --- Optimized Footer F1 Interaction (Parallax) ---
+    const footerParallax = document.getElementById('footer-parallax');
+    const footerPhoto = footerParallax?.querySelector('.footer-photo');
+
+    if (footerParallax && footerPhoto) {
+        // Use GSAP quickTo for ultra-smooth mouse following performance
+        const xTo = gsap.quickTo(footerPhoto, "x", { duration: 1, ease: "power2.out" });
+        const yTo = gsap.quickTo(footerPhoto, "y", { duration: 1, ease: "power2.out" });
+
+        let isFooterInView = false;
+
+        // Only track mouse if footer is in viewport
+        const observer = new IntersectionObserver((entries) => {
+            isFooterInView = entries[0].isIntersecting;
+        }, { threshold: 0.1 });
+
+        observer.observe(footerParallax);
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isFooterInView) return;
+
+            const moveX = (e.clientX - window.innerWidth / 2) / 50;
+            const moveY = (e.clientY - window.innerHeight / 2) / 50;
+
+            xTo(moveX);
+            yTo(moveY);
+        }, { passive: true });
     }
 });

@@ -7,12 +7,17 @@
     <title>Zakaria Chamekh | Développeur Web Full Stack Junior</title>
     <meta name="description"
         content="Portfolio de Zakaria Chamekh, Développeur Full Stack junior spécialisé en React, Laravel et WordPress à Casablanca.">
-    <link rel="icon" href="img/header1.jpg">
+    <link rel="icon" href="NV-IMG/V.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Storm&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Pixels&display=swap" rel="stylesheet">
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -25,12 +30,14 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
+                        sans: ['Inter', 'Outfit', 'sans-serif'],
+                        rubik: ['Rubik Storm', 'cursive'],
+                        bebas: ['Bebas Neue', 'cursive'],
                     },
                     colors: {
                         slate: {
-                            850: '#151e32',
-                            900: '#0f172a',
+                            850: '#111111',
+                            900: '#000000',
                         }
                     },
                     animation: {
@@ -62,382 +69,320 @@
 </head>
 
 <body
-    class="bg-gray-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans overflow-x-hidden transition-colors duration-300 w-full">
+    class="bg-gray-50 text-slate-800 dark:bg-black dark:text-slate-100 font-sans transition-colors duration-300 w-full overflow-x-clip">
 
     <!-- Splash Screen -->
     <div id="splash-screen"
-        class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white dark:bg-slate-900 overflow-hidden">
+        class="absolute inset-0 z-[9999] flex flex-col items-center justify-center bg-black overflow-hidden">
 
-        <!-- Background Globe -->
-        <div id="splash-globe" class="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <img src="img/globe.png" alt="Globe"
-                class="w-[50vw] h-[50vw] md:w-[30vw] md:h-[30vw] object-cover rounded-full opacity-90 drop-shadow-2xl">
+        <!-- Slot Machine Counter -->
+        <div id="splash-counter"
+            class="text-red-600 text-4xl md:text-6xl font-bold font-sans relative z-20 tabular-nums tracking-widest">
+            0000
         </div>
 
-        <!-- Text Split (ZC left, 05 right) -->
-        <!-- Text Split (ZC left, 05 right) on Desktop / Top on Mobile -->
-        <div id="splash-text"
-            class="relative z-10 w-full flex items-center justify-center gap-4 md:gap-[35vw] mb-64 md:mb-0 text-5xl md:text-8xl font-bold">
-            <span
-                class="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent drop-shadow-sm">ZC.</span>
-            <span class="text-blue-600 dark:text-white drop-shadow-sm">05</span>
+        <!-- V Logo (Hidden Initially) -->
+        <div id="splash-v"
+            class="absolute z-20 opacity-0 transform scale-0 text-9xl font-rubik text-red-600 drop-shadow-[0_0_15px_rgba(220,38,38,0.4)]">
+            V
+        </div>
+
+        <!-- Name at Bottom -->
+        <div id="splash-name" class="absolute bottom-10 text-white font-bebas text-xs tracking-widest opacity-80 z-20">
+            ZAKARIA CHAMEKH
         </div>
     </div>
 
     <!-- Navigation -->
     <!-- Header / Navigation Section -->
     <!-- Header / Navigation Section -->
-    <header
-        class="w-full py-4 md:py-6 px-4 md:px-12 flex flex-wrap md:flex-nowrap items-center justify-between gap-y-4 md:gap-x-12 absolute top-0 z-50 transition-all duration-500"
-        id="main-header">
+    <!-- Header (Simplified Logo & Services) -->
+    <header id="main-header"
+        class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-6 flex justify-between items-center transition-all duration-300">
 
-        <!-- Logo (Left on all screens) -->
-        <a href="#" class="text-2xl md:text-3xl font-bold flex items-center group order-1">
-            <span
-                class="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent">ZC.</span>
-            <span id="logo-05"
-                class="text-blue-600 dark:text-white border-r-2 border-blue-500 dark:border-blue-400 pr-0.5 min-w-[20px] transition-all duration-300"></span>
+        <!-- New Stacked Logo -->
+        <a href="#" class="text-2xl font-bold flex flex-col leading-none group order-1 tracking-tighter">
+            <span class="text-black dark:text-white">ZAKARIA</span>
+            <span class="text-gray-500 dark:text-gray-400 text-sm tracking-widest">CHAMEKH</span>
         </a>
 
-        <!-- External Controls (Always Right) -->
-        <div class="navbar-external-controls flex items-center gap-3 order-2 md:order-3">
-            <a href="#contact"
-                class="flex px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all duration-300 shadow-lg shadow-blue-600/20 hover:scale-110 active:scale-95 font-semibold items-center gap-2">
-                <i class="fas fa-envelope"></i>
-                <span class="hidden sm:inline">Contact</span>
-            </a>
-
-            <!-- Dark Mode Toggle -->
-            <button id="theme-toggle"
-                class="w-11 h-11 md:w-12 md:h-12 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-yellow-400 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all duration-300 focus:outline-none shadow-xl border border-gray-100 dark:border-slate-700">
-                <i class="fas fa-moon dark:hidden"></i>
-                <i class="fas fa-sun hidden dark:block"></i>
-            </button>
-        </div>
-
-        <!-- Centered Navbar Pill (Fixed container via CSS) -->
-        <div class="navbar-pill-wrapper order-3 md:order-2 flex justify-center">
-            <nav class="navbar-pill">
-                <div class="navbar-pill-inner">
-                    <div
-                        class="flex items-center justify-center gap-4 sm:gap-6 lg:space-x-8 px-4 md:px-0 overflow-x-auto no-scrollbar">
-                        <a href="#home" class="hidden md:block nav-link-item font-semibold whitespace-nowrap"
-                            data-text="Accueil"><span>Accueil</span></a>
-                        <a href="#about" class="nav-link-item font-semibold whitespace-nowrap"
-                            data-text="À Propos"><span>À Propos</span></a>
-                        <a href="#skills" class="nav-link-item font-semibold whitespace-nowrap"
-                            data-text="Compétences"><span>Compétences</span></a>
-                        <a href="#experience" class="nav-link-item font-semibold whitespace-nowrap"
-                            data-text="Parcours"><span>Parcours</span></a>
-                        <a href="#projects" class="nav-link-item font-semibold whitespace-nowrap"
-                            data-text="Projets"><span>Projets</span></a>
-                    </div>
-                </div>
-            </nav>
-        </div>
+        <!-- Single Services Link with Scramble Effect -->
+        <a href="services.html" class="glitch-link scramble-text order-2" data-text="SERVICES" data-value="SERVICES">
+            SERVICES <span class="arrow">↗</span>
+        </a>
     </header>
 
-
-
-
-    <!-- Mobile Menu Overlay (Removed as links are now permanent) -->
-
-
+    <!-- Fixed WebGL Canvas — always visible as background -->
+    <canvas id="hero-3d-canvas"
+        style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
 
     <!-- Hero Section -->
-    <section id="home"
-        class="min-h-screen flex items-center pt-32 md:pt-32 relative overflow-hidden bg-white dark:bg-slate-900 transition-colors duration-300">
-        <!-- Background Elements -->
-        <div
-            class="absolute top-20 right-0 w-72 h-72 bg-purple-500/10 dark:bg-purple-600/20 rounded-full blur-3xl -z-10 animate-blob">
-        </div>
-        <div
-            class="absolute bottom-20 left-0 w-72 h-72 bg-blue-500/10 dark:bg-blue-600/20 rounded-full blur-3xl -z-10 animate-blob animation-delay-2000">
-        </div>
-
-        <!-- 3D Particles Container / Moon Background -->
-        <!-- <div id="particles-container" class="absolute inset-0 w-full h-full -z-5 pointer-events-none"></div> -->
-        <div
-            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -z-5 pointer-events-none opacity-20 dark:opacity-30 mix-blend-screen w-[400px] h-[400px]">
-            <img src="img/moon.png" alt="Moon Background" class="w-full h-full object-contain animate-moon-bg">
-        </div>
-
-
-
-
-        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-            <div class="hero-content">
-                <span id="hero-greeting"
-                    class="inline-block py-2 px-5 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xl md:text-2xl font-medium mb-6 border border-blue-200 dark:border-blue-500/20">
-                </span>
-                <h1
-                    class="hover-reveal text-4xl md:text-6xl font-bold leading-tight mb-4 text-slate-900 dark:text-white cursor-default inline-block">
-                    Développeur Web <br>
-                    <span id="typewriter"
-                        class="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent"></span><span
-                        class="text-blue-600 dark:text-blue-400 animate-pulse">|</span>
-                </h1>
-                <h2
-                    class="hover-reveal text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-6 font-light cursor-default inline-block">
-                    Spécialisé en React, Laravel et WordPress
-                </h2>
-                <p class="text-slate-600 dark:text-slate-300 text-lg mb-8 max-w-lg leading-relaxed">
-                    Développeur passionné par la création d’applications web performantes, modernes et intuitives.
-                    Transformons vos idées en réalité digitale.
+    <section id="home" class="relative w-full min-h-screen" style="z-index:1;">
+        <!-- Hero UI Overlay -->
+        <div class="absolute inset-0 z-20 pointer-events-none flex flex-col justify-center items-center">
+            <h1 class="text-[14vw] md:text-[12vw] font-[900] tracking-tighter text-white uppercase leading-none select-none drop-shadow-2xl mix-blend-exclusion"
+                id="hero-name-overlay">
+                Zakaria
+            </h1>
+            <div class="mt-4 text-xl md:text-3xl text-white font-medium tracking-widest uppercase select-none relative h-8 flex justify-center items-center overflow-hidden w-full"
+                id="hero-role-container">
+                <span class="glitched-role transform translate-y-0 opacity-100 will-change-transform font-bold"
+                    id="hero-role-text">Développeur</span>
+            </div>
+            <div id="hero-extra-info" class="flex flex-col items-center pointer-events-auto mt-8">
+                <p class="text-sm sm:text-base md:text-lg max-w-2xl text-gray-300 text-center px-6" id="hero-desc-text">
+                    Passionate about crafting clean code and intuitive user experiences.
                 </p>
-                <div class="flex flex-wrap gap-4" style="margin-top: 10px;">
-                    <a href="Zakaria_Chamekh.pdf" download="CV_Zakaria_Chamekh.pdf"
-                        style="display: inline-flex; align-items: center; background-color: #059669; color: white; padding: 12px 30px; border-radius: 8px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;"
-                        onmouseover="this.style.backgroundColor='#047857'; this.style.transform='translateY(-1px)'"
-                        onmouseout="this.style.backgroundColor='#059669'; this.style.transform='translateY(0)'">
-                        <i class="fas fa-download" style="margin-right: 10px;"></i> Télécharger mon CV
+                <p class="text-gray-500 text-lg md:text-xl mt-2 leading-relaxed">React • Laravel • WordPress</p>
+                <div class="flex flex-wrap gap-6 mt-6" id="hero-buttons">
+                    <a href="Zakaria_Chamekh.pdf" download="CV_Zakaria_Chamekh.pdf" class="custom-btn-cv">
+                        <i class="fas fa-download"></i> Mon CV
                     </a>
                 </div>
             </div>
-            <div class="hero-image relative hidden md:block">
-                <div
-                    class="relative w-80 h-96 ml-auto mr-10 -mt-16 bg-gradient-to-b from-blue-500 to-purple-600 rounded-2xl p-1 shadow-2xl rotate-3 hover:rotate-0 transition-all duration-500">
-                    <div
-                        class="bg-white dark:bg-slate-900 w-full h-full rounded-xl overflow-hidden flex items-center justify-center transition-colors duration-300 relative group">
-
-                        <!-- Profile Image -->
-                        <!-- Remplacez 'img/profile.png' par le chemin de votre photo -->
-                        <!-- Pour l'instant, si l'image n'existe pas, une image par défaut s'affichera via le 'onerror' -->
-                        <img src="img/profil_zac.png" alt="Zakaria Chamekh"
-                            class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
-                            onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Zakaria+Chamekh&background=0D8ABC&color=fff&size=500&font-size=0.33';">
-
-                        <!-- Overlay au survol -->
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        </div>
-                    </div>
-                </div>
+        </div>
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-[30] flex flex-col items-center pointer-events-none"
+            id="hero-scroll-indicator">
+            <span class="text-white text-[10px] tracking-[0.3em] mb-3 uppercase opacity-70">Scroll</span>
+            <div class="w-px h-16 bg-white/20 relative overflow-hidden">
+                <div class="w-full h-1/2 bg-white animate-pulse-line absolute top-0 left-0"></div>
             </div>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 bg-gray-50 dark:bg-slate-800/50 transition-colors duration-300">
-        <div class="container mx-auto px-6">
-            <div class="section-header text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800 dark:text-white">À Propos</h2>
-                <div class="w-20 h-1 bg-blue-500 mx-auto rounded-full"></div>
-            </div>
+    <section id="about" class="py-24 bg-black relative overflow-clip" style="position:relative; z-index:30;">
 
-            <div class="grid md:grid-cols-3 gap-12 items-center max-w-5xl mx-auto">
-                <div class="md:col-span-1 flex justify-center">
-                    <div
-                        class="w-64 h-64 bg-white dark:bg-slate-700 rounded-2xl overflow-hidden border-2 border-gray-100 dark:border-slate-600 rotate-3 shadow-xl transition-colors group">
-                        <img src="img/apropos2.jpg" alt="Zakaria Chamekh"
-                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                </div>
-                <div class="md:col-span-2">
-                    <h3 class="text-2xl font-bold mb-4 text-blue-600 dark:text-blue-400">Qui suis-je ?</h3>
-                    <p class="scroll-reveal-text mb-6 leading-relaxed">
-                        Développeur Full Stack junior basé à <strong>Casablanca</strong>, je suis spécialisé dans les
-                        technologies modernes comme <strong>React, Laravel et
-                            WordPress</strong>.
-                    </p>
-                    <p class="scroll-reveal-text mb-6 leading-relaxed">
-                        Motivé et autonome, j'ai acquis une précieuse expérience lors de mon stage chez
-                        <strong>Sparkvision</strong>, où
-                        j'ai pu perfectionner mes compétences en développement <strong>WordPress</strong> et en
-                        optimisation <strong>SEO</strong>. Je suis
-                        constamment en veille technologique pour rester à jour avec les dernières tendances du web.
-                    </p>
-                    <div class="grid grid-cols-2 gap-4 mt-8">
-                        <div class="flex items-center space-x-3 text-slate-700 dark:text-slate-300">
-                            <div
-                                class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center">
-                                <i class="fas fa-map-marker-alt text-blue-500"></i>
-                            </div>
-                            <span>Casablanca, Maroc</span>
-                        </div>
-                        <div class="flex items-center space-x-3 text-slate-700 dark:text-slate-300">
-                            <div
-                                class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center">
-                                <i class="fas fa-envelope text-blue-500"></i>
-                            </div>
-                            <span class="truncate">chamekhzakaria95@gmail.com</span>
-                        </div>
-                        <div class="flex items-center space-x-3 text-slate-700 dark:text-slate-300">
-                            <div
-                                class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center">
-                                <i class="fas fa-graduation-cap text-blue-500"></i>
-                            </div>
-                            <span>ENSAM Casablanca</span>
-                        </div>
-                        <div class="flex items-center space-x-3 text-slate-700 dark:text-slate-300">
-                            <div
-                                class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center">
-                                <i class="fas fa-language text-blue-500"></i>
-                            </div>
-                            <span>Arabe, Fr, Eng</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Large Background Photo inside About -->
+        <div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+            <img src="NV-IMG/heroP1.png" alt="Zakaria About Background"
+                class="w-full h-full object-cover object-center filter grayscale contrast-125 mx-auto"
+                style="max-width: 1200px; mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);"
+                loading="lazy" decoding="async" onerror="this.onerror=null; this.src='NV-IMG/heroP.png';">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-transparent"></div>
         </div>
-    </section>
 
-    <!-- Skills Section -->
-    <section id="skills" class="py-20 bg-white dark:bg-slate-900 transition-colors duration-300">
-        <div class="container mx-auto px-6">
-            <div class="section-header text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800 dark:text-white">Mes Compétences</h2>
-                <div class="w-20 h-1 bg-purple-500 mx-auto rounded-full"></div>
-            </div>
+        <!-- Gradient top — blends with the fixed 3D canvas behind -->
+        <div class="absolute top-0 left-0 w-full h-32 pointer-events-none"
+            style="background:linear-gradient(to bottom,transparent,#000);z-index:0;"></div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Frontend -->
-                <div
-                    class="skill-card bg-gray-50 dark:bg-slate-800 p-8 rounded-xl border border-gray-100 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-300 group shadow-lg dark:shadow-none">
-                    <div
-                        class="w-12 h-12 bg-blue-100 dark:bg-blue-500/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-500 transition-colors">
-                        <i
-                            class="fas fa-laptop-code text-blue-600 dark:text-blue-400 group-hover:text-white text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-6 text-slate-800 dark:text-white">Frontend</h3>
-                    <div class="space-y-4">
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-1 text-slate-600 dark:text-slate-300">
-                                <span>HTML5 / CSS3</span>
-                                <span class="text-blue-600 dark:text-blue-400">90%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                                <div class="bg-blue-600 dark:bg-blue-500 h-2 rounded-full" style="width: 90%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-1 text-slate-600 dark:text-slate-300">
-                                <span>JavaScript (ES6+)</span>
-                                <span class="text-blue-600 dark:text-blue-400">80%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                                <div class="bg-blue-600 dark:bg-blue-500 h-2 rounded-full" style="width: 80%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-1 text-slate-600 dark:text-slate-300">
-                                <span>React.js</span>
-                                <span class="text-blue-600 dark:text-blue-400">75%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                                <div class="bg-blue-600 dark:bg-blue-500 h-2 rounded-full" style="width: 75%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-1 text-slate-600 dark:text-slate-300">
-                                <span>Tailwind / Bootstrap</span>
-                                <span class="text-blue-600 dark:text-blue-400">85%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                                <div class="bg-blue-600 dark:bg-blue-500 h-2 rounded-full" style="width: 85%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                        </div>
+        <div class="container mx-auto px-6 relative z-10">
+
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <div class="manifesto-line mb-1 reveal-type" data-speed="0.1">
+                    <div class="perspective-container">
+                        <span class="back">CREATOR</span>
+                        <span class="front">CREATOR</span>
                     </div>
                 </div>
-
-                <!-- Backend -->
-                <div
-                    class="skill-card bg-gray-50 dark:bg-slate-800 p-8 rounded-xl border border-gray-100 dark:border-slate-700 hover:border-purple-500 dark:hover:border-purple-500 transition-all duration-300 group shadow-lg dark:shadow-none">
-                    <div
-                        class="w-12 h-12 bg-purple-100 dark:bg-purple-500/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-purple-500 transition-colors">
-                        <i
-                            class="fas fa-server text-purple-600 dark:text-purple-400 group-hover:text-white text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-6 text-slate-800 dark:text-white">Backend & CMS</h3>
-                    <div class="space-y-4">
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-1 text-slate-600 dark:text-slate-300">
-                                <span>PHP / Laravel</span>
-                                <span class="text-purple-600 dark:text-purple-400">80%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                                <div class="bg-purple-600 dark:bg-purple-500 h-2 rounded-full" style="width: 80%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-1 text-slate-600 dark:text-slate-300">
-                                <span>WordPress</span>
-                                <span class="text-purple-600 dark:text-purple-400">85%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                                <div class="bg-purple-600 dark:bg-purple-500 h-2 rounded-full" style="width: 85%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-1 text-slate-600 dark:text-slate-300">
-                                <span>SQL / MySQL</span>
-                                <span class="text-purple-600 dark:text-purple-400">75%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                                <div class="bg-purple-600 dark:bg-purple-500 h-2 rounded-full" style="width: 75%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-1 text-slate-600 dark:text-slate-300">
-                                <span>Java (Basics)</span>
-                                <span class="text-purple-600 dark:text-purple-400">60%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                                <div class="bg-purple-600 dark:bg-purple-500 h-2 rounded-full" style="width: 60%"></div>
-                            </div>
-                        </div>
+                <div class="racing-stripe my-2"></div>
+                <div class="manifesto-line mb-4 reveal-type" data-speed="0.2">
+                    <div class="perspective-container">
+                        <span class="back">ENGINEER</span>
+                        <span class="front">ENGINEER</span>
                     </div>
                 </div>
-
-                <!-- Tools & Others -->
-                <div
-                    class="skill-card bg-gray-50 dark:bg-slate-800 p-8 rounded-xl border border-gray-100 dark:border-slate-700 hover:border-green-500 dark:hover:border-green-500 transition-all duration-300 group shadow-lg dark:shadow-none">
-                    <div
-                        class="w-12 h-12 bg-green-100 dark:bg-green-500/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-green-500 transition-colors">
-                        <i class="fas fa-tools text-green-600 dark:text-green-400 group-hover:text-white text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-6 text-slate-800 dark:text-white">Outils & Autres</h3>
-                    <div class="flex flex-wrap gap-3">
-                        <span
-                            class="px-3 py-1 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-gray-200 dark:border-slate-600 rounded-full text-sm">Git
-                            & GitHub</span>
-                        <span
-                            class="px-3 py-1 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-gray-200 dark:border-slate-600 rounded-full text-sm">UML</span>
-                        <span
-                            class="px-3 py-1 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-gray-200 dark:border-slate-600 rounded-full text-sm">Postman
+                <h3 class="manifesto-line font-bold mb-6 text-white reveal-type"
+                    style="font-size: clamp(1.5rem, 3.5vw, 3rem); line-height: 1.2; display: block;">
+                    <div class="perspective-container">
+                        Plus qu'un développeur,<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-white">
+                            un architecte digital.
                         </span>
-                        <span
-                            class="px-3 py-1 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-gray-200 dark:border-slate-600 rounded-full text-sm">Power
-                            BI</span>
-                        <span
-                            class="px-3 py-1 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-gray-200 dark:border-slate-600 rounded-full text-sm">Réseaux
-                            (TCP/IP)</span>
-                        <span
-                            class="px-3 py-1 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-gray-200 dark:border-slate-600 rounded-full text-sm">SEO
-                            Basics</span>
-                        <span
-                            class="px-3 py-1 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-gray-200 dark:border-slate-600 rounded-full text-sm">VS
-                            Code</span>
-                        <span
-                            class="px-3 py-1 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-gray-200 dark:border-slate-600 rounded-full text-sm">Icônes
-                            & UI</span>
+                    </div>
+                </h3>
+
+                <div class="space-y-6 text-lg text-gray-300 font-medium leading-relaxed">
+                    <div class="reveal-type" data-speed="0.1">
+                        <div class="perspective-container">
+                            <p>
+                                Basé à <span class="text-red-500 font-bold">Casablanca</span>, je fusionne
+                                technique et créativité pour concevoir des expériences web immersives. Spécialisé en
+                                <span
+                                    class="bg-white/10 px-2 py-1 rounded text-white font-semibold border border-white/20 hover:border-red-500 transition-colors cursor-default">React</span>,
+                                <span
+                                    class="bg-white/10 px-2 py-1 rounded text-white font-semibold border border-white/20 hover:border-red-500 transition-colors cursor-default">Laravel</span>
+                                et
+                                <span
+                                    class="bg-white/10 px-2 py-1 rounded text-white font-semibold border border-white/20 hover:border-red-500 transition-colors cursor-default">WordPress</span>.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="reveal-type" data-speed="0.15">
+                        <div class="perspective-container">
+                            <p>
+                                Mon parcours chez <strong class="text-white">Sparkvision</strong> m'a appris
+                                une chose essentielle : le code doit servir l'expérience utilisateur. Je ne construis
+                                pas juste
+                                des sites, je bâtis des écosystèmes digitaux performants.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THE MARQUEE (TEXTE VIVANT) IN THE MIDDLE OF ABOUT -->
+        <div class="relative z-10 my-24 py-10 bg-black/40 backdrop-blur-sm border-y border-white/10"
+            style="width: 100vw; margin-left: calc(-50vw + 50%); overflow: hidden;">
+            <!-- SVG Filter for liquid distortion on hover -->
+            <svg style="position:absolute;width:0;height:0;" aria-hidden="true">
+                <defs>
+                    <filter id="liquid-distort">
+                        <feTurbulence type="turbulence" baseFrequency="0.015" numOctaves="3" result="noise" seed="2">
+                            <animate attributeName="baseFrequency" values="0.015;0.025;0.015" dur="4s"
+                                repeatCount="indefinite" />
+                        </feTurbulence>
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R"
+                            yChannelSelector="G" id="liquid-map">
+                            <animate attributeName="scale" values="0;18;0" dur="0.6s" begin="indefinite" fill="freeze"
+                                id="liquid-anim" />
+                        </feDisplacementMap>
+                    </filter>
+                </defs>
+            </svg>
+
+            <div class="marquee-wrapper" id="marquee-section" style="padding:0; background:transparent;">
+                <!-- Line 1: OUTLINE text ← -->
+                <div class="marquee-line marquee-1" id="marquee-line-1">
+                    <span class="marquee-word">CREATIVE DEVELOPER</span><span class="marquee-sep">◆</span>
+                    <span class="marquee-word">REACT</span><span class="marquee-sep">◆</span>
+                    <span class="marquee-word">THREE.JS</span><span class="marquee-sep">◆</span>
+                    <span class="marquee-word">LARAVEL</span><span class="marquee-sep">◆</span>
+                    <span class="marquee-word">FULL STACK</span><span class="marquee-sep">◆</span>
+                    <span class="marquee-word">CREATIVE DEVELOPER</span><span class="marquee-sep">◆</span>
+                    <span class="marquee-word">REACT</span><span class="marquee-sep">◆</span>
+                    <span class="marquee-word">THREE.JS</span><span class="marquee-sep">◆</span>
+                    <span class="marquee-word">LARAVEL</span><span class="marquee-sep">◆</span>
+                    <span class="marquee-word">FULL STACK</span><span class="marquee-sep">◆</span>
+                </div>
+                <!-- Line 2: FILLED text → -->
+                <div class="marquee-line marquee-2" id="marquee-line-2">
+                    <span class="marquee-word">DÉVELOPPEUR WEB</span><span class="marquee-sep">✦</span>
+                    <span class="marquee-word">UI/UX DESIGN</span><span class="marquee-sep">✦</span>
+                    <span class="marquee-word">WORDPRESS</span><span class="marquee-sep">✦</span>
+                    <span class="marquee-word">WEBGL</span><span class="marquee-sep">✦</span>
+                    <span class="marquee-word">GSAP</span><span class="marquee-sep">✦</span>
+                    <span class="marquee-word">DÉVELOPPEUR WEB</span><span class="marquee-sep">✦</span>
+                    <span class="marquee-word">UI/UX DESIGN</span><span class="marquee-sep">✦</span>
+                    <span class="marquee-word">WORDPRESS</span><span class="marquee-sep">✦</span>
+                    <span class="marquee-word">WEBGL</span><span class="marquee-sep">✦</span>
+                    <span class="marquee-word">GSAP</span><span class="marquee-sep">✦</span>
+                </div>
+                <!-- Line 3: KEYWORDS ← dynamically Yellow via styling -->
+                <div class="marquee-line marquee-3" id="marquee-line-3" style="color:#D4FF00;">
+                    <span class="marquee-word font-bold" style="color:#D4FF00; -webkit-text-stroke:0;">HTML5</span><span
+                        class="marquee-sep" style="color:rgba(255,255,255,0.3)">•</span>
+                    <span class="marquee-word font-bold" style="color:#D4FF00; -webkit-text-stroke:0;">CSS3</span><span
+                        class="marquee-sep" style="color:rgba(255,255,255,0.3)">•</span>
+                    <span class="marquee-word font-bold"
+                        style="color:#D4FF00; -webkit-text-stroke:0;">JAVASCRIPT</span><span class="marquee-sep"
+                        style="color:rgba(255,255,255,0.3)">•</span>
+                    <span class="marquee-word font-bold" style="color:#D4FF00; -webkit-text-stroke:0;">PHP</span><span
+                        class="marquee-sep" style="color:rgba(255,255,255,0.3)">•</span>
+                    <span class="marquee-word font-bold" style="color:#D4FF00; -webkit-text-stroke:0;">MYSQL</span><span
+                        class="marquee-sep" style="color:rgba(255,255,255,0.3)">•</span>
+                    <span class="marquee-word font-bold" style="color:#D4FF00; -webkit-text-stroke:0;">GIT</span><span
+                        class="marquee-sep" style="color:rgba(255,255,255,0.3)">•</span>
+                    <span class="marquee-word font-bold"
+                        style="color:#D4FF00; -webkit-text-stroke:0;">ANIME.JS</span><span class="marquee-sep"
+                        style="color:rgba(255,255,255,0.3)">•</span>
+                    <span class="marquee-word font-bold" style="color:#D4FF00; -webkit-text-stroke:0;">HTML5</span><span
+                        class="marquee-sep" style="color:rgba(255,255,255,0.3)">•</span>
+                    <span class="marquee-word font-bold" style="color:#D4FF00; -webkit-text-stroke:0;">CSS3</span><span
+                        class="marquee-sep" style="color:rgba(255,255,255,0.3)">•</span>
+                    <span class="marquee-word font-bold"
+                        style="color:#D4FF00; -webkit-text-stroke:0;">JAVASCRIPT</span><span class="marquee-sep"
+                        style="color:rgba(255,255,255,0.3)">•</span>
+                    <span class="marquee-word font-bold" style="color:#D4FF00; -webkit-text-stroke:0;">PHP</span><span
+                        class="marquee-sep" style="color:rgba(255,255,255,0.3)">•</span>
+                    <span class="marquee-word font-bold" style="color:#D4FF00; -webkit-text-stroke:0;">MYSQL</span><span
+                        class="marquee-sep" style="color:rgba(255,255,255,0.3)">•</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <!-- Modern Stats / Info Grid -->
+            <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                <div
+                    class="p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 hover:border-red-500 transition-all duration-300">
+                    <div class="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-graduation-cap text-2xl text-red-500"></i>
+                    </div>
+                    <h4 class="font-bold text-white text-xl mb-2">ENSAM</h4>
+                    <p class="text-gray-400">Formation d'Excellence & Ingénierie Analytique</p>
+                </div>
+                <div
+                    class="p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 hover:border-white transition-all duration-300">
+                    <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-code-branch text-2xl text-white"></i>
+                    </div>
+                    <h4 class="font-bold text-white text-xl mb-2">Full Stack</h4>
+                    <p class="text-gray-400">Polyvalence Technique Totale (Front & Back)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expertise Roles Section (Replaces Skills) -->
+    <section id="expertise" class="py-24 bg-black relative overflow-clip">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="section-header text-center mb-20">
+                <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-4">
+                    Domaines d'Expertise
+                </h2>
+                <div class="racing-stripe mx-auto"></div>
+            </div>
+
+            <div class="expertise-stack-container">
+                <div class="expertise-stack">
+                    <!-- Front-End Role -->
+                    <div class="expertise-card role-frontend">
+                        <div class="card-inner">
+                            <div class="card-icon"><i class="fas fa-desktop"></i></div>
+                            <h3 class="card-title">Front-End Developer</h3>
+                            <p class="card-text">Interfaces fluides et immersives. Focus sur l'UX et la performance.</p>
+                            <div class="card-tags">
+                                <span>REACT</span><span>THREE.JS</span><span>GSAP</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <h4 class="mt-8 mb-4 font-semibold text-slate-700 dark:text-slate-300">Langues</h4>
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-sm text-slate-600 dark:text-slate-300">
-                            <span>Arabe</span>
-                            <span class="text-slate-500 dark:text-slate-400">Avancé</span>
+                    <!-- Back-End Role -->
+                    <div class="expertise-card role-backend">
+                        <div class="card-inner">
+                            <div class="card-icon"><i class="fas fa-server"></i></div>
+                            <h3 class="card-title">Back-End Engineer</h3>
+                            <p class="card-text">Logicielle robuste et APIs performantes. Sécurité & Scalabilité.</p>
+                            <div class="card-tags">
+                                <span>LARAVEL</span><span>PHP</span><span>MYSQL</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between text-sm text-slate-600 dark:text-slate-300">
-                            <span>Français</span>
-                            <span class="text-slate-500 dark:text-slate-400">Intermédiaire</span>
+                    </div>
+
+                    <!-- Web Design / UI Role -->
+                    <div class="expertise-card role-design">
+                        <div class="card-inner">
+                            <div class="card-icon"><i class="fas fa-pen-nib"></i></div>
+                            <h3 class="card-title">UI/UX Designer</h3>
+                            <p class="card-text">Design moderne et identité visuelle forte. Maîtrise Figma.</p>
+                            <div class="card-tags">
+                                <span>FIGMA</span><span>PS</span><span>UX DESIGN</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between text-sm text-slate-600 dark:text-slate-300">
-                            <span>Anglais</span>
-                            <span class="text-slate-500 dark:text-slate-400">Débutant</span>
+                    </div>
+                    <!-- Testing & QA Role -->
+                    <div class="expertise-card role-testing">
+                        <div class="card-inner">
+                            <div class="card-icon"><i class="fas fa-vial"></i></div>
+                            <h3 class="card-title">QA & Testing</h3>
+                            <p class="card-text">Garantie de qualité totale via des tests rigoureux et automatisés.</p>
+                            <div class="card-tags">
+                                <span>POSTMAN</span><span>UNIT TEST</span><span>JEST</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -445,640 +390,509 @@
         </div>
     </section>
 
-    <!-- Technologies Marquee -->
-    <div
-        class="bg-gray-50/50 dark:bg-slate-900/50 py-16 border-t border-b border-gray-100 dark:border-slate-800 transition-colors duration-300">
-        <div class="container mx-auto px-6 mb-12">
-            <h3 class="text-2xl font-bold text-center text-slate-800 dark:text-white mb-2">Technologies & Outils</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-center text-sm">Une sélection des outils que je maîtrise
-                au quotidien</p>
-        </div>
-
-        <div class="marquee-container overflow-hidden relative">
-            <!-- Shadow Gradients for smooth fade -->
-            <div
-                class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-gray-50/50 dark:from-slate-900/50 to-transparent z-10 pointer-events-none">
-            </div>
-            <div
-                class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-50/50 dark:from-slate-900/50 to-transparent z-10 pointer-events-none">
-            </div>
-
-            <div class="animate-marquee flex items-center">
-                <!-- Original Set -->
-                <div class="tech-item">
-                    <span class="tech-label">HTML5</span>
-                    <img src="img-svg/icons8-html-5.svg" alt="HTML5" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">CSS3</span>
-                    <img src="img-svg/icons8-css.svg" alt="CSS3" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">JavaScript</span>
-                    <img src="img-svg/icons8-javascript.svg" alt="JavaScript" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">React</span>
-                    <img src="img-svg/icons8-react-native.svg" alt="React" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">PHP</span>
-                    <img src="img/PHP-logo.svg.png" alt="PHP" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Laravel</span>
-                    <img src="img/laravel.png" alt="Laravel" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Tailwind</span>
-                    <img src="img-svg/icons8-vent-arrièrecss.svg" alt="Tailwind" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Bootstrap</span>
-                    <img src="img-svg/icons8-bootstrap.svg" alt="Bootstrap" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Git</span>
-                    <img src="img-svg/icons8-git.svg" alt="Git" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">MySQL</span>
-                    <img src="img-svg/sql-database-generic.svg" alt="MySQL" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">WordPress</span>
-                    <img src="img-svg/icons8-wordpress.svg" alt="WordPress" class="h-12 w-auto">
-                </div>
-
-                <div class="tech-item">
-                    <span class="tech-label">Java</span>
-                    <img src="img-svg/icons8-logo-java-coffee-cup.svg" alt="Java" class="h-12 w-auto">
-                </div>
-
-                <!-- New Technologies -->
-                <div class="tech-item">
-                    <span class="tech-label">GSAP</span>
-                    <img src="img/gsap.jspng.png" alt="GSAP" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Three.js</span>
-                    <img src="img/three.jspng.png" alt="Three.js" class="h-12 w-auto invert dark:invert-0">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Anime.js</span>
-                    <img src="img/anime.jspng.png" alt="Anime.js" class="h-12 w-auto">
-                </div>
-
-                <!-- Duplicate Set -->
-                <div class="tech-item">
-                    <span class="tech-label">HTML5</span>
-                    <img src="img-svg/icons8-html-5.svg" alt="HTML5" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">CSS3</span>
-                    <img src="img-svg/icons8-css.svg" alt="CSS3" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">JavaScript</span>
-                    <img src="img-svg/icons8-javascript.svg" alt="JavaScript" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">React</span>
-                    <img src="img-svg/icons8-react-native.svg" alt="React" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">PHP</span>
-                    <img src="img/PHP-logo.svg.png" alt="PHP" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Laravel</span>
-                    <img src="img/laravel.png" alt="Laravel" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Tailwind</span>
-                    <img src="img-svg/icons8-vent-arrièrecss.svg" alt="Tailwind" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Bootstrap</span>
-                    <img src="img-svg/icons8-bootstrap.svg" alt="Bootstrap" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Git</span>
-                    <img src="img-svg/icons8-git.svg" alt="Git" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">MySQL</span>
-                    <img src="img-svg/sql-database-generic.svg" alt="MySQL" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">WordPress</span>
-                    <img src="img-svg/icons8-wordpress.svg" alt="WordPress" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Java</span>
-                    <img src="img-svg/icons8-logo-java-coffee-cup.svg" alt="Java" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">GSAP</span>
-                    <img src="img/gsap.jspng.png" alt="GSAP" class="h-12 w-auto">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Three.js</span>
-                    <img src="img/three.jspng.png" alt="Three.js" class="h-12 w-auto invert dark:invert-0">
-                </div>
-                <div class="tech-item">
-                    <span class="tech-label">Anime.js</span>
-                    <img src="img/anime.jspng.png" alt="Anime.js" class="h-12 w-auto">
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Removed duplicate Marquee section (Moved inside About) -->
 
 
-    <!-- Experience & Education Section -->
-    <section id="experience" class="py-20 bg-gray-50 dark:bg-slate-800/30 transition-colors duration-300">
-        <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-2 gap-12">
-                <!-- Education -->
-                <div>
-                    <h3 class="text-2xl font-bold mb-8 flex items-center text-slate-800 dark:text-white">
-                        <i class="fas fa-user-graduate text-blue-500 mr-3"></i> Formation
-                    </h3>
-                    <div id="education-timeline"
-                        class="relative border-l-2 border-gray-300 dark:border-slate-700 ml-3 space-y-12">
-                        <!-- Scroll Animated Ball -->
-                        <div id="education-scroll-ball"
-                            class="absolute -left-[11px] top-0 w-5 h-5 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50 z-10 pointer-events-none">
-                        </div>
 
-                        <div class="relative pl-8">
-                            <div class="absolute -left-[9px] top-0 w-4 h-4 bg-blue-500/30 rounded-full"></div>
-                            <span class="text-sm text-blue-600 dark:text-blue-400 font-medium">2025 – 2026 (En
-                                cours)</span>
-                            <h4 class="text-xl font-bold mt-1 text-slate-800 dark:text-white">Licence en Développement
-                                Logiciel et Sécurité</h4>
-                            <p class="text-slate-600 dark:text-slate-400 mt-1">ENSAM – Casablanca</p>
-                        </div>
 
-                        <div class="relative pl-8">
-                            <div
-                                class="absolute -left-[9px] top-0 w-4 h-4 bg-gray-400/30 dark:bg-slate-600/30 rounded-full">
-                            </div>
-                            <span class="text-sm text-slate-500 dark:text-slate-400 font-medium">2023 – 2025</span>
-                            <h4 class="text-xl font-bold mt-1 text-slate-800 dark:text-white">Diplôme Développement
-                                Digital – Web Full Stack</h4>
-                            <p class="text-slate-600 dark:text-slate-400 mt-1">ISFO – Casablanca</p>
-                        </div>
-
-                        <div class="relative pl-8">
-                            <div
-                                class="absolute -left-[9px] top-0 w-4 h-4 bg-gray-400/30 dark:bg-slate-600/30 rounded-full">
-                            </div>
-                            <span class="text-sm text-slate-500 dark:text-slate-400 font-medium">2023</span>
-                            <h4 class="text-xl font-bold mt-1 text-slate-800 dark:text-white">Baccalauréat Sciences
-                                Physiques</h4>
-                            <p class="text-slate-600 dark:text-slate-400 mt-1">Mention Assez Bien</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Experience -->
-                <div>
-                    <h3 class="text-2xl font-bold mb-8 flex items-center text-slate-800 dark:text-white">
-                        <i class="fas fa-briefcase text-purple-500 mr-3"></i> Expérience
-                    </h3>
-                    <div id="experience-timeline"
-                        class="relative border-l-2 border-gray-300 dark:border-slate-700 ml-3">
-                        <!-- Scroll Animated Ball (Purple) -->
-                        <div id="experience-scroll-ball"
-                            class="absolute -left-[11px] top-0 w-5 h-5 bg-purple-500 rounded-full shadow-lg shadow-purple-500/50 z-10 pointer-events-none">
-                        </div>
-
-                        <div class="relative pl-8">
-                            <div class="absolute -left-[9px] top-0 w-4 h-4 bg-purple-500/30 rounded-full"></div>
-                            <span class="text-sm text-purple-600 dark:text-purple-400 font-medium">Mars 2025
-                                (Stage)</span>
-                            <h4 class="text-xl font-bold mt-1 text-slate-800 dark:text-white">Stagiaire Développeur Web
-                            </h4>
-                            <p class="text-slate-600 dark:text-slate-400 mt-1 mb-4">Sparkvision</p>
-                            <ul
-                                class="list-disc list-outside ml-4 space-y-2 text-slate-600 dark:text-slate-300 text-sm">
-                                <li class="scroll-reveal-text mb-2">Réalisation complète d’un <strong>site
-                                        vitrine</strong> sous <strong>WordPress</strong>.</li>
-                                <li class="scroll-reveal-text mb-2">Personnalisation de <strong>thème</strong> et
-                                    intégration de <strong>plugins</strong>.</li>
-                                <li class="scroll-reveal-text mb-2">Collaboration à <strong>distance</strong> et gestion
-                                    de <strong>projet</strong>.</li>
-                                <li class="scroll-reveal-text mb-2">Optimisation <strong>SEO</strong> de base pour le
-                                    référencement.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="py-20 bg-white dark:bg-slate-900 transition-colors duration-300">
-        <div class="container mx-auto px-6">
-            <div class="section-header text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800 dark:text-white">Mes Projets</h2>
-                <div class="w-20 h-1 bg-blue-500 mx-auto rounded-full"></div>
-                <p class="text-slate-600 dark:text-slate-400 mt-4 max-w-2xl mx-auto">Une sélection de mes réalisations
-                    académiques et personnelles.</p>
-            </div>
+    <section id="projects" class="py-20 bg-white dark:bg-black transition-colors duration-300 relative overflow-clip"
+        style="position:relative; z-index:30;">
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project 1 -->
-                <!-- Project 1 -->
-                <div
-                    class="project-card group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
-                    <div class="h-48 bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
-                        <img src="img/la-casa.png" alt="La Casa De Papel"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <div class="p-6">
-                        <h3
-                            class="text-xl font-bold mb-2 text-slate-800 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
-                            La Casa De Papel Game</h3>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
-                            Jeu interactif immersif basé sur la célèbre série. Testez vos connaissances et votre
-                            rapidité dans ce défi captivant.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-yellow-100 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">JavaScript</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-orange-100 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400">HTML5</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">CSS3</span>
-                        </div>
-                        <div
-                            class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-slate-700">
-                            <a href="https://lacasa-de-papel.netlify.app/" target="_blank"
-                                class="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center text-slate-600 dark:text-slate-400"><i
-                                    class="fas fa-external-link-alt mr-2"></i> netlify</a>
-                            <a href="https://github.com/zakariach05/PROJECT-JS-LA-CASA-DE-PAPEL-" target="_blank"
-                                class="text-sm font-medium hover:text-slate-900 dark:hover:text-white text-gray-500 dark:text-slate-400 flex items-center"><i
-                                    class="fab fa-github mr-2"></i> Code</a>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!-- Project 2-->
-
-                <div
-                    class="project-card group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
-                    <div class="h-48 bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
-                        <img src="img/05-Electro.png" alt="meteo"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <div class="p-6">
-                        <h3
-                            class="text-xl font-bold mb-2 text-slate-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                            05-Electro(⚠️ en cours de développement ⚠️)</h3>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
-                            👉 ⚠️ 05 Electro est actuellement en cours de développement. Certains produits et fonctionnalités seront ajoutés prochainement.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-cyan-100 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">Reactjs</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">tailwindcss</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">Sass</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">Laravel</span>
-                        </div>
-                        <div
-                            class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-slate-700">
-                            <a href="https://05-electro.vercel.app/" target="_blank"
-                                class="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center text-slate-600 dark:text-slate-400"><i
-                                    class="fas fa-external-link-alt mr-2"></i>05-electro.vercel.app</a>
-                            <a href="https://github.com/zakariach05/05-Electro" target="_blank"
-                                class="text-sm font-medium hover:text-slate-900 dark:hover:text-white text-gray-500 dark:text-slate-400 flex items-center"><i
-                                    class="fab fa-github mr-2"></i> Code</a>
-                        </div>
-                    </div>
-                </div>
-
-                
-                <!-- Project 3 -->
-                <div
-                class="project-card group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
-                <div class="h-48 bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
-                        <img src="img/sparkvision.PNG" alt="Spark Vision"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        </div>
-                    <div class="p-6">
-                        <h3
-                            class="text-xl font-bold mb-2 text-slate-800 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
-                            Spark Vision</h3>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
-                            votre expert en solutions d’éclairage, d’électricité et d’innovation pour l’industrie, le
-                            tertiaire et les services.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">WordPress</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-orange-100 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400">Elementor</span>
-                                <span
-                                class="text-xs py-1 px-2 rounded bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-400">SEO</span>
-                        </div>
-                        <div
-                            class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-slate-700">
-                            <a href="https://sparkvision.ma/" target="_blank"
-                            class="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center text-slate-600 dark:text-slate-400"><i
-                                    class="fas fa-external-link-alt mr-2"></i> sparkvision.ma</a>
-                                    <a href="#"
-                                class="text-sm font-medium hover:text-slate-900 dark:hover:text-white text-gray-500 dark:text-slate-400 flex items-center cursor-not-allowed"
-                                title="Code privé"><i class="fas fa-lock mr-2"></i> Privé</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Project 4 -->
-                <div
-                    class="project-card group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
-                    <div class="h-48 bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
-                        <img src="img/meteo.png" alt="meteo"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <div class="p-6">
-                        <h3
-                            class="text-xl font-bold mb-2 text-slate-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                            05 Météo App</h3>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
-                            05 Météo intègre une barre de recherche intelligente permettant de trouver rapidement un
-                            pays ou une ville, ainsi qu’une carte interactive pour
-                            visualiser leur localisation et afficher instantanément les prévisions météorologiques
-                            correspondantes.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-cyan-100 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">JavaScript-API</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">CSS3</span>
-                        </div>
-                        <div
-                            class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-slate-700">
-                            <a href="https://05-meteo.vercel.app/" target="_blank"
-                                class="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center text-slate-600 dark:text-slate-400"><i
-                                    class="fas fa-external-link-alt mr-2"></i>05-meteo.vercel.app</a>
-                            <a href="https://github.com/zakariach05/Meteo-App" target="_blank"
-                                class="text-sm font-medium hover:text-slate-900 dark:hover:text-white text-gray-500 dark:text-slate-400 flex items-center"><i
-                                    class="fab fa-github mr-2"></i> Code</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Project 4-->
-                <div
-                class="project-card hidden group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
-                    <div class="h-48 bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
-                        <img src="img/Bibliotique.png" alt="Bibliotique"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <div class="p-6">
-                        <h3
-                            class="text-xl font-bold mb-2 text-slate-800 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                            Bibliotique</h3>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
-                            Application de gestion de bibliothèque moderne pour gérer votre collection de livres avec
-                            style.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-cyan-100 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">JavaScript</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">CSS3</span>
-                        </div>
-                        <div
-                            class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-slate-700">
-                            <a href="https://bibliotique.vercel.app/" target="_blank"
-                                class="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center text-slate-600 dark:text-slate-400"><i
-                                    class="fas fa-external-link-alt mr-2"></i> vercel</a>
-                            <a href="https://github.com/zakariach05/Bibliotique" target="_blank"
-                                class="text-sm font-medium hover:text-slate-900 dark:hover:text-white text-gray-500 dark:text-slate-400 flex items-center"><i
-                                    class="fab fa-github mr-2"></i> Code</a>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!-- Project 5 -->
-                <div
-                    class="project-card hidden group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-transform duration-300 shadow-lg border border-gray-100 dark:border-slate-700">
-                    <div class="h-48 bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
-                        <img src="img/Portfolio2.png" alt="Portfolio"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <div class="p-6">
-                        <h3
-                            class="text-xl font-bold mb-2 text-slate-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                            Portfolio Personnel</h3>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
-                            Mon portfolio personnel présentant mes projets, mes compétences et mon parcours de
-                            développeur.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">HTML5</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-cyan-100 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">Tailwind</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-yellow-100 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">JavaScript(ES6+)</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-yellow-100 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">Librairies
-                                JS</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-yellow-100 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">Icônes
-                                & UI</span>
-                            <span
-                                class="text-xs py-1 px-2 rounded bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400">PHP</span>
-                        </div>
-                        <div
-                            class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-slate-700">
-                            <a href="https://zakariach05-portfolio.vercel.app/" target="_blank"
-                                class="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center text-slate-600 dark:text-slate-400"><i
-                                    class="fas fa-external-link-alt mr-2"></i>zakariach-05-portfolio</a>
-                            <a href="#"
-                                class="text-sm font-medium hover:text-slate-900 dark:hover:text-white text-gray-500 dark:text-slate-400 flex items-center cursor-not-allowed"
-                                title="Code privé"><i class="fas fa-lock mr-2"></i> Privé</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Project 5 -->
-
-            </div>
-
-            <div class="mt-12 text-center">
-                <button id="show-more-projects"
-                    class="inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all duration-300 shadow-lg shadow-blue-600/20 hover:scale-105 active:scale-95 font-semibold gap-2">
-                    <span id="show-more-text">Voir plus</span>
-                    <i id="show-more-icon" class="fas fa-chevron-down"></i>
-                </button>
-            </div>
+        <!-- Background Topographic Lines (Hero Theme) -->
+        <div class="absolute inset-0 z-0 opacity-10 dark:opacity-20 pointer-events-none">
+            <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,200 Q250,150 500,200 T1000,200" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M0,400 Q250,350 500,400 T1000,400" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M0,600 Q250,550 500,600 T1000,600" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M0,800 Q250,750 500,800 T1000,800" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M100,0 Q150,250 100,500 T100,1000" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M300,0 Q350,250 300,500 T300,1000" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M700,0 Q750,250 700,500 T700,1000" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M900,0 Q950,250 900,500 T900,1000" fill="none" stroke="currentColor" stroke-width="1" />
+            </svg>
         </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+
+            <div class="projects-masonry mt-12">
+                <!-- Project 1 -->
+                <div class="project-card-wrapper">
+                    <a href="https://la-casa-depapel.netlify.app/" target="_blank" class="project-card-3d group block">
+                        <div class="img-wrapper">
+                            <img src="img/la-casa.png" alt="La Casa De Papel" loading="lazy" decoding="async">
+                        </div>
+                        <div class="project-info">
+                            <h3 class="text-xl font-bold mb-2 text-white">La Casa De Papel Game</h3>
+                            <p class="text-gray-300 text-sm mb-4 line-clamp-2">
+                                Jeu interactif immersif basé sur la célèbre série. Testez vos connaissances.
+                            </p>
+                            <div class="flex gap-2">
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">JavaScript</span>
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">CSS3</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card-wrapper">
+                    <a href="https://github.com/zakariach05/05-Electro-profesionnels" target="_blank"
+                        class="project-card-3d group block">
+                        <div class="img-wrapper">
+                            <img src="img/05-Electro.png" alt="05-Electro" loading="lazy" decoding="async">
+                        </div>
+                        <div class="project-info">
+                            <h3 class="text-xl font-bold mb-2 text-white">05-Electro</h3>
+                            <p class="text-gray-300 text-sm mb-4 line-clamp-2">
+                                E-commerce moderne développé avec React, Tailwind et Laravel.
+                            </p>
+                            <div class="flex gap-2">
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Reactjs</span>
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Laravel</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card-wrapper">
+                    <a href="https://sparkvision.ma" target="_blank" class="project-card-3d group block">
+                        <div class="img-wrapper">
+                            <img src="img/sparkvision.PNG" alt="Spark Vision" loading="lazy" decoding="async">
+                        </div>
+                        <div class="project-info">
+                            <h3 class="text-xl font-bold mb-2 text-white">Spark Vision</h3>
+                            <p class="text-gray-300 text-sm mb-4 line-clamp-2">
+                                Solutions d’éclairage, d’électricité et d’innovation pour l’industrie.
+                            </p>
+                            <div class="flex gap-2">
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">WordPress</span>
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Elementor</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card-wrapper">
+                    <a href="https://05-meteo.vercel.app/" target="_blank" class="project-card-3d group block">
+                        <div class="img-wrapper">
+                            <img src="img/meteo.png" alt="Météo" loading="lazy" decoding="async">
+                        </div>
+                        <div class="project-info">
+                            <h3 class="text-xl font-bold mb-2 text-white">05 Météo App</h3>
+                            <p class="text-gray-300 text-sm mb-4 line-clamp-2">
+                                Application météo avec appels API instantanés et design soigné.
+                            </p>
+                            <div class="flex gap-2">
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">JavaScript-API</span>
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">CSS3</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="project-card-wrapper">
+                    <a href="https://bibliotique.vercel.app/" target="_blank" class="project-card-3d group block">
+                        <div class="img-wrapper">
+                            <img src="img/Bibliotique.png" alt="Bibliotique" loading="lazy" decoding="async">
+                        </div>
+                        <div class="project-info">
+                            <h3 class="text-xl font-bold mb-2 text-white">Bibliotique</h3>
+                            <p class="text-gray-300 text-sm mb-4 line-clamp-2">
+                                Plateforme de gestion de bibliothèque moderne et intuitive.
+                            </p>
+                            <div class="flex gap-2">
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">React</span>
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Tailwind</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="project-card-wrapper">
+                    <a href="#" class="project-card-3d group block">
+                        <div class="img-wrapper">
+                            <img src="img/portfolio.png" alt="Project Portfolio" loading="lazy" decoding="async">
+                        </div>
+                        <div class="project-info">
+                            <h3 class="text-xl font-bold mb-2 text-white">Mon Portfolio</h3>
+                            <p class="text-gray-300 text-sm mb-4 line-clamp-2">
+                                Design immersif avec Three.js et animations avancées GSAP.
+                            </p>
+                            <div class="flex gap-2">
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Three.js</span>
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">GSAP</span>
+                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Tailwind</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
     </section>
+
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-gray-50 dark:bg-slate-800/30 transition-colors duration-300">
-        <div class="container mx-auto px-6">
-            <div class="section-header text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-slate-800 dark:text-white">Me Contacter</h2>
-                <div class="w-20 h-1 bg-blue-500 mx-auto rounded-full"></div>
-                <p class="text-slate-600 dark:text-slate-400 mt-4">Un projet ? Une question ? N'hésitez pas à m'écrire.
-                </p>
-            </div>
+    <section id="contact" class="py-20 bg-white dark:bg-black transition-colors duration-300 relative overflow-clip"
+        style="position:relative; z-index:30;">
 
-            <div
-                class="max-w-4xl mx-auto grid md:grid-cols-5 bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-2xl transition-colors duration-300">
-                <!-- Contact Info -->
-                <div
-                    class="md:col-span-2 bg-gradient-to-br from-blue-600 to-purple-700 p-8 text-white flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-xl font-bold mb-6">Coordonnées</h3>
-                        <div class="space-y-6">
-                            <div class="flex items-start space-x-4">
-                                <i class="fas fa-phone-alt mt-1 opacity-70"></i>
-                                <span>+212 704685662</span>
-                            </div>
-                            <div class="flex items-start space-x-4">
-                                <i class="fas fa-envelope mt-1 opacity-70"></i>
-                                <span class="break-all">chamekhzakaria95@gmail.com</span>
-                            </div>
-                            <div class="flex items-start space-x-4">
-                                <i class="fas fa-map-marker-alt mt-1 opacity-70"></i>
-                                <span>Casablanca, Maroc</span>
+        <!-- Background Topographic Lines (Hero Theme) -->
+        <div class="absolute inset-0 z-0 opacity-10 dark:opacity-20 pointer-events-none">
+            <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,200 Q250,150 500,200 T1000,200" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M0,400 Q250,350 500,400 T1000,400" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M0,600 Q250,550 500,600 T1000,600" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M0,800 Q250,750 500,800 T1000,800" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M100,0 Q150,250 100,500 T100,1000" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M300,0 Q350,250 300,500 T300,1000" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M700,0 Q750,250 700,500 T700,1000" fill="none" stroke="currentColor" stroke-width="1" />
+                <path d="M900,0 Q950,250 900,500 T900,1000" fill="none" stroke="currentColor" stroke-width="1" />
+            </svg>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+
+            <div class="contact-split-container transition-all duration-300">
+                <!-- Logo Side (Left - 40%) -->
+                <div class="contact-logo-side">
+                    <canvas id="contact-v-canvas" class="contact-v-canvas"></canvas>
+                    <img src="NV-IMG/V.png" alt="" id="contact-v-source" style="display:none;">
+                </div>
+
+                <!-- Contact Form Side (Right - 60%) -->
+                <div class="contact-form-side">
+                    <div class="multistep-form-container mx-auto">
+                        <div class="step-indicator">
+                            <span class="step-label uppercase">Step <span id="current-step-num">1</span> / 4</span>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="step-progress"></div>
                             </div>
                         </div>
-                    </div>
-                    <div class="mt-12">
-                        <p class="mb-4 text-sm opacity-80">Retrouvez-moi sur :</p>
-                        <div class="flex flex-wrap gap-3">
-                            <!-- LinkedIn -->
-                            <a href="https://www.linkedin.com/in/zakaria-chamekh-996812319" target="_blank"
-                                class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center transition-all duration-300 hover:-translate-y-1"
-                                onmouseover="this.style.backgroundColor='#0077b5'"
-                                onmouseout="this.style.backgroundColor='rgba(255,255,255,0.2)'">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
 
-                            <!-- GitHub -->
-                            <a href="https://github.com/zakariach05" target="_blank"
-                                class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center transition-all duration-300 hover:-translate-y-1"
-                                onmouseover="this.style.backgroundColor='#333'"
-                                onmouseout="this.style.backgroundColor='rgba(255,255,255,0.2)'">
-                                <i class="fab fa-github"></i>
-                            </a>
+                        <form id="multistep-contact-form" class="mt-12">
+                            <!-- Step 1 -->
+                            <div class="form-step active" data-step="1">
+                                <h3 class="step-heading text-3xl md:text-5xl font-black text-white uppercase mb-8">Let's
+                                    start with your name.</h3>
+                                <div class="input-wrapper">
+                                    <input type="text" id="step-name" class="step-input-large"
+                                        placeholder="Type your name here" required>
+                                </div>
+                                <div class="step-actions mt-10 flex items-center gap-6">
+                                    <button type="button"
+                                        class="btn-step-next bg-white text-black px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-red-600 hover:text-white transition-all">
+                                        NEXT <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <span
+                                        class="press-enter-hint text-xs text-gray-500 uppercase tracking-widest hidden md:block">Press
+                                        <span class="border border-gray-700 px-1 rounded">ENTER</span></span>
+                                </div>
+                            </div>
 
-                            <!-- Facebook -->
-                            <a href="#" target="_blank"
-                                class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center transition-all duration-300 hover:-translate-y-1"
-                                onmouseover="this.style.backgroundColor='#1877F2'"
-                                onmouseout="this.style.backgroundColor='rgba(255,255,255,0.2)'">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
+                            <!-- Step 2 -->
+                            <div class="form-step" data-step="2">
+                                <h3 class="step-heading text-3xl md:text-5xl font-black text-white uppercase mb-8">
+                                    What's your email?</h3>
+                                <div class="input-wrapper">
+                                    <input type="email" id="step-email" class="step-input-large"
+                                        placeholder="name@example.com" required>
+                                </div>
+                                <div class="step-actions mt-10 flex items-center gap-6">
+                                    <button type="button"
+                                        class="btn-step-next bg-white text-black px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-red-600 hover:text-white transition-all">
+                                        NEXT <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <span
+                                        class="press-enter-hint text-xs text-gray-500 uppercase tracking-widest hidden md:block">Press
+                                        <span class="border border-gray-700 px-1 rounded">ENTER</span></span>
+                                </div>
+                            </div>
 
-                            <!-- Instagram -->
-                            <a href="#" target="_blank"
-                                class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center transition-all duration-300 hover:-translate-y-1"
-                                onmouseover="this.style.background='linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)'"
-                                onmouseout="this.style.background='rgba(255,255,255,0.2)'">
-                                <i class="fab fa-instagram"></i>
-                            </a>
+                            <!-- Step 3 -->
+                            <div class="form-step" data-step="3">
+                                <h3 class="step-heading text-3xl md:text-5xl font-black text-white uppercase mb-8">What
+                                    is your project about?</h3>
+                                <div class="input-wrapper">
+                                    <input type="text" id="step-subject" class="step-input-large"
+                                        placeholder="Brief subject" required>
+                                </div>
+                                <div class="step-actions mt-10 flex items-center gap-6">
+                                    <button type="button"
+                                        class="btn-step-next bg-white text-black px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-red-600 hover:text-white transition-all">
+                                        NEXT <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <span
+                                        class="press-enter-hint text-xs text-gray-500 uppercase tracking-widest hidden md:block">Press
+                                        <span class="border border-gray-700 px-1 rounded">ENTER</span></span>
+                                </div>
+                            </div>
 
-                            <!-- WhatsApp -->
-                            <a href="#" target="_blank"
-                                class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center transition-all duration-300 hover:-translate-y-1"
-                                onmouseover="this.style.backgroundColor='#25D366'"
-                                onmouseout="this.style.backgroundColor='rgba(255,255,255,0.2)'">
-                                <i class="fab fa-whatsapp"></i>
-                            </a>
+                            <!-- Step 4 -->
+                            <div class="form-step" data-step="4">
+                                <h3 class="step-heading text-3xl md:text-5xl font-black text-white uppercase mb-8">Tell
+                                    me more details.</h3>
+                                <div class="input-wrapper">
+                                    <textarea id="step-message" class="step-input-large"
+                                        placeholder="Your message here..." rows="1" required></textarea>
+                                </div>
+                                <div class="step-actions mt-10 flex items-center gap-6">
+                                    <button type="submit"
+                                        class="btn-step-submit bg-white text-black px-10 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-red-600 hover:text-white transition-all">
+                                        SUBMIT <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                    <span
+                                        class="press-enter-hint text-xs text-gray-500 uppercase tracking-widest hidden md:block">Press
+                                        <span class="border border-gray-700 px-1 rounded">ENTER</span></span>
+                                </div>
+                            </div>
+                        </form>
+                        <div id="form-success-msg"
+                            class="hidden mt-8 p-6 bg-green-500/20 border border-green-500/50 rounded-xl text-center">
+                            <i class="fas fa-check-circle text-4xl text-green-500 mb-4 block"></i>
+                            <h4 class="text-xl font-bold text-white mb-2">Message Envoyé !</h4>
+                            <p class="text-gray-400">Merci, je vous répondrai dans les plus brefs délais.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Contact Form -->
-                <div class="md:col-span-3 p-8">
-                    <form id="contact-form" action="php/contact.php" method="POST" class="space-y-6">
-                        <!-- Anti-spam Honeypot -->
-                        <input type="text" name="_gotcha" style="display:none !important" tabindex="-1"
-                            autocomplete="off">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="name" class="block text-sm text-slate-600 dark:text-slate-400 mb-2">Nom
-                                    complet</label>
-                                <input type="text" id="name" name="name" required
-                                    class="w-full bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors text-slate-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
-                                    placeholder="Votre nom">
-                            </div>
-                            <div>
-                                <label for="email"
-                                    class="block text-sm text-slate-600 dark:text-slate-400 mb-2">Email</label>
-                                <input type="email" id="email" name="email" required
-                                    class="w-full bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors text-slate-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
-                                    placeholder="votre@email.com">
-                            </div>
+                <!-- Contact Info Side (25%) -->
+                <div class="contact-info-side p-10 bg-slate-50 dark:bg-slate-900/50 flex flex-col justify-center">
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="text-xs font-bold text-red-500 uppercase tracking-widest mb-2">Email</h4>
+                            <p class="text-slate-800 dark:text-white font-medium">zakaria.chamekh@example.com</p>
                         </div>
                         <div>
-                            <label for="subject"
-                                class="block text-sm text-slate-600 dark:text-slate-400 mb-2">Sujet</label>
-                            <input type="text" id="subject" name="subject" required
-                                class="w-full bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors text-slate-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
-                                placeholder="Sujet de votre message">
+                            <h4 class="text-xs font-bold text-red-500 uppercase tracking-widest mb-2">Localisation</h4>
+                            <p class="text-slate-800 dark:text-white font-medium">Casablanca, Maroc</p>
                         </div>
                         <div>
-                            <label for="message"
-                                class="block text-sm text-slate-600 dark:text-slate-400 mb-2">Message</label>
-                            <textarea id="message" name="message" rows="4" required
-                                class="w-full bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors text-slate-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 resize-none"
-                                placeholder="Votre message..."></textarea>
+                            <h4 class="text-xs font-bold text-red-500 uppercase tracking-widest mb-2">Suivez-moi</h4>
+                            <div class="flex gap-4 mt-2">
+                                <a href="#"
+                                    class="text-xl text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors"><i
+                                        class="fab fa-linkedin-in"></i></a>
+                                <a href="#"
+                                    class="text-xl text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors"><i
+                                        class="fab fa-github"></i></a>
+                                <a href="#"
+                                    class="text-xl text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors"><i
+                                        class="fab fa-instagram"></i></a>
+                            </div>
                         </div>
-                        <button type="submit"
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 shadow-lg shadow-blue-600/20">
-                            <span>Envoyer le message</span>
-                            <i class="fas fa-paper-plane text-sm"></i>
-                        </button>
-                        <p id="form-status" class="text-sm text-center hidden"></p>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer
-        class="py-8 bg-slate-100 dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 text-center transition-colors duration-300">
-        <div class="container mx-auto px-6">
-            <div class="mb-4 flex justify-center w-full overflow-hidden">
-                <svg viewBox="0 0 500 60" class="w-full max-w-md h-auto">
-                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
-                        class="footer-name-draw text-4xl font-bold fill-transparent stroke-current text-slate-800 dark:text-white"
-                        style="stroke-width: 1px;">
-                        Zakaria Chamekh
-                    </text>
-                </svg>
+    <!-- ========== FOOTER F1 PREMIUM ========== -->
+    <footer id="f1-footer" style="position:relative;z-index:30;">
+
+        <div class="footer-frame-container">
+            <!-- Main Footer Content -->
+            <div class="footer-main">
+
+                <!-- LEFT: Navigation -->
+                <nav class="footer-col footer-nav" aria-label="Footer navigation">
+                    <p class="footer-col-label">PAGES</p>
+                    <ul>
+                        <li><a href="#home" class="glitch-link footer-link" data-text="Home"><span>Home</span></a>
+                        </li>
+                        <li><a href="#projects" class="glitch-link footer-link" data-text="Work"><span>Work</span></a>
+                        </li>
+                        <li><a href="#about" class="glitch-link footer-link" data-text="About"><span>About</span></a>
+                        </li>
+                        <li><a href="#contact" class="glitch-link footer-link"
+                                data-text="Contact"><span>Contact</span></a></li>
+                        <li><a href="Zakaria_Chamekh.pdf" download class="glitch-link footer-link footer-link-accent"
+                                data-text="CV ↗"><span>CV
+                                    ↗</span></a></li>
+                    </ul>
+                </nav>
+
+                <!-- CENTER: Main Hero Block -->
+                <div class="footer-col footer-center" id="footer-parallax">
+                    <!-- Tagline massive -->
+                    <h2 class="footer-tagline">
+                        ALWAYS<br>
+                        <span class="footer-tagline-red">DELIVERING</span><br>
+                        THE CODE.
+                    </h2>
+                    <!-- Photo créateur -->
+                    <div class="footer-photo-wrap">
+                        <img src="NV-IMG/footer-img.png" alt="Zakaria Chamekh" class="footer-photo" loading="lazy"
+                            decoding="async" onerror="this.style.display='none'">
+                    </div>
+                    <!-- CTA Button -->
+                    <a href="#contact" class="footer-cta-btn">
+                        Business Enquiries
+                        <span class="footer-cta-arrow">↗</span>
+                    </a>
+                </div>
+
+                <!-- RIGHT: Social Links -->
+                <nav class="footer-col footer-social" aria-label="Social links">
+                    <p class="footer-col-label">FOLLOW ON</p>
+                    <ul>
+                        <li><a href="#" class="glitch-link footer-link" data-text="LinkedIn"><span>LinkedIn</span></a>
+                        </li>
+                        <li><a href="#" class="glitch-link footer-link" data-text="GitHub"><span>GitHub</span></a>
+                        </li>
+                        <li><a href="#" class="glitch-link footer-link" data-text="Instagram"><span>Instagram</span></a>
+                        </li>
+                        <li><a href="#" class="glitch-link footer-link" data-text="Twitter / X"><span>Twitter /
+                                    X</span></a></li>
+                    </ul>
+                    <div class="footer-bottom-bar">
+                        <span class="footer-copy">&copy; 2025 Zakaria Chamekh. All rights reserved.</span>
+                        <div class="footer-bottom-links">
+                        </div>
+                    </div>
             </div>
-            <p class="text-slate-600 dark:text-slate-500 mb-2">
-                &copy; 2025 Tous droits réservés.
-            </p>
         </div>
     </footer>
 
+    <!-- Section ZAKARIA Finale Premium -->
+    <section class="w-full h-fit bg-black flex items-center justify-center relative overflow-clip py-8 md:py-12"
+        style="z-index: 50;" id="zakaria-finale-section">
+
+        <!-- Entrance Wrapper -->
+        <div id="zakaria-reveal" class="w-full px-2 md:px-4 flex justify-center"
+            style="opacity: 0; transform: translateY(50px); transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1);">
+
+            <!-- SVG Handwriting Simulation -->
+            <svg viewBox="0 0 1500 220" class="w-full h-auto overflow-visible select-none">
+                <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle"
+                    class="font-sans font-[900] uppercase zakaria-svg-text">
+                    <tspan class="draw-char">Z</tspan>
+                    <tspan class="draw-char">A</tspan>
+                    <tspan class="draw-char">K</tspan>
+                    <tspan class="draw-char">A</tspan>
+                    <tspan class="draw-char">R</tspan>
+                    <tspan class="draw-char">I</tspan>
+                    <tspan class="draw-char">A</tspan>
+                </text>
+            </svg>
+
+        </div>
+
+        <style>
+            .zakaria-svg-text {
+                font-size: 190px;
+                letter-spacing: 0.1em;
+            }
+
+            .draw-char {
+                fill: transparent;
+                stroke: white;
+                stroke-width: 2.5px;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                opacity: 1;
+                /* Managed by GSAP */
+                transition: filter 0.5s ease;
+            }
+
+            /* Very subtle glow class triggered by GSAP when filled */
+            .draw-char.filled-glow {
+                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+            }
+        </style>
+
+        <script>
+            setTimeout(() => {
+                const section = document.getElementById('zakaria-finale-section');
+                const reveal = document.getElementById('zakaria-reveal');
+                if (!reveal || !section || typeof gsap === 'undefined') return;
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            // Section reveal
+                            reveal.style.opacity = '1';
+                            reveal.style.transform = 'translateY(0)';
+
+                            // Initialize GSAP Loop once
+                            if (!window.zakariaAnimLoop) {
+                                window.zakariaAnimLoop = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+
+                                window.zakariaAnimLoop
+                                    // 1. Draw outline left to right
+                                    .to(".draw-char", {
+                                        strokeDashoffset: 0,
+                                        duration: 2,
+                                        stagger: 0.15,
+                                        ease: "power2.inOut"
+                                    })
+                                    // 2. Fill in white
+                                    .to(".draw-char", {
+                                        fill: "#ffffff",
+                                        stroke: "transparent",
+                                        duration: 0.8,
+                                        stagger: 0.1,
+                                        ease: "power1.inOut",
+                                        onStart: function () {
+                                            document.querySelectorAll('.draw-char').forEach(el => el.classList.add('filled-glow'));
+                                        }
+                                    }, "-=1.2")
+                                    // 3. Wait (keep visible)
+                                    .to({}, { duration: 2.5 })
+                                    // 4. Fade out smoothly to erase
+                                    .to(".draw-char", {
+                                        opacity: 0,
+                                        duration: 0.8,
+                                        stagger: 0.05,
+                                        ease: "power2.inOut",
+                                        onComplete: function () {
+                                            // Reset for next stroke drawing
+                                            gsap.set(".draw-char", {
+                                                fill: "transparent",
+                                                stroke: "white",
+                                                strokeDashoffset: 1000
+                                            });
+                                            document.querySelectorAll('.draw-char').forEach(el => el.classList.remove('filled-glow'));
+                                        }
+                                    })
+                                    // 5. Restore opacity instantly so they can be drawn again
+                                    .to(".draw-char", { opacity: 1, duration: 0 });
+                            }
+
+                        } else {
+                            const rect = entry.boundingClientRect;
+                            if (rect.top > 0) {
+                                reveal.style.opacity = '0';
+                                reveal.style.transform = 'translateY(50px)';
+                            }
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                observer.observe(section);
+            }, 100);
+        </script>
+    </section>
+
     <!-- Scripts -->
     <!-- Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
 
     <!-- Main JS -->
+    <script src="js/scroll-manager.js"></script>
     <script src="js/main.js"></script>
-    <!-- <script src="js/particles.js"></script> -->
+    <script src="js/v-logo.js"></script>
+    <script type="module" src="js/hero-3d.js"></script>
+    <script type="module" src="js/advanced-animations.js"></script>
+    <script type="module" src="js/contact-3d.js"></script>
     <!-- Scroll to Top Button with Progress -->
     <a href="#home" id="scroll-top" class="scroll-top-progress" title="Retour en haut">
         <svg class="progress-ring" width="50" height="50">
