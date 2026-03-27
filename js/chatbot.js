@@ -7,7 +7,7 @@
   'use strict';
 
   /* ── Q & A Database ─────────────────────────────────────── */
-  const QA = [
+  const QA_HOME = [
     {
       id: 'who',
       label: '👤  Who are you?',
@@ -39,6 +39,36 @@
         "I'd love to hear from you! 😊<br><br>📧 <strong>Email:</strong> Use the contact form above<br>💼 <strong>LinkedIn:</strong> Connect with me professionally<br>🐙 <strong>GitHub:</strong> Check out my code<br><br>Don't hesitate — let's create something great together! ✨",
     },
   ];
+
+  const QA_SERVICES = [
+    {
+      id: 's_web',
+      label: '💻  Développement Web ?',
+      answer: "C'est mon cœur de métier. Je crée des applications sur-mesure hyper modernes avec React côté front et Laravel côté Backend. L'architecture est ultra-rapide (SSR/CSR) et complètement sécurisée.",
+    },
+    {
+      id: 's_3d',
+      label: '🧊  Expériences 3D & WebGL ?',
+      answer: "Grâce à Three.js et GSAP, je donne vie au design web. Les sites ne sont plus de simples pages 2D, ils deviennent de réelles expériences interactives virtuelles (comme mon portfolio).",
+    },
+    {
+      id: 's_ecom',
+      label: '🛒  Boutiques E-commerce ?',
+      answer: "Je conçois des boutiques clés en main (WordPress/WooCommerce ou React/Laravel), faites pour générer des ventes. Incluant le paiement en ligne, le panel administrateur et la gestion des livraisons.",
+    },
+    {
+      id: 's_seo',
+      label: '🚀  Comment se passe le SEO ?',
+      answer: "Mon code est optimisé pour les moteurs de recherche (Google). Structure sémantique, temps de chargement éclair, et balises dynamiques. Tout est prêt pour vous placer sur la 1ère page.",
+    },
+    {
+      id: 's_contact',
+      label: '📬  Comment démarrer un projet ?',
+      answer: "C'est très simple ! 🚀 Utilisez le gigantesque lien email en fin de page ou écrivez-moi directement à zakariach05@gmail.com pour en discuter.",
+    }
+  ];
+
+  const QA = window.location.pathname.includes('services.html') ? QA_SERVICES : QA_HOME;
 
   /* ── DOM refs ───────────────────────────────────────────── */
   const toggle   = document.getElementById('cb-toggle');

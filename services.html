@@ -66,6 +66,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chatbot.css">
 </head>
 
 <body
@@ -491,6 +492,47 @@
             <span class="view-text">View</span>
         </div>
     </div>
+
+    <!-- ======================================================
+         CHATBOT WIDGET
+         ====================================================== -->
+
+    <!-- Toggle Button -->
+    <button id="cb-toggle" aria-label="Open chat assistant" aria-expanded="false" aria-controls="cb-window">
+        <i class="fas fa-comment-dots cb-icon-open"></i>
+        <i class="fas fa-times cb-icon-close"></i>
+        <span id="cb-badge" aria-hidden="true">1</span>
+    </button>
+
+    <!-- Chat Window -->
+    <div id="cb-window" role="dialog" aria-labelledby="cb-header-name" aria-modal="true">
+
+        <!-- Header -->
+        <div class="cb-header">
+            <div class="cb-header-avatar" aria-hidden="true">
+                <img src="NV-IMG/heroP1.png" alt="Zakaria">
+            </div>
+            <div class="cb-header-info">
+                <div class="cb-header-name" id="cb-header-name">Zakaria — Assistant Virtual</div>
+                <div class="cb-header-status">Online now</div>
+            </div>
+            <button id="cb-close" class="cb-close" aria-label="Close chat">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Messages -->
+        <div id="cb-messages" role="log" aria-live="polite" aria-atomic="false">
+            <div class="cb-date-chip">Today · Ask me anything!</div>
+        </div>
+
+        <!-- Quick Questions -->
+        <p class="cb-pills-label">Quick Questions</p>
+        <div id="cb-pills" role="group" aria-label="Quick question shortcuts"></div>
+
+    </div><!-- /#cb-window -->
+
+    <script src="js/chatbot.js"></script>
 
 </body>
 
