@@ -334,11 +334,17 @@ document.addEventListener('DOMContentLoaded', () => {
         brandLogo.addEventListener('mouseenter', () => {
             anime({
                 targets: brandLogo,
-                scale: [1, 1.2, 1],
-                rotate: '1turn',
-                duration: 1000,
-                color: ['#2563EB', '#9333EA', '#2563EB'], // Cycle colors
-                easing: 'easeInOutSine'
+                scale: [1, 1.05],
+                duration: 400,
+                easing: 'easeOutQuad'
+            });
+        });
+        brandLogo.addEventListener('mouseleave', () => {
+            anime({
+                targets: brandLogo,
+                scale: 1,
+                duration: 400,
+                easing: 'easeOutQuad'
             });
         });
     }
@@ -882,29 +888,60 @@ document.addEventListener('DOMContentLoaded', () => {
         animateCursor();
 
         // Hover Effect using Event Delegation
-        const handleHover = (target) => {
+        const handleHover = (e) => {
+            const target = e.target;
             cursor.classList.remove('active-project-view', 'active-link', 'active-text-reveal');
 
-            if (!target) return;
+            if (!target) {
+                gsap.to(follower, { x: 0, y: 0, duration: 0.3 });
+                return;
+            }
 
             const projectCard = target.closest('.project-card-3d');
             const link = target.closest('a, button, .nav-link-item, .tech-item');
-            const textReveal = target.closest('.hover-reveal'); // Check for H1/H2 with reveal class
+            const textReveal = target.closest('.hover-reveal'); 
 
             if (projectCard) {
-                // Any hover on the project card or its internal links shows "VIEW"
                 cursor.classList.add('active-project-view');
             } else if (textReveal) {
-                // Hover on H1/H2 Hero Text
                 cursor.classList.add('active-text-reveal');
             } else if (link) {
-                // Hovering any other interactive element
                 cursor.classList.add('active-link');
+                
+                // Magnetic / Move with mouse effect for links
+                const rect = link.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                const moveX = (e.clientX - centerX) * 0.3;
+                const moveY = (e.clientY - centerY) * 0.3;
+                
+                gsap.to(link, {
+                    x: moveX,
+                    y: moveY,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
             }
         };
 
-        document.addEventListener('mouseover', (e) => handleHover(e.target));
-        document.addEventListener('mouseout', () => handleHover(null));
+        const resetLinkPosition = (e) => {
+            const link = e.target.closest('a, button, .nav-link-item, .tech-item');
+            if (link) {
+                gsap.to(link, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.5,
+                    ease: "elastic.out(1, 0.3)"
+                });
+            }
+        };
+
+        document.addEventListener('mousemove', (e) => handleHover(e));
+        document.addEventListener('mouseout', (e) => {
+            handleHover({ target: null });
+            resetLinkPosition(e);
+        });
 
         // Touch Interaction for mobile
         document.addEventListener('touchstart', (e) => handleHover(e.target), { passive: true });

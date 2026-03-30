@@ -58,17 +58,34 @@
          * Les pixels transparents (fond supprimé) restent transparents.
          * Rouge pur → Blanc → Rouge pur en boucle
          */
+        let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            // Calculate mouse position relative to center of screen (-1 to 1)
+            targetX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+            targetY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+        });
+
         function animateColor(timestamp) {
             if (!originalPixels) return;
 
             const W = canvas.width;
             const H = canvas.height;
 
+            // Interpolate mouse movement for smoothness
+            mouseX += (targetX - mouseX) * 0.1;
+            mouseY += (targetY - mouseY) * 0.1;
+
+            // Apply "powerful" move: translate the canvas slightly based on mouse
+            // We use CSS transform for performance, or we can offset pixels.
+            // Let's use CSS transform via JS for a macro move.
+            const moveStrength = 40; 
+            canvas.style.transform = `translate(${mouseX * moveStrength}px, ${mouseY * moveStrength}px) rotate(${mouseX * 5}deg)`;
+
             // t oscille entre 0 et 1 via sinus (période ~2.5s)
             const t = (Math.sin((timestamp / 1250) * Math.PI) + 1) / 2;
-            // t=0 → rouge pur, t=1 → blanc pur
-
-            // Couleurs cibles
+            
             const redR = 220, redG = 38, redB = 38;
             const whiteR = 255, whiteG = 255, whiteB = 255;
 
@@ -78,18 +95,11 @@
 
             for (let i = 0; i < data.length; i += 4) {
                 const alpha = src[i + 3];
-                if (alpha === 0) {
-                    // Pixel transparent → reste transparent
-                    data[i] = 0;
-                    data[i + 1] = 0;
-                    data[i + 2] = 0;
-                    data[i + 3] = 0;
-                } else {
-                    // Interpoler entre rouge pur et blanc pur
-                    data[i] = Math.round(redR + (whiteR - redR) * t); // R
-                    data[i + 1] = Math.round(redG + (whiteG - redG) * t); // G
-                    data[i + 2] = Math.round(redB + (whiteB - redB) * t); // B
-                    data[i + 3] = alpha; // Conserver la transparence originale
+                if (alpha > 0) {
+                    data[i] = Math.round(redR + (whiteR - redR) * t);
+                    data[i + 1] = Math.round(redG + (whiteG - redG) * t);
+                    data[i + 2] = Math.round(redB + (whiteB - redB) * t);
+                    data[i + 3] = alpha;
                 }
             }
 

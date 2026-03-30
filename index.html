@@ -102,10 +102,80 @@
         class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-6 flex justify-between items-center transition-all duration-300">
 
         <!-- New Stacked Logo -->
-        <a href="#" class="text-2xl font-bold flex flex-col leading-none group order-1 tracking-tighter">
-            <span class="text-black dark:text-white">ZAKARIA</span>
-            <span class="text-gray-500 dark:text-gray-400 text-sm tracking-widest">CHAMEKH</span>
+        <a href="#" class="flex flex-col leading-none group order-1 tracking-tighter w-max" style="width: 140px;">
+            <svg viewBox="0 0 160 55" class="w-full h-auto overflow-visible select-none">
+                <style>
+                    .header-draw-char {
+                        fill: currentColor;
+                        fill-opacity: 0;
+                        stroke: currentColor;
+                        stroke-width: 1.2px;
+                        stroke-dasharray: 400;
+                        stroke-dashoffset: 400;
+                        opacity: 1;
+                    }
+                </style>
+                <!-- ZAKARIA -->
+                <text x="0" y="20" text-anchor="start" dominant-baseline="middle"
+                    class="font-sans font-bold text-black dark:text-white"
+                    style="font-size: 26px; font-weight: 800; letter-spacing: -0.02em;">
+                    <tspan class="header-draw-char">Z</tspan>
+                    <tspan class="header-draw-char">A</tspan>
+                    <tspan class="header-draw-char">K</tspan>
+                    <tspan class="header-draw-char">A</tspan>
+                    <tspan class="header-draw-char">R</tspan>
+                    <tspan class="header-draw-char">I</tspan>
+                    <tspan class="header-draw-char">A</tspan>
+                </text>
+                <!-- CHAMEKH -->
+                <text x="2" y="44" text-anchor="start" dominant-baseline="middle"
+                    class="font-sans font-bold text-gray-500 dark:text-gray-400"
+                    style="font-size: 13px; letter-spacing: 0.18em;">
+                    <tspan class="header-draw-char">C</tspan>
+                    <tspan class="header-draw-char">H</tspan>
+                    <tspan class="header-draw-char">A</tspan>
+                    <tspan class="header-draw-char">M</tspan>
+                    <tspan class="header-draw-char">E</tspan>
+                    <tspan class="header-draw-char">K</tspan>
+                    <tspan class="header-draw-char">H</tspan>
+                </text>
+            </svg>
         </a>
+        <script>
+            window.addEventListener('load', () => {
+                if (typeof gsap === 'undefined') return;
+                const headerTimeline = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+                headerTimeline
+                    .to(".header-draw-char", {
+                        strokeDashoffset: 0,
+                        duration: 1.5,
+                        stagger: 0.08,
+                        ease: "power2.inOut"
+                    })
+                    .to(".header-draw-char", {
+                        fillOpacity: 1,
+                        strokeOpacity: 0,
+                        duration: 0.6,
+                        stagger: 0.04,
+                        ease: "power1.inOut"
+                    }, "-=1.0")
+                    .to({}, { duration: 4 })
+                    .to(".header-draw-char", {
+                        opacity: 0,
+                        duration: 0.6,
+                        stagger: 0.03,
+                        ease: "power2.inOut",
+                        onComplete: function () {
+                            gsap.set(".header-draw-char", {
+                                fillOpacity: 0,
+                                strokeOpacity: 1,
+                                strokeDashoffset: 400
+                            });
+                        }
+                    })
+                    .to(".header-draw-char", { opacity: 1, duration: 0 });
+            });
+        </script>
 
         <!-- Single Services Link with Scramble Effect -->
         <a href="services.html" class="glitch-link scramble-text order-2" data-text="SERVICES" data-value="SERVICES">
@@ -121,10 +191,39 @@
     <section id="home" class="relative w-full min-h-screen" style="z-index:1;">
         <!-- Hero UI Overlay -->
         <div class="absolute inset-0 z-20 pointer-events-none flex flex-col justify-center items-center">
-            <h1 class="text-[14vw] md:text-[12vw] font-[900] tracking-tighter text-white uppercase leading-none select-none drop-shadow-2xl mix-blend-exclusion"
+            <h1 class="text-[14vw] md:text-[12vw] font-[900] tracking-tighter uppercase leading-none select-none drop-shadow-2xl mix-blend-exclusion"
                 id="hero-name-overlay">
-                Zakaria
+                <style>
+                    .hero-char {
+                        -webkit-text-stroke: 0.025em white;
+                        color: transparent;
+                    }
+                </style>
+                <span class="hero-char">Z</span><span class="hero-char">A</span><span class="hero-char">K</span><span
+                    class="hero-char">A</span><span class="hero-char">R</span><span class="hero-char">I</span><span
+                    class="hero-char">A</span>
             </h1>
+            <script>
+                window.addEventListener('load', () => {
+                    if (typeof gsap === 'undefined') return;
+                    const heroTimeline = gsap.timeline({ repeat: -1 });
+                    heroTimeline
+                        .to(".hero-char", {
+                            color: "white",
+                            duration: 0.8,
+                            stagger: 0.1,
+                            ease: "power2.inOut"
+                        })
+                        .to({}, { duration: 2 })
+                        .to(".hero-char", {
+                            color: "transparent",
+                            duration: 0.6,
+                            stagger: 0.05,
+                            ease: "power2.inOut"
+                        })
+                        .to({}, { duration: 0.5 });
+                });
+            </script>
             <div class="mt-4 text-xl md:text-3xl text-white font-medium tracking-widest uppercase select-none relative h-8 flex justify-center items-center overflow-hidden w-full"
                 id="hero-role-container">
                 <span class="glitched-role transform translate-y-0 opacity-100 will-change-transform font-bold"
@@ -722,11 +821,14 @@
                         <li><a href="#" class="glitch-link footer-link" data-text="Twitter / X"><span>Twitter /
                                     X</span></a></li>
                     </ul>
-                    <div class="footer-bottom-bar">
-                        <span class="footer-copy">&copy; 2025 Zakaria Chamekh. All rights reserved.</span>
-                        <div class="footer-bottom-links">
-                        </div>
-                    </div>
+                </nav>
+            </div>
+
+            <!-- FOOTER BOTTOM BAR: Full width -->
+            <div class="footer-bottom-bar">
+                <div class="footer-bottom-inner">
+                    <span class="footer-copy">&copy; 2025 ZAKARIA CHAMEKH. ALL RIGHTS RESERVED.</span>
+                </div>
             </div>
         </div>
     </footer>
