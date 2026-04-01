@@ -189,6 +189,7 @@ html {
 #about,
 #expertise,
 #projects,
+#signature-section,
 #contact,
 footer {
     position: relative;
@@ -351,35 +352,46 @@ body {
 }
 
 /* Aston Green */
-/* Aston Green */
+.role-cloud {
+    --card-color: #7b61ff;
+}
 
-/* Fan positioning for 4 cards */
+/* Hyper Red / Purple */
+
+/* Fan positioning for 5 cards */
 .role-frontend {
-    --rot: -28deg;
-    --tx: -240px;
+    --rot: -32deg;
+    --tx: -320px;
     transform: rotate(var(--rot)) translateX(var(--tx));
     z-index: 1;
 }
 
 .role-backend {
-    --rot: -10deg;
-    --tx: -80px;
+    --rot: -16deg;
+    --tx: -160px;
     transform: rotate(var(--rot)) translateX(var(--tx));
     z-index: 2;
 }
 
 .role-design {
-    --rot: 10deg;
-    --tx: 80px;
+    --rot: 0deg;
+    --tx: 0px;
     transform: rotate(var(--rot)) translateX(var(--tx));
     z-index: 3;
 }
 
 .role-testing {
-    --rot: 28deg;
-    --tx: 240px;
+    --rot: 16deg;
+    --tx: 160px;
     transform: rotate(var(--rot)) translateX(var(--tx));
     z-index: 4;
+}
+
+.role-cloud {
+    --rot: 32deg;
+    --tx: 320px;
+    transform: rotate(var(--rot)) translateX(var(--tx));
+    z-index: 5;
 }
 
 @media (max-width: 1024px) {
@@ -389,26 +401,32 @@ body {
     }
 
     .role-frontend {
-        --rot: -20deg;
-        --tx: -180px;
+        --rot: -24deg;
+        --tx: -240px;
         transform: rotate(var(--rot)) translateX(var(--tx));
     }
 
     .role-backend {
-        --rot: -7deg;
-        --tx: -60px;
+        --rot: -12deg;
+        --tx: -120px;
         transform: rotate(var(--rot)) translateX(var(--tx));
     }
 
     .role-design {
-        --rot: 7deg;
-        --tx: 60px;
+        --rot: 0deg;
+        --tx: 0px;
         transform: rotate(var(--rot)) translateX(var(--tx));
     }
 
     .role-testing {
-        --rot: 20deg;
-        --tx: 180px;
+        --rot: 12deg;
+        --tx: 120px;
+        transform: rotate(var(--rot)) translateX(var(--tx));
+    }
+
+    .role-cloud {
+        --rot: 24deg;
+        --tx: 240px;
         transform: rotate(var(--rot)) translateX(var(--tx));
     }
 }
@@ -2292,7 +2310,8 @@ input:-webkit-autofill:active {
     width: 100%;
     padding: 30px 40px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    margin-top: 60px; /* Space after columns */
+    margin-top: 60px;
+    /* Space after columns */
 }
 
 .footer-bottom-inner {
@@ -2336,9 +2355,23 @@ input:-webkit-autofill:active {
 }
 
 @keyframes livePulse {
-    0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
-    70% { transform: scale(1.1); opacity: 0.8; box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
-    100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+    0% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+    }
+
+    70% {
+        transform: scale(1.1);
+        opacity: 0.8;
+        box-shadow: 0 0 0 6px rgba(220, 38, 38, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+    }
 }
 
 .footer-bottom-links {
@@ -2450,3 +2483,148 @@ input:-webkit-autofill:active {
 .scroll-top-progress {
     will-change: transform, opacity;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   SIGNATURE SECTION — Styles
+════════════════════════════════════════════════════════════ */
+#signature-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #000000;
+    padding: 8vh 4vw;
+    z-index: 35;
+    perspective: 1200px;           /* 3D container */
+    transform-style: preserve-3d;
+}
+
+/* Ambient gold glow behind signature */
+#signature-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 40% at 50% 55%,
+        rgba(200, 169, 110, .07) 0%,
+        transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Fine grain overlay for luxury texture */
+#signature-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: .35;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Vertical gold rule above label */
+.sig-rule {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, #c8a96e);
+    margin-bottom: 3rem;
+    opacity: 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* "handcrafted with passion" label */
+.sig-label {
+    font-family: 'Georgia', serif;
+    font-size: clamp(.55rem, .8vw, .75rem);
+    letter-spacing: .5em;
+    text-transform: uppercase;
+    color: #c8a96e;
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* ── SVG wrapper ──────────────────────────────────────────── */
+#sig-wrap {
+    position: relative;
+    width: min(1100px, 96vw);
+    z-index: 1;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+/* Signature SVG */
+#sig-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+}
+
+/* All paths: hidden initially, revealed via dashoffset */
+#sig-svg path {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    paint-order: stroke;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, .35));
+}
+
+/* ── Pen image — positioned by JS via left/top ───────────── */
+#pen-img {
+    position: absolute;
+    width: 140px;
+    height: auto;
+    pointer-events: none;
+    transform-origin: 50% 97%;   /* pivot at nib tip */
+    transform: rotate(-38deg);
+    z-index: 20;
+    opacity: 0;
+    filter: drop-shadow(0 4px 18px rgba(0,0,0,.7));
+    will-change: left, top;
+}
+
+/* Bottom flourish line */
+.sig-line {
+    width: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #ff2222, transparent);
+    margin-top: 3rem;
+    opacity: 0;
+    position: relative;
+    z-index: 1;
+    transition: box-shadow 0.6s ease;
+}
+
+/* Gold shimmer keyframe for post-sign glow pulse */
+@keyframes sig-gold-pulse {
+    0%   { filter: drop-shadow(0 0 8px rgba(200,169,110,.5)); }
+    50%  { filter: drop-shadow(0 0 22px rgba(200,169,110,.95)) drop-shadow(0 0 50px rgba(255,220,140,.3)); }
+    100% { filter: drop-shadow(0 0 8px rgba(200,169,110,.5)); }
+}
+
+/* Applied by JS after signing finishes */
+#sig-svg.signed path {
+    animation: sig-gold-pulse 3s ease-in-out infinite;
+}
+
+/* Mobile: thinner strokes so they stay readable */
+@media (max-width: 600px) {
+    #sig-svg path {
+        stroke-width: 14;
+    }
+    #signature-section {
+        min-height: 70vh;
+        padding: 6vh 3vw;
+    }
+    .sig-pen img {
+        width: 110px;
+    }
+}

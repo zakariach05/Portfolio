@@ -212,10 +212,22 @@
   /* ── Init ───────────────────────────────────────────────── */
   buildPills();
 
-  /* Notification badge pulse after 3 s */
+  /* ── Notification badge pulse after 3 s ─────────────────── */
   setTimeout(() => {
     const badge = document.getElementById('cb-badge');
     if (badge && !isOpen) badge.classList.add('cb-badge--show');
   }, 3000);
+
+  /* ── Hero-Only Visibility (icon de chat reste en hero fixed) ── */
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    ScrollTrigger.create({
+      trigger: '#home',
+      start: 'top top',
+      end: 'bottom top',
+      onEnter: () => gsap.to(toggle, { opacity: 1, scale: 1, pointerEvents: 'auto', duration: 0.4 }),
+      onLeave: () => gsap.to(toggle, { opacity: 0, scale: 0.8, pointerEvents: 'none', duration: 0.4 }),
+      onEnterBack: () => gsap.to(toggle, { opacity: 1, scale: 1, pointerEvents: 'auto', duration: 0.4 }),
+    });
+  }
 
 })();
