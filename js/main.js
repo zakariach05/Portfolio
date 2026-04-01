@@ -780,11 +780,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 scrollTopBtn.classList.remove('show');
             }
 
-            if (scrollPercent > 0.95) {
-                progressCircle.style.stroke = '#0077ff';
+            if (scrollPercent > 0.99) {
+                progressCircle.style.stroke = '#dc2626'; // Red at the end
                 progressCircle.style.strokeWidth = '4';
-            } else if (scrollPercent > 0.5) {
-                progressCircle.style.stroke = '#2141ce';
+            } else if (scrollPercent > 0.7) {
+                progressCircle.style.stroke = '#0077ff';
                 progressCircle.style.strokeWidth = '3.5';
             } else {
                 progressCircle.style.stroke = '#2402e6';
