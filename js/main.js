@@ -92,29 +92,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Navbar Scroll Effect (Removed: Navbar is now part of the header and scrolls with the page) ---
 
 
-    // --- Lenis Smooth Scroll Setup ---
+    // --- Lenis Smooth Scroll Setup (Performance Optimized) ---
     const lenis = new Lenis({
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smooth: true,
+        smoothWheel: true,
         smoothTouch: false,
         touchMultiplier: 1.5,
         wheelMultiplier: 1.0,
+        infinite: false,
     });
 
-    // Expose lenis globally so other scripts can use lenis.stop() / lenis.start()
+    // Expose lenis globally
     window.lenis = lenis;
 
-    // Sync Lenis scroll events into ScrollTrigger
-    lenis.on('scroll', () => { ScrollTrigger.update(); });
-
-    // Integrate Lenis RAF with GSAP ticker
-    gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-    });
-
-    // Prevent GSAP lag-smoothing from interfering with Lenis timing
+    // Advanced Sync for Maximum Smoothness
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
+
+    // Global GSAP Performance Tweaks
+    ScrollTrigger.normalizeScroll(true); // Prevents address-bar jitter on mobile
+    ScrollTrigger.config({ limitCallbacks: true }); // Better for CPU/Memory
+    ScrollTrigger.clearScrollMemory('manual'); // Smoother reloads
 
     // --- Splash Screen Logic ---
     const splashScreen = document.getElementById('splash-screen');
