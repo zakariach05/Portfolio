@@ -16,7 +16,8 @@ function initHeroTransition() {
     gsap.registerPlugin(ScrollTrigger);
 
     const homeSection = document.getElementById('home');
-    const heroImgContainer = document.querySelector('.scan-container').parentElement;
+    const scanContainer = document.querySelector('.scan-container');
+    const heroImgContainer = scanContainer ? scanContainer.parentElement : document.getElementById('hero-img-wrapper');
     const aboutSection = document.getElementById('about');
     const aboutTargetImg = document.getElementById('about-final-img');
 
