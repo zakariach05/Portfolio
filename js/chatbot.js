@@ -96,7 +96,7 @@
     if (role === 'bot') {
       const avatar = document.createElement('div');
       avatar.className = 'cb-avatar';
-      avatar.innerHTML = '<img src="NV-IMG/heroP1.png" alt="Zak">';
+      avatar.innerHTML = '<img src="NV-IMG/heroP_pro.png" alt="Zak">';
       wrap.appendChild(avatar);
     }
 
@@ -119,7 +119,7 @@
 
     const avatar = document.createElement('div');
     avatar.className = 'cb-avatar';
-    avatar.innerHTML = '<img src="NV-IMG/heroP1.png" alt="Zak">';
+    avatar.innerHTML = '<img src="NV-IMG/heroP_pro.png" alt="Zak">';
     wrap.appendChild(avatar);
 
     const bubble = document.createElement('div');

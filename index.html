@@ -14,6 +14,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rubik+Storm&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
@@ -187,69 +188,57 @@
     <canvas id="hero-3d-canvas"
         style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
 
-    <!-- Hero Section -->
-    <section id="home" class="relative w-full min-h-screen" style="z-index:1;">
-        <!-- Hero UI Overlay -->
-        <div class="absolute inset-0 z-20 pointer-events-none flex flex-col justify-center items-center">
-            <h1 class="text-[14vw] md:text-[12vw] font-[900] tracking-tighter uppercase leading-none select-none drop-shadow-2xl mix-blend-exclusion"
-                id="hero-name-overlay">
-                <style>
-                    .hero-char {
-                        -webkit-text-stroke: 0.025em white;
-                        color: transparent;
-                    }
-                </style>
-                <span class="hero-char">Z</span><span class="hero-char">A</span><span class="hero-char">K</span><span
-                    class="hero-char">A</span><span class="hero-char">R</span><span class="hero-char">I</span><span
-                    class="hero-char">A</span>
-            </h1>
-            <script>
-                window.addEventListener('load', () => {
-                    if (typeof gsap === 'undefined') return;
-                    const heroTimeline = gsap.timeline({ repeat: -1 });
-                    heroTimeline
-                        .to(".hero-char", {
-                            color: "white",
-                            duration: 0.8,
-                            stagger: 0.1,
-                            ease: "power2.inOut"
-                        })
-                        .to({}, { duration: 2 })
-                        .to(".hero-char", {
-                            color: "transparent",
-                            duration: 0.6,
-                            stagger: 0.05,
-                            ease: "power2.inOut"
-                        })
-                        .to({}, { duration: 0.5 });
-                });
-            </script>
-            <div class="mt-4 text-xl md:text-3xl text-white font-medium tracking-widest uppercase select-none relative h-8 flex justify-center items-center overflow-hidden w-full"
-                id="hero-role-container">
-                <span class="glitched-role transform translate-y-0 opacity-100 will-change-transform font-bold"
-                    id="hero-role-text">Développeur</span>
-            </div>
-            <div id="hero-extra-info" class="flex flex-col items-center pointer-events-auto mt-8">
-                <p class="text-sm sm:text-base md:text-lg max-w-2xl text-gray-300 text-center px-6" id="hero-desc-text">
-                    Passionate about crafting clean code and intuitive user experiences.
-                </p>
-                <p class="text-gray-500 text-lg md:text-xl mt-2 leading-relaxed">React • Laravel • WordPress</p>
-                <div class="flex flex-wrap gap-6 mt-6" id="hero-buttons">
-                    <a href="Zakaria_Chamekh.pdf" download="CV_Zakaria_Chamekh.pdf" class="custom-btn-cv">
-                        <i class="fas fa-download"></i> Mon CV
-                    </a>
+    <!-- ═══════════════════════════════════════════════
+         HERO — Cinematic 3D Scroll-Reveal (300vh)
+         Portrait rendered by Three.js on the bg canvas
+    ════════════════════════════════════════════════ -->
+    <section id="home" style="height:300vh; position:relative; z-index:1;">
+        <!-- Background 3D Canvas (Noise/Ambiance) -->
+        <canvas id="hero-3d-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;"></canvas>
+
+        <!-- Sticky inner stays in viewport while animation plays -->
+        <div id="hero-sticky">
+
+            <!-- LEFT PANEL: Slide-in content -->
+            <div id="hero-text-panel" class="hero-panel" aria-label="Hero Introduction">
+                <h1 id="hero-name" class="hero-main-name">Zakaria<br>Chamekh</h1>
+                <h2 id="hero-role" class="hero-sub-name mt-2">Développeur Full Stack & Designer</h2>
+                
+                <div class="hero-description mt-6 opacity-80 max-w-sm">
+                    <p>Passionné par la création d'expériences numériques immersives et performantes, alliant code propre et design soigné.</p>
+                </div>
+
+                <div class="hero-subtitle mt-6">
+                    <span class="hero-subtitle-stack">React · Laravel · Three.js · WordPress</span>
+                </div>
+
+                <div id="hero-cta-group" class="mt-10 flex gap-4">
+                     <a href="#projects" class="hero-cta-pill hero-cta-red">
+                        <i class="fas fa-eye mr-2"></i> Voir Projets
+                     </a>
+                     <a href="Zakaria_Chamekh.pdf" download class="hero-cta-pill">
+                        <i class="fas fa-file-download mr-2"></i> Mon CV
+                     </a>
                 </div>
             </div>
-        </div>
-        <!-- Scroll Indicator -->
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-[30] flex flex-col items-center pointer-events-none"
-            id="hero-scroll-indicator">
-            <span class="text-white text-[10px] tracking-[0.3em] mb-3 uppercase opacity-70">Scroll</span>
-            <div class="w-px h-16 bg-white/20 relative overflow-hidden">
-                <div class="w-full h-1/2 bg-white animate-pulse-line absolute top-0 left-0"></div>
+
+            <!-- CENTER/RIGHT: Portrait (Borderless, integrated) -->
+            <div id="hero-img-wrapper" class="hero-center-portrait">
+                <div id="hero-img-ambient-red"></div>
+                <img id="hero-profile-img" src="NV-IMG/heroP.png" alt="Zakaria" 
+                     onerror="this.onerror=null; this.src='NV-IMG/heroP1.png';">
             </div>
-        </div>
-    </section>
+
+            <!-- BOTTOM: Scroll hint -->
+            <div id="hero-scroll-indicator" aria-hidden="true">
+                <span class="hero-scroll-label">Scroll</span>
+                <div class="hero-scroll-line">
+                    <div class="hero-scroll-line-fill"></div>
+                </div>
+            </div>
+
+        </div><!-- /#hero-sticky -->
+    </section><!-- /#home -->
 
     <!-- About Section -->
     <section id="about" class="py-24 bg-black relative overflow-clip" style="position:relative; z-index:30;">
@@ -938,13 +927,19 @@
                 <nav class="footer-col footer-social" aria-label="Social links">
                     <p class="footer-col-label">FOLLOW ON</p>
                     <ul>
-                        <li><a href="https://www.linkedin.com/in/zakaria-chamekh-996812319/" target="_blank" rel="noopener noreferrer" class="glitch-link footer-link" data-text="LinkedIn"><span>LinkedIn</span></a>
+                        <li><a href="https://www.linkedin.com/in/zakaria-chamekh-996812319/" target="_blank"
+                                rel="noopener noreferrer" class="glitch-link footer-link"
+                                data-text="LinkedIn"><span>LinkedIn</span></a>
                         </li>
-                        <li><a href="https://github.com/zakariach05" target="_blank" rel="noopener noreferrer" class="glitch-link footer-link" data-text="GitHub"><span>GitHub</span></a>
+                        <li><a href="https://github.com/zakariach05" target="_blank" rel="noopener noreferrer"
+                                class="glitch-link footer-link" data-text="GitHub"><span>GitHub</span></a>
                         </li>
-                        <li><a href="https://www.instagram.com/forev_60/" target="_blank" rel="noopener noreferrer" class="glitch-link footer-link" data-text="Instagram"><span>Instagram</span></a>
+                        <li><a href="https://www.instagram.com/forev_60/" target="_blank" rel="noopener noreferrer"
+                                class="glitch-link footer-link" data-text="Instagram"><span>Instagram</span></a>
                         </li>
-                        <li><a href="https://x.com/ChamekhZak33734" target="_blank" rel="noopener noreferrer" class="glitch-link footer-link" data-text="Twitter / X"><span>Twitter / X</span></a></li>
+                        <li><a href="https://x.com/ChamekhZak33734" target="_blank" rel="noopener noreferrer"
+                                class="glitch-link footer-link" data-text="Twitter / X"><span>Twitter / X</span></a>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -1091,6 +1086,7 @@
     <script src="js/main.js"></script>
     <script src="js/v-logo.js"></script>
     <script type="module" src="js/hero-3d.js"></script>
+    <script src="js/hero-scroll-reveal.js"></script>
     <script type="module" src="js/advanced-animations.js"></script>
     <script type="module" src="js/contact-3d.js"></script>
     <!-- Scroll to Top Button with Progress -->
@@ -1099,7 +1095,8 @@
             <circle class="progress-ring__circle" stroke="currentColor" stroke-width="3" fill="transparent" r="22"
                 cx="25" cy="25" />
         </svg>
-        <img src="NV-IMG/V.png" alt="V" class="scroll-top-logo" style="width: 32px; height: 32px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); object-fit: contain;">
+        <img src="NV-IMG/V.png" alt="V" class="scroll-top-logo"
+            style="width: 32px; height: 32px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); object-fit: contain;">
     </a>
 
 
@@ -1128,7 +1125,7 @@
         <!-- Header -->
         <div class="cb-header">
             <div class="cb-header-avatar" aria-hidden="true">
-                <img src="NV-IMG/heroP1.png" alt="Zakaria">
+                <img src="NV-IMG/heroP_pro.png" alt="Zakaria">
             </div>
             <div class="cb-header-info">
                 <div class="cb-header-name" id="cb-header-name">Zakaria — Assistant Virtual</div>

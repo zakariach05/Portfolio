@@ -349,60 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Greeting Animation (Bonjour 👋 -> Je suis Zakaria) ---
-    const greetingElement = document.getElementById('hero-greeting');
-    if (greetingElement) {
-        // 1. Start with "Bonjour 👋"
-        greetingElement.innerHTML = 'Bonjour <span id="wave-emoji" style="display:inline-block">👋</span>';
-
-        // 2. Animate the WaveEmoji
-        anime({
-            targets: '#wave-emoji',
-            rotate: [0, 20, -20, 20, 0],
-            duration: 900, // Accelerated from 1500
-            easing: 'easeInOutSine',
-            loop: 2, // Wave twice
-            complete: function () {
-                // 3. Wait a bit, then delete
-                setTimeout(() => {
-                    deleteGreeting();
-                }, 200); // Reduced delay from 500
-            }
-        });
-
-        function deleteGreeting() {
-            let text = greetingElement.textContent; // "Bonjour 👋"
-            let length = text.length;
-
-            const deleteInterval = setInterval(() => {
-                if (length > 0) {
-                    // Quick backspace
-                    greetingElement.textContent = text.substring(0, length - 1);
-                    length--;
-                } else {
-                    clearInterval(deleteInterval);
-                    // 4. Type "Je suis Zakaria Chamekh"
-                    setTimeout(() => {
-                        typeFinalGreeting("Je suis Zakaria Chamekh 🙋🏻‍♂️");
-                    }, 100); // Reduced delay from 300
-                }
-            }, 30); // Faster delete speed from 50
-        }
-
-        function typeFinalGreeting(finalText) {
-            let i = 0;
-            greetingElement.textContent = ""; // Ensure empty
-
-            const typeInterval = setInterval(() => {
-                if (i < finalText.length) {
-                    greetingElement.textContent += finalText.charAt(i);
-                    i++;
-                } else {
-                    clearInterval(typeInterval);
-                }
-            }, 40); // Faster typing speed from 80
-        }
-    }
+    // --- Greeting Animation (REMOVED: Now handled by hero-scroll-reveal.js) ---
 
     // --- Typewriter Animation ---
     const typewriterElement = document.getElementById('typewriter');
