@@ -71,18 +71,18 @@
   const QA = window.location.pathname.includes('services.html') ? QA_SERVICES : QA_HOME;
 
   /* ── DOM refs ───────────────────────────────────────────── */
-  const toggle   = document.getElementById('cb-toggle');
-  const window_  = document.getElementById('cb-window');
+  const toggle = document.getElementById('cb-toggle');
+  const window_ = document.getElementById('cb-window');
   const closeBtn = document.getElementById('cb-close');
   const messages = document.getElementById('cb-messages');
-  const pills    = document.getElementById('cb-pills');
+  const pills = document.getElementById('cb-pills');
 
   if (!toggle || !window_ || !closeBtn || !messages || !pills) return;
 
   /* ── State ──────────────────────────────────────────────── */
-  let isOpen    = false;
-  let isTyping  = false;
-  let greeted   = false;
+  let isOpen = false;
+  let isTyping = false;
+  let greeted = false;
 
   /* ── Helpers ────────────────────────────────────────────── */
   function scrollToBottom() {
