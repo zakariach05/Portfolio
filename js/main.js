@@ -112,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.ticker.lagSmoothing(0);
 
     // Global GSAP Performance Tweaks
-    ScrollTrigger.normalizeScroll(true); // Prevents address-bar jitter on mobile
     ScrollTrigger.config({ limitCallbacks: true }); // Better for CPU/Memory
     ScrollTrigger.clearScrollMemory('manual'); // Smoother reloads
 
@@ -668,7 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (showMoreBtn) {
         showMoreBtn.addEventListener('click', () => {
             if (showMoreText.textContent === "Voir plus") {
-                const hiddenProjects = document.querySelectorAll('.project-card.hidden');
+                const hiddenProjects = document.querySelectorAll('.project-card-wrapper.hidden');
                 hiddenProjects.forEach((project, index) => {
                     project.classList.remove('hidden');
                     project.classList.add('extra-project');
@@ -690,7 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showMoreText.textContent = "Voir moins";
                 showMoreIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
             } else {
-                const extraProjects = document.querySelectorAll('.project-card.extra-project');
+                const extraProjects = document.querySelectorAll('.project-card-wrapper.extra-project');
                 extraProjects.forEach((project) => {
                     project.classList.add('hidden');
                     project.classList.remove('extra-project');
@@ -840,7 +839,6 @@ document.addEventListener('DOMContentLoaded', () => {
             cursor.classList.remove('active-project-view', 'active-link', 'active-text-reveal');
 
             if (!target) {
-                gsap.to(follower, { x: 0, y: 0, duration: 0.3 });
                 return;
             }
 

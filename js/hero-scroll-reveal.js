@@ -125,7 +125,7 @@
         if (!isMobile) {
             // Desktop: Glide to the right
             tl.to(imgWrapper, {
-                left: '75%',
+                x: () => window.innerWidth * 0.25,
                 scale: 1.05,
                 duration: 1,
                 ease: 'power2.inOut'
@@ -172,8 +172,6 @@
             gsap.to(imgWrapper, {
                 rotationY: x * 8,
                 rotationX: -y * 8,
-                x: x * 30,
-                y: y * 30,
                 duration: 1.5,
                 ease: 'power2.out',
                 overwrite: 'auto'

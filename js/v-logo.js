@@ -20,6 +20,13 @@
         let originalPixels = null;
         let animFrameId    = null;
 
+        let isVisible = true;
+        if (typeof IntersectionObserver !== 'undefined') {
+            new IntersectionObserver((entries) => {
+                isVisible = entries[0].isIntersecting;
+            }, { rootMargin: '150px' }).observe(canvas);
+        }
+
         // ── Mouse parallax (shared global target, individual lerp per instance) ──
         let mouseX = 0, mouseY = 0;
         let targetX = 0, targetY = 0;
@@ -37,13 +44,18 @@
             const H = img.naturalHeight;
             if (!W || !H) return;
 
-            canvas.width  = W;
-            canvas.height = H;
+            const MAX_RES = 384;
+            const s = Math.min(1, MAX_RES / Math.max(W, H));
+            const rw = Math.max(1, Math.round(W * s));
+            const rh = Math.max(1, Math.round(H * s));
 
-            ctx.clearRect(0, 0, W, H);
-            ctx.drawImage(img, 0, 0, W, H);
+            canvas.width  = rw;
+            canvas.height = rh;
 
-            const imageData = ctx.getImageData(0, 0, W, H);
+            ctx.clearRect(0, 0, rw, rh);
+            ctx.drawImage(img, 0, 0, rw, rh);
+
+            const imageData = ctx.getImageData(0, 0, rw, rh);
             const data      = imageData.data;
             const THRESHOLD = 55;
 
@@ -70,6 +82,11 @@
 
         function animateColor(timestamp) {
             if (!originalPixels) return;
+
+            if (!isVisible) {
+                animFrameId = requestAnimationFrame(animateColor);
+                return;
+            }
 
             const W = canvas.width;
             const H = canvas.height;

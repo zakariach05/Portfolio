@@ -370,10 +370,12 @@ class Hero3DScene {
         }
 
         // ── Dual-scene render ─────────────────────────────────────────
-        this.renderer.clear();
-        this.renderer.render(this.bgScene, this.bgCamera);
-        this.renderer.clearDepth();
-        this.renderer.render(this.scene, this.camera);
+        if (this.portraitGroup || this.noiseMat || this.particles) {
+            this.renderer.clear();
+            this.renderer.render(this.bgScene, this.bgCamera);
+            this.renderer.clearDepth();
+            this.renderer.render(this.scene, this.camera);
+        }
     }
 }
 
