@@ -43,7 +43,11 @@ class Contact3DScene {
             antialias: true,
             powerPreference: "high-performance"
         });
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer.setPixelRatio(
+            window.matchMedia('(pointer: coarse)').matches
+                ? 1
+                : Math.min(window.devicePixelRatio, 2)
+        );
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
 
         // Lighting

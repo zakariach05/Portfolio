@@ -93,10 +93,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Lenis Smooth Scroll Setup (Performance Optimized) ---
+    // On touch devices use native scroll (no smoothWheel hijack) + shorter duration
+    const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
     const lenis = new Lenis({
-        duration: 1.2,
+        duration: isCoarsePointer ? 0.8 : 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
+        smoothWheel: !isCoarsePointer,
         smoothTouch: false,
         touchMultiplier: 1.5,
         wheelMultiplier: 1.0,
@@ -175,12 +177,84 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 500);
 
         initParallax();
+        initHeroReveal();
     }
 
-    // --- Parallax Effect ---
+    // --- Hero Load-in Reveal (breakpoint-split: text-split on desktop, fade on mobile) ---
+    function initHeroReveal() {
+        const panel = document.getElementById('hero-text-panel');
+        const nameEl = document.getElementById('hero-name');
+        if (!panel || typeof gsap === 'undefined') return;
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        const showPanel = () => {
+            gsap.set(panel, { clearProps: 'all' });
+            panel.style.opacity = '1';
+            panel.style.pointerEvents = 'auto';
+        };
+
+        const mm = gsap.matchMedia();
+
+        // Desktop (>768px): split the name into letters with a mask reveal
+        mm.add('(min-width: 768px)', () => {
+            try {
+                const lines = nameEl ? gsap.utils.toArray('.hero-name-line', nameEl) : [];
+                if (lines.length === 0) return;
+
+                const originals = lines.map(l => l.textContent);
+
+                const chars = [];
+                lines.forEach(line => {
+                    const text = line.textContent;
+                    line.textContent = '';
+                    [...text].forEach(ch => {
+                        const s = document.createElement('span');
+                        s.textContent = ch;
+                        s.style.display = 'inline-block';
+                        line.appendChild(s);
+                        chars.push(s);
+                    });
+                });
+
+                // Initial hidden state applied right before the timeline plays
+                gsap.set(chars, { yPercent: 115, opacity: 0 });
+                gsap.set('#hero-role', { y: 28, opacity: 0 });
+                gsap.set('.hero-description', { y: 22, opacity: 0 });
+                gsap.set('#hero-cta-group a', { y: 18, opacity: 0 });
+
+                const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+                tl.to(chars, { yPercent: 0, opacity: 1, duration: 0.7, stagger: 0.04 }, 0.1)
+                    .to('#hero-role', { y: 0, opacity: 1, duration: 0.7 }, '-=0.3')
+                    .to('.hero-description', { y: 0, opacity: 1, duration: 0.7 }, '-=0.45')
+                    .to('#hero-cta-group a', { y: 0, opacity: 1, stagger: 0.12, duration: 0.6 }, '-=0.45')
+                    .eventCallback('onComplete', showPanel);
+
+                return () => {
+                    lines.forEach((l, i) => { l.textContent = originals[i]; });
+                };
+            } catch (e) {
+                console.warn('[HeroReveal] desktop reveal skipped:', e);
+                showPanel();
+            }
+        });
+
+        // Mobile (<768px): simple fade + translateY, no letter splitting
+        mm.add('(max-width: 767px)', () => {
+            try {
+                gsap.fromTo(panel, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' });
+            } catch (e) {
+                console.warn('[HeroReveal] mobile reveal skipped:', e);
+                showPanel();
+            }
+        });
+    }
+
+    // --- Parallax Effect (desktop only; torn down automatically via matchMedia) ---
     function initParallax() {
-        if (window.innerWidth > 768) { // Desktop only for performance
-            gsap.utils.toArray('.hero-image, .project-card, .skill-card').forEach((el, i) => {
+        const mm = gsap.matchMedia();
+        mm.add('(min-width: 769px)', () => {
+            gsap.utils.toArray('.hero-image, .project-card, .skill-card').forEach((el) => {
                 gsap.to(el, {
                     yPercent: -10,
                     ease: "none",
@@ -192,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             });
-        }
+        });
     }
 
     if (splashScreen && splashCounter) {
@@ -200,9 +274,9 @@ document.addEventListener('DOMContentLoaded', () => {
         lenis.stop();
         body.style.overflow = 'hidden';
 
-        // Phase 1: Slot Machine Counter (Exactly 2s)
+        // Phase 1: Slot Machine Counter (quick spin — whole splash lasts 2s total)
         let startTime = null;
-        const duration = 2000;
+        const duration = 700;
 
         function updateCounter(timestamp) {
             if (!startTime) startTime = timestamp;
@@ -221,67 +295,80 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         requestAnimationFrame(updateCounter);
 
+        // Single cleanup path for ending the splash — idempotent & safe
+        let splashDone = false;
+        const finishSplash = () => {
+            if (splashDone) return;
+            splashDone = true;
+
+            // Unlock scroll & remove splash FIRST — must always happen
+            body.style.overflow = '';
+            lenis.start();
+            splashV.style.display = 'none';
+            splashScreen.style.display = 'none';
+
+            // Force recalculation of page height for ScrollTrigger & Lenis
+            ScrollTrigger.refresh();
+            lenis.resize();
+
+            // Initial signal to the scroll manager
+            window.dispatchEvent(new CustomEvent('sectionChange', { detail: { index: 0, id: 'home' } }));
+
+            // Hero animations must never be able to block the cleanup above
+            try {
+                startHeroAnimations();
+            } catch (e) {
+                console.error('startHeroAnimations error:', e);
+            }
+        };
+
+        // Safety net: never allow the splash to stay up & block the page
+        setTimeout(finishSplash, 2300);
+
         function startMorphSequence() {
             const tl = gsap.timeline();
 
-            // Phase 2: Morphing (0005 -> V)
-            // Phase 2: Morphing (0005 -> V)
+            // Morph timeline is 1.3s — counter took 0.7s → splash ends at exactly 2s
             tl.to([splashCounter, '#splash-name'], {
                 scale: 0, // Shrink 0005 & Name
                 opacity: 0,
-                duration: 0.5,
+                duration: 0.35,
                 ease: "power2.in"
-            })
+            }, 0)
                 .to(splashV, {
                     opacity: 1,
                     scale: 1, // V appears
-                    duration: 0.6,
+                    duration: 0.35,
                     ease: "back.out(1.7)"
-                }, "-=0.2")
+                }, 0.15)
 
-                // Phase 3: Move to Header
                 // Phase 3: Move to Top Center (Fixed Position)
                 .to(splashV, {
                     y: () => -(window.innerHeight / 2) + 45, // Center in 90px header (approx)
                     scale: 0.3, // Size match
                     color: body.classList.contains('dark') ? '#ffffff' : '#ffffffff', // Optional: match theme? Let's just keep position for now, but maybe sync color if requested later. Keeping styling simple.
-                    duration: 1.2,
+                    duration: 0.45,
                     ease: "power3.inOut"
-                }, "+=0.2")
+                }, 0.55)
 
                 // Phase 4: Revelation (Background Fade Out + Site Fade In)
                 .to(splashScreen, {
                     backgroundColor: "transparent", // Fade out black bg
-                    duration: 1.2,
+                    duration: 0.5,
                     ease: "power2.inOut",
                     onStart: () => {
                         splashScreen.style.pointerEvents = 'none'; // Allow clicks on site
                     }
-                }, "-=1.0")
+                }, 0.8)
                 .to(body, {
                     opacity: 1, // Fade in site content
-                    duration: 1.2,
+                    duration: 0.5,
                     ease: "power2.inOut"
-                }, "-=1.2")
+                }, 0.8)
 
                 // Final Step: Ensure everything is interactive
-                .call(() => {
-                    body.style.overflow = '';
-                    lenis.start();
-                    startHeroAnimations();
-                    // Keep V visible and fixed
-                    splashV.style.position = 'absolute';
-                    
-                    // Final safety cleanup: hide splash div entirely so it cannot block pixels
-                    splashScreen.style.display = 'none';
-
-                    // Force recalcluation of page height for ScrollTrigger & Lenis
-                    ScrollTrigger.refresh();
-                    lenis.resize();
-
-                    // Initial signal to the scroll manager
-                    window.dispatchEvent(new CustomEvent('sectionChange', { detail: { index: 0, id: 'home' } }));
-                });
+                // (no position arg → appended at end of timeline, fires at 1.3s → total = 2s)
+                .call(finishSplash);
         }
     } else {
         // Fallback if splash missing
@@ -293,9 +380,12 @@ document.addEventListener('DOMContentLoaded', () => {
         startHeroAnimations();
     }
 
+    // Debounced resize — coalesces ScrollTrigger.refresh() into one call after resizing stops
+    let resizeTimer = null;
     window.addEventListener('resize', () => {
         lenis.resize();
-        ScrollTrigger.refresh();
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 150);
     });
 
 
@@ -659,48 +749,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // --- Show More Projects ---
-    const showMoreBtn = document.getElementById('show-more-projects');
-    const showMoreText = document.getElementById('show-more-text');
-    const showMoreIcon = document.getElementById('show-more-icon');
-
-    if (showMoreBtn) {
-        showMoreBtn.addEventListener('click', () => {
-            if (showMoreText.textContent === "Voir plus") {
-                const hiddenProjects = document.querySelectorAll('.project-card-wrapper.hidden');
-                hiddenProjects.forEach((project, index) => {
-                    project.classList.remove('hidden');
-                    project.classList.add('extra-project');
-
-                    anime({
-                        targets: project,
-                        opacity: [0, 1],
-                        translateY: [50, 0],
-                        rotateX: [20, 0],
-                        scale: [0.9, 1],
-                        duration: 800,
-                        easing: 'easeOutExpo',
-                        delay: index * 100,
-                        complete: () => {
-                            project.style.transform = '';
-                        }
-                    });
-                });
-                showMoreText.textContent = "Voir moins";
-                showMoreIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-            } else {
-                const extraProjects = document.querySelectorAll('.project-card-wrapper.extra-project');
-                extraProjects.forEach((project) => {
-                    project.classList.add('hidden');
-                    project.classList.remove('extra-project');
-                });
-                showMoreText.textContent = "Voir plus";
-                showMoreIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
-                document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    }
-
     // --- Scroll to Top Visibility & Progress (OPTIMISED) ---
     const scrollTopBtn = document.getElementById('scroll-top');
     const progressCircle = document.querySelector('.progress-ring__circle');
@@ -781,12 +829,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // --- Custom Mouse Cursor Interaction ---
+    // --- Custom Mouse Cursor Interaction (fine pointers only — skipped on touch) ---
     const cursor = document.querySelector('.custom-cursor');
     const dot = document.querySelector('.cursor-dot');
     const follower = document.querySelector('.cursor-follower');
 
-    if (cursor && dot && follower) {
+    if (cursor && dot && follower && window.matchMedia('(pointer: fine)').matches) {
         let mouseX = 0;
         let mouseY = 0;
         let dotX = 0;
@@ -941,7 +989,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const footerParallax = document.getElementById('footer-parallax');
     const footerPhoto = footerParallax?.querySelector('.footer-photo');
 
-    if (footerParallax && footerPhoto) {
+    if (footerParallax && footerPhoto && window.matchMedia('(pointer: fine)').matches) {
         // Use GSAP quickTo for ultra-smooth mouse following performance
         const xTo = gsap.quickTo(footerPhoto, "x", { duration: 1, ease: "power2.out" });
         const yTo = gsap.quickTo(footerPhoto, "y", { duration: 1, ease: "power2.out" });

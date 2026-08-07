@@ -102,7 +102,11 @@ class Hero3DScene {
             antialias: true,
             powerPreference: 'high-performance',
         });
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer.setPixelRatio(
+            window.matchMedia('(pointer: coarse)').matches
+                ? 1
+                : Math.min(window.devicePixelRatio, 2)
+        );
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.autoClear = false;
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -277,6 +281,8 @@ class Hero3DScene {
             this.renderer.setSize(window.innerWidth, window.innerHeight);
             if (this.noiseMat)
                 this.noiseMat.uniforms.uRes.value.set(window.innerWidth, window.innerHeight);
+            // Re-render after a resize (the drawing buffer is reallocated)
+            this.renderOnce();
         });
 
         window.addEventListener('mousemove', (e) => {
@@ -295,87 +301,23 @@ class Hero3DScene {
         });
     }
 
-    // ── Animation loop ────────────────────────────────────────────────────────
-    animate() {
-        requestAnimationFrame(this.animate.bind(this));
-        if (!this.isActive) return;
-
-        const t    = this.clock.getElapsedTime();
-        const LERP = 0.072;
-
-        // ── Smooth mouse ──────────────────────────────────────────────
-        this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.05;
-        this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.05;
-
-        // ── Noise background ──────────────────────────────────────────
-        if (this.noiseMat) this.noiseMat.uniforms.uTime.value = t;
-
-        // ── Portrait smooth-lerp updates ──────────────────────────────
-        if (this.portraitGroup) {
-            // Position X
-            this._currentX += (this._targetX - this._currentX) * LERP;
-            this.portraitGroup.position.x = this._currentX;
-
-            // Rotation Y (scroll-driven)
-            this._currentRY += (this._targetRY - this._currentRY) * LERP;
-            this.portraitGroup.rotation.y = this._currentRY;
-
-            // Scale
-            this.portraitGroup.scale.setScalar(this._targetScale);
-
-
-            // Subtle X tilt from mouse (only when portrait is centred)
-            if (Math.abs(this._currentX) < 1.5) {
-                const tiltTarget = this.mouse.y * 0.045;
-                this.portraitGroup.rotation.x += (tiltTarget - this.portraitGroup.rotation.x) * 0.06;
-            }
-
-            // Breathing micro-animation
-            const breathe = Math.sin(t * 0.78) * 0.003;
-            this.portraitMesh && (this.portraitMesh.position.z = 0.01 + breathe * 1.5);
-        }
-
-        // ── Glow pulse (red breathing) ────────────────────────────────
-        if (this.glowMesh) {
-            this._currentGlow += (this._targetGlow - this._currentGlow) * 0.04;
-            // Breathing: slower, more cinematic
-            const pulse = this._currentGlow + Math.sin(t * 1.1) * 0.065 + Math.sin(t * 0.37) * 0.03;
-            this.glowMesh.material.opacity = Math.max(0, Math.min(1, pulse));
-        }
-
-        // Outer glow breathes more slowly
-        if (this.outerGlowMesh) {
-            const outerPulse = 0.22 + Math.sin(t * 0.65) * 0.06;
-            this.outerGlowMesh.material.opacity = outerPulse;
-        }
-
-        // ── Glow lights drift ─────────────────────────────────────────
-
-        // ── Rim light orbit (red fire sweep) ─────────────────────────
-        if (this.rimLight) {
-            this.rimLight.position.x = 3   + Math.sin(t * 0.32) * 2.2;
-            this.rimLight.position.y = 5.5 + Math.cos(t * 0.24) * 1.5;
-        }
-
-        // ── Key light slight drift (simulates dynamic illumination) ──
-        if (this.keyLight) {
-            this.keyLight.position.x = -5 + Math.sin(t * 0.18) * 0.8;
-            this.keyLight.intensity  =  7.0 + Math.sin(t * 1.05) * 0.8;
-        }
-
-        // ── Particles rotate slowly ───────────────────────────────────
-        if (this.particles) {
-            this.particles.rotation.y  = t * 0.012;
-            this.particles.rotation.x  = Math.sin(t * 0.055) * 0.025;
-        }
-
-        // ── Dual-scene render ─────────────────────────────────────────
+    // ── Static render ─────────────────────────────────────────────────────────
+    // The scene is now a static black backdrop (noise/particles/portrait were
+    // removed), so we render ONE frame and stop the RAF loop. This saves a
+    // full-screen WebGL render every animation frame for the whole session.
+    renderOnce() {
         if (this.portraitGroup || this.noiseMat || this.particles) {
             this.renderer.clear();
             this.renderer.render(this.bgScene, this.bgCamera);
             this.renderer.clearDepth();
             this.renderer.render(this.scene, this.camera);
+        } else {
+            this.renderer.clear();
         }
+    }
+
+    animate() {
+        this.renderOnce();
     }
 }
 

@@ -44,8 +44,9 @@
         const textPanel = document.getElementById('hero-text-panel');
         const imgWrapper = document.getElementById('hero-img-wrapper');
         const scrollHint = document.getElementById('hero-scroll-indicator');
+        const hasPhoto = !!imgWrapper;
 
-        if (!heroSection || !textPanel || !imgWrapper) {
+        if (!heroSection || !textPanel) {
             console.warn('[HeroReveal] Required elements not found.');
             return;
         }
@@ -53,43 +54,55 @@
         // ── Initial States ──────────────────────────────────────────────────────
         const isMobile = window.innerWidth <= 900;
 
-        // Portrait centered, slightly smaller, hidden
-        if (!isMobile) {
-            gsap.set(imgWrapper, {
+        if (hasPhoto) {
+            // Portrait centered, slightly smaller, hidden
+            if (!isMobile) {
+                gsap.set(imgWrapper, {
+                    xPercent: -50,
+                    yPercent: -50,
+                    left: '50%',
+                    top: '55%',
+                    scale: 0.9,
+                    opacity: 0,
+                    filter: 'blur(10px)'
+                });
+                gsap.set(textPanel, { x: -60, opacity: 0, pointerEvents: 'none' });
+            } else {
+                // Mobile initial state: Image on top, Text below
+                gsap.set(imgWrapper, {
+                    xPercent: 0,
+                    yPercent: 0,
+                    left: 'auto',
+                    top: 'auto',
+                    y: -20, // Start slightly higher
+                    position: 'relative',
+                    scale: 0.85,
+                    opacity: 0,
+                    filter: 'blur(5px)'
+                });
+                gsap.set(textPanel, {
+                    x: 0,
+                    y: 60, // Start lower
+                    left: 'auto',
+                    top: 'auto',
+                    position: 'relative',
+                    opacity: 0,
+                    pointerEvents: 'none'
+                });
+            }
+        } else {
+            // No photo: text is the hero, centered, hidden then revealed on entrance
+            gsap.set(textPanel, {
                 xPercent: -50,
                 yPercent: -50,
-                left: '50%',
-                top: '55%',
-                scale: 0.9,
-                opacity: 0,
-                filter: 'blur(10px)'
-            });
-            gsap.set(textPanel, { x: -60, opacity: 0, pointerEvents: 'none' });
-        } else {
-            // Mobile initial state: Image on top, Text below
-            gsap.set(imgWrapper, {
-                xPercent: 0,
-                yPercent: 0,
-                left: 'auto',
-                top: 'auto',
-                y: -20, // Start slightly higher
-                position: 'relative',
-                scale: 0.85,
-                opacity: 0,
-                filter: 'blur(5px)'
-            });
-            gsap.set(textPanel, {
                 x: 0,
-                y: 60, // Start lower
-                left: 'auto',
-                top: 'auto',
-                position: 'relative',
+                y: 40,
                 opacity: 0,
                 pointerEvents: 'none'
             });
         }
 
-        gsap.set(scrollHint, { opacity: 0 });
+        if (scrollHint) gsap.set(scrollHint, { opacity: 0 });
 
         // ── Entrance Animation (on load) ────────────────────────────────────────
         const entranceTl = gsap.timeline({
@@ -97,19 +110,31 @@
             onComplete: () => ScrollTrigger.refresh()
         });
 
-        entranceTl.to(imgWrapper, {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            filter: 'blur(0px)',
-            duration: 1.8,
-            ease: 'expo.out'
-        })
-            .to(scrollHint, {
+        if (hasPhoto) {
+            entranceTl.to(imgWrapper, {
                 opacity: 1,
-                duration: 0.8,
-                ease: 'power2.out'
-            }, '-=0.8');
+                scale: 1,
+                y: 0,
+                filter: 'blur(0px)',
+                duration: 1.8,
+                ease: 'expo.out'
+            })
+                .to(scrollHint, {
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: 'power2.out'
+                }, '-=0.8');
+        }
+
+        // Reveal the text (with or without photo)
+        entranceTl.to(textPanel, {
+            opacity: 1,
+            x: 0,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out',
+            onStart: () => gsap.set(textPanel, { pointerEvents: 'auto' })
+        }, hasPhoto ? '-=1.0' : '+=0');
 
         // ── Scroll Animation (Center to Right Reveal) ───────────────────────────
         const tl = gsap.timeline({
@@ -122,70 +147,80 @@
             }
         });
 
-        if (!isMobile) {
-            // Desktop: Glide to the right
-            tl.to(imgWrapper, {
-                x: () => window.innerWidth * 0.25,
-                scale: 1.05,
-                duration: 1,
-                ease: 'power2.inOut'
-            }, 0);
+        if (hasPhoto) {
+            if (!isMobile) {
+                // Desktop: Glide to the right
+                tl.to(imgWrapper, {
+                    x: () => window.innerWidth * 0.25,
+                    scale: 1.05,
+                    duration: 1,
+                    ease: 'power2.inOut'
+                }, 0);
 
-            tl.to(textPanel, {
-                opacity: 1,
-                x: 0,
-                duration: 0.8,
-                ease: 'power3.out',
-                onStart: () => gsap.set(textPanel, { pointerEvents: 'auto' })
-            }, 0.2);
+                tl.to(textPanel, {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.8,
+                    ease: 'power3.out'
+                }, 0.2);
+            } else {
+                // Mobile: Vertical SWAP on scroll (more subtle)
+                // Image goes DOWN slightly, Text goes UP
+                tl.to(imgWrapper, {
+                    y: 80, // Reduced movement (was 280)
+                    scale: 0.95,
+                    opacity: 0.8,
+                    duration: 1,
+                    ease: 'power2.inOut'
+                }, 0);
+
+                tl.to(textPanel, {
+                    opacity: 1,
+                    y: -180, // Still moves up enough to clear the image or overlap nicely
+                    duration: 1,
+                    ease: 'power2.inOut'
+                }, 0.1);
+            }
         } else {
-            // Mobile: Vertical SWAP on scroll (more subtle)
-            // Image goes DOWN slightly, Text goes UP
-            tl.to(imgWrapper, {
-                y: 80, // Reduced movement (was 280)
-                scale: 0.95,
-                opacity: 0.8,
+            // No photo: subtle fade/slide out on scroll
+            tl.to(textPanel, {
+                opacity: 0.25,
+                y: -60,
                 duration: 1,
                 ease: 'power2.inOut'
             }, 0);
-
-            tl.to(textPanel, {
-                opacity: 1,
-                y: -180, // Still moves up enough to clear the image or overlap nicely
-                duration: 1,
-                ease: 'power2.inOut',
-                onStart: () => gsap.set(textPanel, { pointerEvents: 'auto' })
-            }, 0.1);
         }
 
         // 3. Hint fade
-        tl.to(scrollHint, { opacity: 0, y: 30, duration: 0.3 }, 0);
+        if (scrollHint) tl.to(scrollHint, { opacity: 0, y: 30, duration: 0.3 }, 0);
 
         // ── Mouse Interactive Parallax ──────────────────────────────────────────
-        document.addEventListener('mousemove', (e) => {
-            if (isMobile) return;
+        if (hasPhoto) {
+            document.addEventListener('mousemove', (e) => {
+                if (isMobile) return;
 
-            const x = (e.clientX / window.innerWidth) - 0.5;
-            const y = (e.clientY / window.innerHeight) - 0.5;
+                const x = (e.clientX / window.innerWidth) - 0.5;
+                const y = (e.clientY / window.innerHeight) - 0.5;
 
-            // Portrait 3D tilt
-            gsap.to(imgWrapper, {
-                rotationY: x * 8,
-                rotationX: -y * 8,
-                duration: 1.5,
-                ease: 'power2.out',
-                overwrite: 'auto'
+                // Portrait 3D tilt
+                gsap.to(imgWrapper, {
+                    rotationY: x * 8,
+                    rotationX: -y * 8,
+                    duration: 1.5,
+                    ease: 'power2.out',
+                    overwrite: 'auto'
+                });
+
+                // Panel subtle drift
+                gsap.to(textPanel, {
+                    x: x * 20,
+                    y: y * 15,
+                    duration: 2,
+                    ease: 'power2.out',
+                    overwrite: 'auto'
+                });
             });
-
-            // Panel subtle drift
-            gsap.to(textPanel, {
-                x: x * 20,
-                y: y * 15,
-                duration: 2,
-                ease: 'power2.out',
-                overwrite: 'auto'
-            });
-        });
+        }
 
         window.addEventListener('resize', () => ScrollTrigger.refresh());
     }

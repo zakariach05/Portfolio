@@ -9,6 +9,8 @@ class AdvancedAnimations {
     initMarquee() {
         if (typeof gsap === 'undefined') return;
 
+        const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+
         const marquees = [
             { selector: '.marquee-1', direction: -1, duration: 20 },
             { selector: '.marquee-2', direction: 1, duration: 25 },
@@ -34,12 +36,27 @@ class AdvancedAnimations {
                 modifiers: { x: gsap.utils.unitize(x => parseFloat(x) % width) }
             });
 
+            // Slower on touch devices (less CPU/GPU churn while keeping the effect)
+            if (isCoarse) tween.timeScale(0.6);
+
             this.marqueeTweens.push(tween);
 
-            el.querySelectorAll('.marquee-word').forEach(word => {
-                word.addEventListener('mouseenter', () => gsap.to(tween, { timeScale: 0.1, duration: 0.5 }));
-                word.addEventListener('mouseleave', () => gsap.to(tween, { timeScale: 1, duration: 0.5 }));
-            });
+            // Pause when out of the viewport — infinite tweens otherwise run forever
+            if (typeof IntersectionObserver !== 'undefined') {
+                new IntersectionObserver((entries) => {
+                    const entering = entries[0].isIntersecting;
+                    if (entering) tween.play();
+                    else tween.pause();
+                }, { rootMargin: '100px' }).observe(el);
+            }
+
+            // Hover pause only makes sense on devices with a pointer
+            if (!isCoarse) {
+                el.querySelectorAll('.marquee-word').forEach(word => {
+                    word.addEventListener('mouseenter', () => gsap.to(tween, { timeScale: 0.1, duration: 0.5 }));
+                    word.addEventListener('mouseleave', () => gsap.to(tween, { timeScale: 1, duration: 0.5 }));
+                });
+            }
         });
     }
 
@@ -55,36 +72,60 @@ class AdvancedAnimations {
                     scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' }
                 }
             );
+        });
 
-            const inner = card.querySelector('.project-card-3d');
-            if (!inner) return;
+        // Desktop-only: scrub parallax + 3D mouse tilt (disabled on mobile for performance).
+        // Uses gsap.quickTo instead of per-mousemove gsap.to() to avoid tween churn.
+        const mm = gsap.matchMedia();
+        mm.add('(min-width: 768px)', () => {
+            const tilters = [];
 
-            gsap.to(inner, {
-                y: '-10%', ease: 'none',
-                scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: true }
-            });
+            document.querySelectorAll('.project-card-wrapper').forEach((card) => {
+                const inner = card.querySelector('.project-card-3d');
+                if (!inner) return;
 
-            inner.addEventListener('mousemove', (e) => {
-                const r = inner.getBoundingClientRect();
-                const xP = (e.clientX - r.left) / r.width - 0.5;
-                const yP = (e.clientY - r.top) / r.height - 0.5;
                 gsap.to(inner, {
-                    rotateY: xP * 10, rotateX: -yP * 10, scale: 1.03,
-                    boxShadow: '0 25px 50px rgba(0,0,0,0.5)', duration: 0.4, ease: 'power2.out'
+                    y: '-10%', ease: 'none',
+                    scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: true }
                 });
+
+                const rotY = gsap.quickTo(inner, 'rotationY', { duration: 0.4, ease: 'power2.out' });
+                const rotX = gsap.quickTo(inner, 'rotationX', { duration: 0.4, ease: 'power2.out' });
+                const scale = gsap.quickTo(inner, 'scale', { duration: 0.4, ease: 'power2.out' });
+
+                const onMove = (e) => {
+                    const r = inner.getBoundingClientRect();
+                    const xP = (e.clientX - r.left) / r.width - 0.5;
+                    const yP = (e.clientY - r.top) / r.height - 0.5;
+                    rotY(xP * 10);
+                    rotX(-yP * 10);
+                    scale(1.03);
+                };
+                const onLeave = () => {
+                    rotY(0);
+                    rotX(0);
+                    scale(1);
+                };
+
+                inner.addEventListener('mousemove', onMove);
+                inner.addEventListener('mouseleave', onLeave);
+                tilters.push({ inner, onMove, onLeave });
             });
-            inner.addEventListener('mouseleave', () => {
-                gsap.to(inner, {
-                    rotateY: 0, rotateX: 0, scale: 1,
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.1)', duration: 0.5, ease: 'power2.out'
+
+            return () => {
+                tilters.forEach(({ inner, onMove, onLeave }) => {
+                    inner.removeEventListener('mousemove', onMove);
+                    inner.removeEventListener('mouseleave', onLeave);
                 });
-            });
+            };
         });
     }
 
     // ─── About Reveal ───────────────────────────────────────────────────────
     initAboutReveal() {
         if (!window.gsap || !window.ScrollTrigger) return;
+
+        const finePointer = window.matchMedia('(pointer: fine)').matches;
 
         document.querySelectorAll('.reveal-type').forEach((el) => {
             const container = el.querySelector('.perspective-container');
@@ -97,15 +138,23 @@ class AdvancedAnimations {
                 }
             );
 
-            el.addEventListener('mousemove', (e) => {
-                const r = el.getBoundingClientRect();
-                const x = (e.clientX - r.left) / r.width - 0.5;
-                const y = (e.clientY - r.top) / r.height - 0.5;
-                gsap.to(container, { rotateY: x * 20, rotateX: -y * 20, duration: 0.6, ease: 'power2.out' });
-            });
-            el.addEventListener('mouseleave', () => {
-                gsap.to(container, { rotateY: 0, rotateX: 0, duration: 1, ease: 'elastic.out(1,0.3)' });
-            });
+            // Mouse tilt only on fine pointers (no-op on touch)
+            if (finePointer) {
+                const rotY = gsap.quickTo(container, 'rotationY', { duration: 0.6, ease: 'power2.out' });
+                const rotX = gsap.quickTo(container, 'rotationX', { duration: 0.6, ease: 'power2.out' });
+
+                el.addEventListener('mousemove', (e) => {
+                    const r = el.getBoundingClientRect();
+                    const x = (e.clientX - r.left) / r.width - 0.5;
+                    const y = (e.clientY - r.top) / r.height - 0.5;
+                    rotY(x * 20);
+                    rotX(-y * 20);
+                });
+                el.addEventListener('mouseleave', () => {
+                    rotY(0);
+                    rotX(0);
+                });
+            }
         });
     }
 
@@ -375,7 +424,6 @@ class AdvancedAnimations {
 document.addEventListener('DOMContentLoaded', () => {
     const anims = new AdvancedAnimations();
     anims.initAboutReveal();
-    anims.initExpertiseShuffle();
     anims.initSignatureAnimation();
     anims.initPinnedOverlapEffects();
 });

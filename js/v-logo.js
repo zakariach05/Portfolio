@@ -28,13 +28,16 @@
         }
 
         // ── Mouse parallax (shared global target, individual lerp per instance) ──
+        // Skipped on touch devices (pointer: coarse) — native parallax is not needed there
         let mouseX = 0, mouseY = 0;
         let targetX = 0, targetY = 0;
 
-        document.addEventListener('mousemove', (e) => {
-            targetX = (e.clientX - window.innerWidth  / 2) / (window.innerWidth  / 2);
-            targetY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
-        });
+        if (!window.matchMedia('(pointer: coarse)').matches) {
+            document.addEventListener('mousemove', (e) => {
+                targetX = (e.clientX - window.innerWidth  / 2) / (window.innerWidth  / 2);
+                targetY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+            });
+        }
 
         // ── Sparks ──
         let sparks = [];

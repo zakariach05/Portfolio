@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rubik+Storm&display=swap" rel="stylesheet">
@@ -121,116 +121,29 @@
         style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
 
     <!-- ═══════════════════════════════════════════════
-         HERO — Cinematic 3D Scroll-Reveal (300vh)
-         Portrait rendered by Three.js on the bg canvas
+         HERO — Full-viewport intro (100svh, centered)
+         Red noise bg lives on the fixed 3D canvas
     ════════════════════════════════════════════════ -->
-    <section id="home" style="height:300vh; position:relative; z-index:1;">
+    <section id="home" style="position:relative; z-index:1;">
 
-        <!-- Sticky inner stays in viewport while animation plays -->
-        <div id="hero-sticky">
+            <!-- Sticky inner keeps hero a full viewport screen -->
+            <div id="hero-sticky">
 
-            <!-- LEFT PANEL: Slide-in content -->
-            <div id="hero-text-panel" class="hero-panel" aria-label="Hero Introduction">
+            <!-- CENTERED CONTENT: Hero Introduction -->
+            <div id="hero-text-panel" class="hero-panel hero-centered" aria-label="Hero Introduction">
 
-                <!-- Animated SVG Name: Zakaria Chamekh -->
-                <h1 id="hero-name" class="hero-main-name" style="overflow:visible;">
-                    <svg id="hero-name-svg" viewBox="0 0 420 120"
-                        style="width:100%;max-width:420px;height:auto;overflow:visible;display:block;">
-                        <style>
-                            .hero-draw-char {
-                                fill: currentColor;
-                                fill-opacity: 0;
-                                stroke: currentColor;
-                                stroke-width: 1.5px;
-                                stroke-dasharray: 600;
-                                stroke-dashoffset: 600;
-                                opacity: 1;
-                            }
-                            .hero-draw-char.hero-filled-glow {
-                                filter: drop-shadow(0 0 6px rgba(255,255,255,0.3));
-                            }
-                        </style>
-                        <!-- ZAKARIA -->
-                        <text x="0" y="58" dominant-baseline="middle"
-                            class="font-sans text-white"
-                            style="font-size:72px;font-weight:900;letter-spacing:-0.03em;font-family:Inter,Outfit,sans-serif;">
-                            <tspan class="hero-draw-char">Z</tspan><tspan class="hero-draw-char">A</tspan><tspan class="hero-draw-char">K</tspan><tspan class="hero-draw-char">A</tspan><tspan class="hero-draw-char">R</tspan><tspan class="hero-draw-char">I</tspan><tspan class="hero-draw-char">A</tspan>
-                        </text>
-                        <!-- CHAMEKH -->
-                        <text x="4" y="105" dominant-baseline="middle"
-                            class="font-sans"
-                            style="font-size:32px;font-weight:700;letter-spacing:0.22em;font-family:Inter,Outfit,sans-serif;fill:rgba(255,255,255,0.55);">
-                            <tspan class="hero-draw-char">C</tspan><tspan class="hero-draw-char">H</tspan><tspan class="hero-draw-char">A</tspan><tspan class="hero-draw-char">M</tspan><tspan class="hero-draw-char">E</tspan><tspan class="hero-draw-char">K</tspan><tspan class="hero-draw-char">H</tspan>
-                        </text>
-                    </svg>
+                <!-- Name: Zakaria Chamekh -->
+                <h1 id="hero-name" class="hero-main-name" aria-label="Zakaria Chamekh">
+                    <span class="hero-name-line">ZAKARIA</span>
+                    <span class="hero-name-line hero-name-sub">CHAMEKH</span>
                 </h1>
 
-                <script>
-                (function() {
-                    function initHeroNameAnim() {
-                        if (typeof gsap === 'undefined') {
-                            setTimeout(initHeroNameAnim, 100);
-                            return;
-                        }
-                        const chars = document.querySelectorAll('#hero-name-svg .hero-draw-char');
-                        if (!chars.length) return;
-
-                        function runLoop() {
-                            const tl = gsap.timeline({ repeat: -1, repeatDelay: 2 });
-                            tl
-                                // 1. Draw stroke char by char
-                                .to(chars, {
-                                    strokeDashoffset: 0,
-                                    duration: 1.8,
-                                    stagger: 0.07,
-                                    ease: 'power2.inOut'
-                                })
-                                // 2. Fill in
-                                .to(chars, {
-                                    fillOpacity: 1,
-                                    strokeOpacity: 0,
-                                    duration: 0.7,
-                                    stagger: 0.04,
-                                    ease: 'power1.inOut',
-                                    onStart: function() {
-                                        chars.forEach(el => el.classList.add('hero-filled-glow'));
-                                    }
-                                }, '-=1.2')
-                                // 3. Hold
-                                .to({}, { duration: 3 })
-                                // 4. Fade out
-                                .to(chars, {
-                                    opacity: 0,
-                                    duration: 0.6,
-                                    stagger: 0.03,
-                                    ease: 'power2.inOut',
-                                    onComplete: function() {
-                                        gsap.set(chars, {
-                                            fillOpacity: 0,
-                                            strokeOpacity: 1,
-                                            strokeDashoffset: 600,
-                                            opacity: 1
-                                        });
-                                        chars.forEach(el => el.classList.remove('hero-filled-glow'));
-                                    }
-                                });
-                        }
-                        runLoop();
-                    }
-                    if (document.readyState === 'loading') {
-                        document.addEventListener('DOMContentLoaded', initHeroNameAnim);
-                    } else {
-                        initHeroNameAnim();
-                    }
-                })();
-                </script>
-
-                <h2 id="hero-role" class="hero-sub-name mt-2">Développeur Full Stack & créateur de solutions digitales</h2>
+                <h2 id="hero-role" class="hero-sub-name mt-2">Développeur Full Stack &amp; Creative</h2>
 
                 <div class="hero-description mt-6 opacity-80 max-w-sm">
                     <p>Passionné par la création d'expériences numériques immersives et performantes, alliant code
                         propre et design soigné.</p>
-                </div><br><br>
+                </div>
 
                 <div id="hero-cta-group" class="mt-10 flex gap-4">
                     <a href="#projects" class="hero-cta-pill hero-cta-red">
@@ -239,21 +152,6 @@
                     <a href="CV_Zakaria_Chamekh (3).pdf" download class="hero-cta-pill">
                         <i class="fas fa-file-download mr-2"></i> Mon CV
                     </a>
-                </div>
-            </div>
-
-            <!-- CENTER/RIGHT: Portrait (Borderless, integrated) -->
-            <div id="hero-img-wrapper" class="hero-center-portrait">
-                <div id="hero-img-ambient-red"></div>
-                <img id="hero-profile-img" src="NV-IMG/heroP.png" alt="Zakaria"
-                    onerror="this.onerror=null; this.src='NV-IMG/heroP1.png';">
-            </div>
-
-            <!-- BOTTOM: Scroll hint -->
-            <div id="hero-scroll-indicator" aria-hidden="true">
-                <span class="hero-scroll-label">Scroll</span>
-                <div class="hero-scroll-line">
-                    <div class="hero-scroll-line-fill"></div>
                 </div>
             </div>
 
@@ -446,8 +344,7 @@
                 <div class="racing-stripe mx-auto"></div>
             </div>
 
-            <div class="expertise-stack-container">
-                <div class="expertise-stack" id="expertise-stack">
+            <div class="expertise-grid" id="expertise-stack">
                     <!-- Front-End Role -->
                     <div class="expertise-card role-frontend">
                         <div class="card-inner">
@@ -507,7 +404,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
     </section>
 
@@ -540,88 +436,89 @@
 
             <div class="projects-masonry mt-12">
                  <!-- Project 0 -->
-                <div class="project-card-wrapper">
-                    <a href="https://github.com/zakariach05/Hotel-Cinco" target="_blank" class="project-card-3d group block">
-                        <div class="img-wrapper">
-                            <img src="img/hotel-photo.png" alt="Hotel cinco" loading="lazy" decoding="async">
-                        </div>
-                        <div class="project-info">
-                            <h3 class="text-xl font-bold mb-2 text-white"> Hotel Cinco</h3>
-                            <p class="text-gray-300 text-sm mb-4 line-clamp-2">
-                                Luxury Hotel cinco Management System
-                            </p>
-                            <div class="flex gap-2">
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Java 17</span>
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Spring Boot 3</span>
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">React 19</span>
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">TypeScript</span>
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">PostgreSQL 16</span>
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Tailwind CSS 4</span>
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Docker</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!-- Project 1 -->
-                <div class="project-card-wrapper">
-                    <a href="https://la-casa-depapel.netlify.app/" target="_blank" class="project-card-3d group block">
-                        <div class="img-wrapper">
-                            <img src="img/la-casa.png" alt="La Casa De Papel" loading="lazy" decoding="async">
-                        </div>
-                        <div class="project-info">
-                            <h3 class="text-xl font-bold mb-2 text-white">La Casa De Papel Game</h3>
-                            <p class="text-gray-300 text-sm mb-4 line-clamp-2">
-                                Jeu interactif immersif basé sur la célèbre série. Testez vos connaissances.
-                            </p>
-                            <div class="flex gap-2">
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">JavaScript</span>
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">CSS3</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                <!-- Project 0 -->
+                 <div class="project-card-wrapper">
+                     <a href="https://github.com/zakariach05/Hotel-Cinco" target="_blank" class="project-card-3d group block">
+                         <div class="img-wrapper">
+                             <img src="img/hotel-photo.png" alt="Hotel cinco" loading="lazy" decoding="async">
+                         </div>
+                         <div class="project-info">
+                             <h3 class="text-xl font-bold mb-2 text-white"> Hotel Cinco</h3>
+                             <p class="text-gray-300 text-sm mb-4 line-clamp-2">
+                                 Luxury Hotel cinco Management System
+                             </p>
+                             <div class="flex gap-2">
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Java 17</span>
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Spring Boot 3</span>
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">React 19</span>
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">TypeScript</span>
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">PostgreSQL 16</span>
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Tailwind CSS 4</span>
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Docker</span>
+                             </div>
+                         </div>
+                     </a>
+                 </div>
+                 <!-- Project 1 -->
+                 <div class="project-card-wrapper">
+                     <a href="https://la-casa-depapel.netlify.app/" target="_blank" class="project-card-3d group block">
+                         <div class="img-wrapper">
+                             <img src="img/la-casa.png" alt="La Casa De Papel" loading="lazy" decoding="async">
+                         </div>
+                         <div class="project-info">
+                             <h3 class="text-xl font-bold mb-2 text-white">La Casa De Papel Game</h3>
+                             <p class="text-gray-300 text-sm mb-4 line-clamp-2">
+                                 Jeu interactif immersif basé sur la célèbre série. Testez vos connaissances.
+                             </p>
+                             <div class="flex gap-2">
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">JavaScript</span>
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">CSS3</span>
+                             </div>
+                         </div>
+                     </a>
+                 </div>
 
-                <!-- Project 2 -->
-                <div class="project-card-wrapper">
-                    <a href="https://github.com/zakariach05/05-Electro-profesionnels" target="_blank"
-                        class="project-card-3d group block">
-                        <div class="img-wrapper">
-                            <img src="img/05-Electro.png" alt="05-Electro" loading="lazy" decoding="async">
-                        </div>
-                        <div class="project-info">
-                            <h3 class="text-xl font-bold mb-2 text-white">05-Electro</h3>
-                            <p class="text-gray-300 text-sm mb-4 line-clamp-2">
-                                E-commerce moderne développé avec React, Tailwind et Laravel.
-                            </p>
-                            <div class="flex gap-2">
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Reactjs</span>
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Laravel</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                 <!-- Project 2 -->
+                 <div class="project-card-wrapper">
+                     <a href="https://github.com/zakariach05/05-Electro-profesionnels" target="_blank"
+                         class="project-card-3d group block">
+                         <div class="img-wrapper">
+                             <img src="img/05-Electro.png" alt="05-Electro" loading="lazy" decoding="async">
+                         </div>
+                         <div class="project-info">
+                             <h3 class="text-xl font-bold mb-2 text-white">05-Electro</h3>
+                             <p class="text-gray-300 text-sm mb-4 line-clamp-2">
+                                 E-commerce moderne développé avec React, Tailwind et Laravel.
+                             </p>
+                             <div class="flex gap-2">
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Reactjs</span>
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Laravel</span>
+                             </div>
+                         </div>
+                     </a>
+                 </div>
 
-                <!-- Project 3 -->
-                <div class="project-card-wrapper hidden">
-                    <a href="https://sparkvision.ma" target="_blank" class="project-card-3d group block">
-                        <div class="img-wrapper">
-                            <img src="img/sparkvision.PNG" alt="Spark Vision" loading="lazy" decoding="async">
-                        </div>
-                        <div class="project-info">
-                            <h3 class="text-xl font-bold mb-2 text-white">Spark Vision</h3>
-                            <p class="text-gray-300 text-sm mb-4 line-clamp-2">
-                                Solutions d’éclairage, d’électricité et d’innovation pour l’industrie.
-                            </p>
-                            <div class="flex gap-2">
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">WordPress</span>
-                                <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Elementor</span>
-                            </div>
-                        </div>
+                 <!-- Project 3 -->
+                 <div class="project-card-wrapper">
+                     <a href="https://sparkvision.ma" target="_blank" class="project-card-3d group block">
+                         <div class="img-wrapper">
+                             <img src="img/sparkvision.PNG" alt="Spark Vision" loading="lazy" decoding="async">
+                         </div>
+                         <div class="project-info">
+                             <h3 class="text-xl font-bold mb-2 text-white">Spark Vision</h3>
+                             <p class="text-gray-300 text-sm mb-4 line-clamp-2">
+                                 Solutions d’éclairage, d’électricité et d’innovation pour l’industrie.
+                             </p>
+                             <div class="flex gap-2">
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">WordPress</span>
+                                 <span class="text-xs py-1 px-2 rounded bg-white/20 text-white">Elementor</span>
+                             </div>
+                         </div>
                     </a>
                 </div>
 
                 <!-- Project 4 -->
-                <div class="project-card-wrapper hidden">
+                <div class="project-card-wrapper">
                     <a href="https://05-meteo.vercel.app/" target="_blank" class="project-card-3d group block">
                         <div class="img-wrapper">
                             <img src="img/meteo.png" alt="Météo" loading="lazy" decoding="async">
@@ -640,7 +537,7 @@
                 </div>
 
                 <!-- Project 5 -->
-                <div class="project-card-wrapper hidden">
+                <div class="project-card-wrapper">
                     <a href="https://bibliotique.vercel.app/" target="_blank" class="project-card-3d group block">
                         <div class="img-wrapper">
                             <img src="img/Bibliotique.png" alt="Bibliotique" loading="lazy" decoding="async">
@@ -659,7 +556,7 @@
                 </div>
 
                 <!-- Project 6 -->
-                <div class="project-card-wrapper hidden">
+                <div class="project-card-wrapper">
                     <a href="#" class="project-card-3d group block">
                         <div class="img-wrapper">
                             <img src="img/portfolio.png" alt="Project Portfolio" loading="lazy" decoding="async">
@@ -677,14 +574,6 @@
                         </div>
                     </a>
                 </div>
-            </div>
-
-            <div class="flex justify-center mt-12">
-                <button id="show-more-projects"
-                    class="inline-flex items-center gap-3 px-10 py-3 rounded-full font-bold text-white bg-white/10 border border-white/20 hover:bg-red-600 hover:border-red-500 transition-all duration-300 cursor-pointer">
-                    <span id="show-more-text">Voir plus</span>
-                    <i id="show-more-icon" class="fas fa-chevron-down"></i>
-                </button>
             </div>
     </section>
     ═══════════════════════════════════════════════════ -->
@@ -1125,7 +1014,6 @@
     <!-- Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
 
@@ -1134,7 +1022,6 @@
     <script src="js/main.js"></script>
     <script src="js/v-logo.js"></script>
     <script type="module" src="js/hero-3d.js"></script>
-    <script src="js/hero-scroll-reveal.js"></script>
     <script type="module" src="js/advanced-animations.js"></script>
     <script type="module" src="js/contact-3d.js"></script>
     <!-- Scroll to Top Button with Progress -->
