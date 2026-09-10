@@ -5,8 +5,7 @@
  *
  *  - Côté logo : V rempli en rouge (JuiceLogo, même visuel que le splash)
  *  - Côté formulaire : formulaire multi-étapes (4 steps) avec barre de
- *    progression, validation HTML5, touche ENTER, et envoi vers /api/contact
- *    (l'original appelait php/contact.php).
+ *    progression, validation HTML5, touche ENTER, et envoi vers /api/contact.
  */
 import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
