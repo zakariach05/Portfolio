@@ -460,7 +460,7 @@ html {
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    max-width: clamp(260px, 36vw, 480px);
+    max-width: min(92vw, 1150px);
     pointer-events: none;
     /* opacity & x set by GSAP */
     opacity: 0;
@@ -535,9 +535,9 @@ html {
 }
 
 #hero-name {
-    font-size: clamp(3rem, 6vw, 6rem);
+    font-size: clamp(3rem, 3vw, 4rem);
     font-weight: 800;
-    line-height: 0.95;
+    line-height: 0.9;
     letter-spacing: -0.03em;
     margin: 0 0 18px 0;
     font-family: 'Inter', 'Outfit', sans-serif;
@@ -545,7 +545,7 @@ html {
 }
 
 #hero-subtitle {
-    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+    font-size: clamp(0.9rem, 0.5vw, 1.2rem);
     color: rgba(255, 255, 255, 0.52);
     margin: 0 0 10px 0;
     font-weight: 400;

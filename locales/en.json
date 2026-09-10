@@ -1,0 +1,259 @@
+{
+  "common": {
+    "backTop": "Back to top",
+    "switchToFr": "Passer au français",
+    "switchToEn": "Switch to English"
+  },
+  "nav": {
+    "work": "WORK",
+    "services": "SERVICES",
+    "contact": "CONTACT",
+    "mainNav": "Main navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "backHome": "Back to home",
+    "backTop": "Back to top"
+  },
+  "curtain": {
+    "work": "Work",
+    "services": "Services",
+    "contact": "Contact",
+    "name": "ZAKARIA CHAMEKH",
+    "role": "FULL STACK DEVELOPER",
+    "city": "CASABLANCA — MOROCCO",
+    "available": "AVAILABLE",
+    "newProjects": "NEW PROJECTS",
+    "copyright": "© 2026 — ZAKARIA CHAMEKH. ALL RIGHTS RESERVED."
+  },
+  "hero": {
+    "introLabel": "Hero introduction",
+    "nameLabel": "Zakaria Chamekh",
+    "scrollLabel": "Scroll to explore",
+    "badgeText": "SCROLL TO EXPLORE • SCROLL TO EXPLORE •"
+  },
+  "about": {
+    "titleWhite": "Who I",
+    "titleRed": "Am",
+    "bgAlt": "Zakaria About Background",
+    "tagline1": "More than a developer,",
+    "tagline2": "a digital architect.",
+    "para1a": "Based in",
+    "para1city": "Casablanca",
+    "para1b": ", I blend technology and creativity to craft complete web experiences. I work on both the Front-end (",
+    "frontend": ["React", "TypeScript", "Tailwind CSS"],
+    "para1c": ") and the Back-end (",
+    "backend": ["Node.js", "Laravel", "Spring Boot"],
+    "para1d": ") as well as databases (",
+    "databases": ["MySQL", "PostgreSQL"],
+    "para1e": ").",
+    "para2a": "My journey at",
+    "para2companies": "3LM Solutions, M2E Automation and Sparkvision",
+    "para2b": "taught me one essential thing: code must serve the user experience. I don't just build websites, I build high-performing digital ecosystems, tested and production-ready.",
+    "cards": [
+      { "title": "ENSAM", "text": "Excellence Training & Analytical Engineering" },
+      { "title": "ISFO", "text": "Digital Development Diploma — Full Stack Web Specialty" },
+      { "title": "Full Stack", "text": "Total Technical Versatility (Front & Back)" }
+    ]
+  },
+  "marquee": {
+    "webdev": "WEB DEVELOPER"
+  },
+  "expertise": {
+    "titleWhite": "Areas of",
+    "titleRed": "Expertise",
+    "cards": [
+      {
+        "role": "role-frontend",
+        "title": "Front-End Developer",
+        "text": "Smooth, immersive interfaces. Focused on UX and performance.",
+        "tags": ["REACT", "THREE.JS", "GSAP"]
+      },
+      {
+        "role": "role-backend",
+        "title": "Back-End Engineer",
+        "text": "Robust software and high-performance APIs. Security & Scalability.",
+        "tags": ["LARAVEL", "PHP", "MYSQL"]
+      },
+      {
+        "role": "role-design",
+        "title": "UI/UX Designer",
+        "text": "Modern design and strong visual identity. Figma proficient.",
+        "tags": ["FIGMA", "PS", "UX DESIGN"]
+      },
+      {
+        "role": "role-testing",
+        "title": "QA & Testing",
+        "text": "Total quality assurance through rigorous, automated testing.",
+        "tags": ["POSTMAN", "UNIT TEST", "JEST"]
+      },
+      {
+        "role": "role-cloud",
+        "title": "Cloud & DevOps",
+        "text": "Scalable infrastructure and CI/CD. Cloud solutions expertise.",
+        "tags": ["AWS", "DOCKER", "CI/CD"]
+      }
+    ]
+  },
+  "projects": {
+    "titleWhite": "My",
+    "titleRed": "Projects",
+    "tagImage": "Image",
+    "tagVideo": "Video",
+    "openLabel": "Open",
+    "items": [
+      { "id": "hotel-cinco", "description": "Luxury Hotel Cinco Management System" },
+      { "id": "info-aymane", "description": "Your trusted digital partner. Agency specialized in digital marketing, web creation and visual communication in Casablanca." },
+      { "id": "immo-estrie", "description": "Professional website for a property management company in Quebec, with services presentation, responsive design and integrated contact form." },
+      { "id": "casa-papel", "description": "Immersive interactive game based on the famous series. Test your knowledge." },
+      { "id": "electro-05", "description": "Modern fullstack e-commerce platform with product management, authentication, cart, orders, payment, comparison and administration." },
+      { "id": "spark-vision", "description": "Lighting, electrical and innovation solutions for industry." },
+      { "id": "meteo-05", "description": "Weather app with instant API calls and polished design." },
+      { "id": "bibliotique", "description": "Modern and intuitive library management platform." },
+      { "id": "portfolio", "description": "Immersive design with Three.js and advanced GSAP animations." }
+    ]
+  },
+  "lightbox": {
+    "close": "Close",
+    "closeLabel": "Close the lightbox",
+    "viewProject": "View project ↗"
+  },
+  "dots": {
+    "goTo": "Go to section "
+  },
+  "contact": {
+    "titleWhite": "Contact",
+    "titleRed": "Me",
+    "stepLabel": "Step",
+    "steps": [
+      { "heading": "Let's start with your name.", "placeholder": "Type your name here" },
+      { "heading": "What's your email?", "placeholder": "name@example.com" },
+      { "heading": "What is your project about?", "placeholder": "Brief subject" },
+      { "heading": "Tell me more details.", "placeholder": "Your message here..." }
+    ],
+    "next": "NEXT",
+    "submit": "SUBMIT",
+    "sending": "SENDING...",
+    "pressEnter": "Press",
+    "enterKey": "ENTER",
+    "successTitle": "Message Sent!",
+    "successText": "Message sent — I'll get back to you soon.",
+    "errorTitle": "Sending failed",
+    "errorText": "An error occurred. Please try again."
+  },
+  "footer": {
+    "titleWhite": "Always",
+    "titleRed": "shipping code",
+    "cta": "Download resume",
+    "links": [
+      { "label": "Home", "href": "#home" },
+      { "label": "Work", "href": "#projects" },
+      { "label": "About", "href": "#about" },
+      { "label": "Contact", "href": "#contact" }
+    ],
+    "copyright": "© 2025 Zakaria Chamekh. All rights reserved."
+  },
+  "chatbot": {
+    "headerName": "Zakaria — Virtual assistant",
+    "headerStatus": "Online now",
+    "dateChip": "Today · Ask me anything!",
+    "pillsLabel": "Quick Questions",
+    "toggleLabel": "Open chat assistant",
+    "closeLabel": "Close chat",
+    "pillsGroupLabel": "Quick question shortcuts",
+    "greeting": "Hi there! 👋 I'm <strong>Zak</strong>, your virtual assistant. Ask me anything about Zakaria!",
+    "home": [
+      {
+        "id": "who",
+        "label": "👤  Who are you?",
+        "answer": "I'm <strong>Zakaria Chamekh</strong>, a passionate Full Stack web developer based in <span class='cb-highlight'>Casablanca</span>. I specialize in building modern, responsive web applications with a strong focus on performance and immersive UI/UX. 🚀"
+      },
+      {
+        "id": "services",
+        "label": "🛠️  What services do you offer?",
+        "answer": "I offer a full range of digital services: <br>• <strong>Web Development</strong> — React, Laravel, WordPress<br>• <strong>API design</strong> & backend architecture<br>• <strong>UI/UX</strong> design & prototyping (Figma)<br>• <strong>3D / WebGL</strong> interactive experiences<br><br>Let's build something amazing together! 💡"
+      },
+      {
+        "id": "tech",
+        "label": "⚡  What technologies do you use?",
+        "answer": "🧰 My tech stack includes:<br><br><strong>Front‑End:</strong> React · Three.js · GSAP · Tailwind<br><strong>Back‑End:</strong> Laravel · PHP · MySQL · Node.js<br><strong>Tools:</strong> Figma · Git · Postman · WordPress<br><br>Always learning, always growing! 📚"
+      },
+      {
+        "id": "projects",
+        "label": "🎨  Show me your projects",
+        "answer": "Sure! Here are some highlights:<br><br>🎮 <strong>La Casa De Papel Game</strong> — interactive quiz game<br>🛒 <strong>05‑Electro</strong> — e‑commerce (React + Laravel)<br>🌐 <strong>Spark Vision</strong> — company site (WordPress)<br>☁️ <strong>05 Météo</strong> — weather app with live API<br>📚 <strong>Bibliotique</strong> — library management platform<br><br>Scroll up to the <strong>Projects</strong> section to see them live! ⬆️"
+      },
+      {
+        "id": "contact",
+        "label": "📬  How can I contact you?",
+        "answer": "I'd love to hear from you! 😊<br><br>📧 <strong>Email:</strong> Use the contact form above<br>💼 <strong>LinkedIn:</strong> Connect with me professionally<br>🐙 <strong>GitHub:</strong> Check out my code<br><br>Don't hesitate — let's create something great together! ✨"
+      }
+    ],
+    "services": [
+      {
+        "id": "s_web",
+        "label": "💻  Web Development?",
+        "answer": "That's my core craft. I build hyper-modern custom applications with React on the front and Laravel on the back. The architecture is ultra-fast (SSR/CSR) and fully secure."
+      },
+      {
+        "id": "s_3d",
+        "label": "🧊  3D & WebGL experiences?",
+        "answer": "Thanks to Three.js and GSAP, I bring web design to life. Sites are no longer simple 2D pages — they become real interactive virtual experiences (like my portfolio)."
+      },
+      {
+        "id": "s_ecom",
+        "label": "🛒  E-commerce stores?",
+        "answer": "I design turnkey stores (WordPress/WooCommerce or React/Laravel), built to generate sales. Including online payment, admin panel and delivery management."
+      },
+      {
+        "id": "s_seo",
+        "label": "🚀  How about SEO?",
+        "answer": "My code is optimized for search engines (Google). Semantic structure, lightning-fast load times, and dynamic tags. Everything is ready to put you on the 1st page."
+      },
+      {
+        "id": "s_contact",
+        "label": "📬  How to start a project?",
+        "answer": "It's very simple! 🚀 Use the huge email link at the end of the page or write to me directly at zakariach05@gmail.com to discuss it."
+      }
+    ]
+  },
+  "servicesPage": {
+    "heroTitleWhite": "My",
+    "heroTitleRed": "Services",
+    "heroSub": "Cutting-edge technical solutions to bring your projects to life and dominate the digital web ecosystem.",
+    "items": [
+      {
+        "title": "Advanced Web Development",
+        "desc": "Design of ultra-high-performance, secure and dynamic web applications using modern web standards.",
+        "tags": ["REACT", "LARAVEL"]
+      },
+      {
+        "title": "Creative & 3D Web",
+        "desc": "Integration of interactive 3D experiences and smooth animations, delivering a premium, highly immersive level of interaction.",
+        "tags": ["THREE.JS", "GSAP"]
+      },
+      {
+        "title": "E-commerce Stores",
+        "desc": "Building high-conversion e-commerce platforms. Integrated payment processes, simplified stock management and admin dashboard.",
+        "tags": ["WORDPRESS", "TAILWIND"]
+      },
+      {
+        "title": "Minimalist UI/UX Design",
+        "desc": "Thoughtful design focused on premium aesthetics and user experience, with clean interfaces (pixel-perfect Figma).",
+        "tags": ["FIGMA", "PROTOTYPING"]
+      },
+      {
+        "title": "SEO & Web Perf Optimization",
+        "desc": "Drastic acceleration of load times (Lighthouse +95) and clean code structure to boost your Google visibility.",
+        "tags": ["TECHNICAL SEO", "ANALYTICS"]
+      },
+      {
+        "title": "Maintenance & Infrastructure",
+        "desc": "Keeping your apps in optimal condition: backend-type security fixes, VPS management, and long-term support.",
+        "tags": ["PHP BACKEND", "API MAINTENANCE"]
+      }
+    ],
+    "ctaTitleWhite": "Ready to dominate",
+    "ctaTitleRed": "your digital market",
+    "ctaButton": "Discuss My Project"
+  }
+}
