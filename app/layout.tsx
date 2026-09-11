@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit, Bebas_Neue, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import Script from "next/script";
 import LenisProvider from "@/components/providers/LenisProvider";
 import IntroProvider from "@/components/providers/IntroProvider";
 import ContactStatusProvider from "@/contexts/ContactStatusContext";
@@ -156,6 +157,15 @@ export default function RootLayout({
             <OverlayGroup />
           </LanguageProvider>
         </ContactStatusProvider>
+        <Script id="microsoft-clarity" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "ygjgy5zvlh");
+          `}
+        </Script>
       </body>
     </html>
   );
