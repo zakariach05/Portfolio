@@ -1,0 +1,23 @@
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 1250ms
+ ⨯ The requested resource isn't a valid image for /NV-IMG/about-bg.webp received null
+ImageError: The requested resource isn't a valid image.
+    at imageOptimizer (C:\Users\HP\Desktop\portfolio\node_modules\next\dist\server\image-optimizer.js:770:15)
+    at async cacheEntry.imageResponseCache.get.incrementalCache (C:\Users\HP\Desktop\portfolio\node_modules\next\dist\server\next-server.js:182:65)
+    at async C:\Users\HP\Desktop\portfolio\node_modules\next\dist\server\response-cache\index.js:90:36
+    at async C:\Users\HP\Desktop\portfolio\node_modules\next\dist\lib\batcher.js:45:32 {
+  statusCode: 400
+}
+ ⨯ The requested resource isn't a valid image for /NV-IMG/hero-mobile.webp received null
+ImageError: The requested resource isn't a valid image.
+    at imageOptimizer (C:\Users\HP\Desktop\portfolio\node_modules\next\dist\server\image-optimizer.js:770:15)
+    at async cacheEntry.imageResponseCache.get.incrementalCache (C:\Users\HP\Desktop\portfolio\node_modules\next\dist\server\next-server.js:182:65)
+    at async C:\Users\HP\Desktop\portfolio\node_modules\next\dist\server\response-cache\index.js:90:36
+    at async C:\Users\HP\Desktop\portfolio\node_modules\next\dist\lib\batcher.js:45:32 {
+  statusCode: 400
+}
+ ⨯ The requested resource isn't a valid image for /NV-IMG/about-bg.webp received null
+ ⨯ The requested resource isn't a valid image for /NV-IMG/hero-mobile.webp received null
