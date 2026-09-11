@@ -113,6 +113,9 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
     },
   },
+  verification: {
+    google: "2uKTy_wkCFso5p6LiLEEiu6cxKNPdRx7Ak2ovVDb15c", // ghir l-content, bla meta tag kamla
+  },
 };
 
 export default function RootLayout({
@@ -131,15 +134,15 @@ export default function RootLayout({
         <PersonSchema />
         <ContactStatusProvider>
           <LanguageProvider>
-          <SiteBackground />
-          <CustomCursor />
-          <LenisProvider>
-            <CurtainMenu />
-            <NavigationDots />
-            <IntroProvider>{children}</IntroProvider>
-          </LenisProvider>
-          <Chatbot />
-          <ScrollTopButton />
+            <SiteBackground />
+            <CustomCursor />
+            <LenisProvider>
+              <CurtainMenu />
+              <NavigationDots />
+              <IntroProvider>{children}</IntroProvider>
+            </LenisProvider>
+            <Chatbot />
+            <ScrollTopButton />
           </LanguageProvider>
         </ContactStatusProvider>
       </body>
