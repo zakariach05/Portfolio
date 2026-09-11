@@ -9,7 +9,7 @@
  * Garde le thème noir/rouge du site. Textes FR/EN via locales/*.json.
  * Visuel bas de page optimisé via next/image.
  */
-import Image from "next/image";
+import AppImage from "@/components/AppImage";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const SOCIAL_LINKS = [
@@ -72,11 +72,12 @@ export default function Footer() {
         aria-hidden="true"
         className="pointer-events-none relative mt-6 -mx-6 -mb-24 md:-mb-32 select-none overflow-hidden"
       >
-        <Image
+        <AppImage
           src="/NV-IMG/vidio/footer%20video.png"
           alt=""
           width={1672}
           height={941}
+          sizes="100vw"
           loading="lazy"
           draggable={false}
           className="block h-[36vh] min-h-[240px] w-full object-cover"

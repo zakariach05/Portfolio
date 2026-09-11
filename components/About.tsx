@@ -13,8 +13,9 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
-import Image from "next/image";
+import AppImage from "@/components/AppImage";
 import Marquee from "@/components/Marquee";
+import RevealText from "@/components/RevealText";
 import SectionTitle from "@/components/SectionTitle";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -128,11 +129,12 @@ export default function About() {
     >
       {/* Large Background Photo */}
       <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-        <Image
-          src="/NV-IMG/heroP1.png"
+        <AppImage
+          src="/NV-IMG/about-bg.webp"
           alt={t("about.bgAlt")}
           fill
           sizes="(max-width: 1200px) 100vw, 1200px"
+          loading="lazy"
           className="object-cover object-center filter grayscale contrast-125 mx-auto"
           style={{
             maxWidth: 1200,
@@ -178,41 +180,47 @@ export default function About() {
             }}
           >
             <div className="perspective-container">
-              {t("about.tagline1")}
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-white">
-                {t("about.tagline2")}
-              </span>
+              <RevealText as="div" stagger={0.04}>
+                {t("about.tagline1")}
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-white">
+                  {t("about.tagline2")}
+                </span>
+              </RevealText>
             </div>
           </h3>
 
-          <div className="space-y-6 text-lg text-gray-300 font-medium leading-relaxed">
+          <div className="space-y-6 text-lg font-medium leading-relaxed">
             <div className="reveal-type" data-speed="0.1">
               <div className="perspective-container">
-                <p>
-                  {t("about.para1a")}{" "}
-                  <span className="text-red-500 font-bold">
-                    {t("about.para1city")}
-                  </span>
-                  {t("about.para1b")}
-                  {renderTechBadges(dict.about.frontend)}
-                  {t("about.para1c")}
-                  {renderTechBadges(dict.about.backend)}
-                  {t("about.para1d")}
-                  {renderTechBadges(dict.about.databases)}
-                  {t("about.para1e")}
-                </p>
+                <RevealText as="div" stagger={0.03} className="text-gray-300">
+                  <p>
+                    {t("about.para1a")}{" "}
+                    <span className="text-red-500 font-bold">
+                      {t("about.para1city")}
+                    </span>
+                    {t("about.para1b")}
+                    {renderTechBadges(dict.about.frontend)}
+                    {t("about.para1c")}
+                    {renderTechBadges(dict.about.backend)}
+                    {t("about.para1d")}
+                    {renderTechBadges(dict.about.databases)}
+                    {t("about.para1e")}
+                  </p>
+                </RevealText>
               </div>
             </div>
             <div className="reveal-type" data-speed="0.15">
               <div className="perspective-container">
-                <p>
-                  {t("about.para2a")}{" "}
-                  <strong className="text-white">
-                    {t("about.para2companies")}
-                  </strong>{" "}
-                  {t("about.para2b")}
-                </p>
+                <RevealText as="div" stagger={0.03} className="text-gray-300">
+                  <p>
+                    {t("about.para2a")}{" "}
+                    <strong className="text-white">
+                      {t("about.para2companies")}
+                    </strong>{" "}
+                    {t("about.para2b")}
+                  </p>
+                </RevealText>
               </div>
             </div>
           </div>

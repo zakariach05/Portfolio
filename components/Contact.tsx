@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import JuiceLogo from "@/components/JuiceLogo";
+import Logo065Tooltip from "@/components/Logo065Tooltip";
 import SectionTitle from "@/components/SectionTitle";
 import { useContactStatus } from "@/contexts/ContactStatusContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -218,7 +219,9 @@ export default function Contact() {
           {/* Logo Side */}
           <div className="contact-logo-side">
             <div className="relative inline-block">
-              <JuiceLogo className="juice-logo--lg" />
+              <Logo065Tooltip>
+                <JuiceLogo className="juice-logo--lg" />
+              </Logo065Tooltip>
             </div>
           </div>
 

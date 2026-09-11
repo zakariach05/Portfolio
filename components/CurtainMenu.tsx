@@ -18,6 +18,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import JuiceLogo from "@/components/JuiceLogo";
+import Logo065Tooltip from "@/components/Logo065Tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLenis } from "@/components/providers/LenisProvider";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -57,11 +58,13 @@ export default function CurtainMenu() {
 
   const isHome = pathname === "/";
   const NAV = [
+    { label: t("nav.about"), href: isHome ? "#about" : "/#about" },
     { label: t("nav.work"), href: isHome ? "#projects" : "/#projects" },
     { label: t("nav.services"), href: "/services" },
     { label: t("nav.contact"), href: isHome ? "#contact" : "/#contact" },
   ];
   const CURTAIN = [
+    { label: t("curtain.about"), href: isHome ? "#about" : "/#about" },
     { label: t("curtain.work"), href: isHome ? "#projects" : "/#projects" },
     { label: t("curtain.services"), href: "/services" },
     { label: t("curtain.contact"), href: isHome ? "#contact" : "/#contact" },
@@ -77,8 +80,8 @@ export default function CurtainMenu() {
     const [path, hash] = href.split("#");
     const targetHash = hash ? `#${hash}` : null;
 
-    if (path === "/services") {
-      router.push("/services");
+    if (path === "/services" || path === "/projets") {
+      router.push(path);
       return;
     }
     if (!targetHash) {
@@ -87,16 +90,18 @@ export default function CurtainMenu() {
       return;
     }
     if (path === "" || path === pathname) {
-      // même page → scroll Lenis vers l'ancre
+      // même page → scroll Lenis vers l'ancre, sans laisser le "#" dans l'URL
       window.setTimeout(() => {
         if (lenis) lenis.scrollTo(targetHash, { offset: 0 });
+        history.replaceState(null, "", window.location.pathname);
       }, 40);
       return;
     }
-    // autre page avec ancre → naviguer, puis scroller après rendu de la home
-    router.push(`${path}${targetHash}`);
+    // autre page avec ancre → naviguer (URL propre), puis scroller après rendu
+    router.push(path);
     window.setTimeout(() => {
       if (lenis) lenis.scrollTo(targetHash, { offset: 0 });
+      history.replaceState(null, "", path);
     }, 550);
   };
 
@@ -162,7 +167,9 @@ export default function CurtainMenu() {
             }}
             className="w-12 h-12 flex items-center justify-center shrink-0"
           >
-            <JuiceLogo className="juice-logo--sm" />
+            <Logo065Tooltip>
+              <JuiceLogo className="juice-logo--sm" />
+            </Logo065Tooltip>
           </a>
         ) : (
           <Link
@@ -170,7 +177,9 @@ export default function CurtainMenu() {
             aria-label={t("nav.backHome")}
             className="w-12 h-12 flex items-center justify-center shrink-0"
           >
-            <JuiceLogo className="juice-logo--sm" />
+            <Logo065Tooltip>
+              <JuiceLogo className="juice-logo--sm" />
+            </Logo065Tooltip>
           </Link>
         )}
 

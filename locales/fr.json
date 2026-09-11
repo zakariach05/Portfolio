@@ -4,9 +4,13 @@
     "switchToFr": "Passer au français",
     "switchToEn": "Switch to English"
   },
+  "cursor": {
+    "view": "VOIR"
+  },
   "nav": {
     "work": "PROJETS",
     "services": "SERVICES",
+    "about": "À PROPOS",
     "contact": "CONTACT",
     "mainNav": "Navigation principale",
     "openMenu": "Ouvrir le menu",
@@ -17,6 +21,7 @@
   "curtain": {
     "work": "Projets",
     "services": "Services",
+    "about": "À propos",
     "contact": "Contact",
     "name": "ZAKARIA CHAMEKH",
     "role": "DÉVELOPPEUR FULL STACK",
@@ -28,6 +33,7 @@
   "hero": {
     "introLabel": "Hero Introduction",
     "nameLabel": "Zakaria Chamekh",
+    "role": "Développeur Web Full Stack & Sécurité des Applications Web",
     "scrollLabel": "Défiler pour explorer",
     "badgeText": "DÉFILEZ POUR EXPLORER • DÉFILEZ POUR EXPLORER •"
   },
@@ -91,6 +97,12 @@
         "title": "Cloud & DevOps",
         "text": "Infrastructure scalable et CI/CD. Expertise Cloud Solutions.",
         "tags": ["AWS", "DOCKER", "CI/CD"]
+      },
+      {
+        "role": "role-security",
+        "title": "SÉCURITÉ & OWASP",
+        "text": "Audit de vulnérabilités et bonnes pratiques OWASP Top 10. Code sécurisé par conception.",
+        "tags": ["OWASP", "PENTEST", "JWT"]
       }
     ]
   },
@@ -100,6 +112,14 @@
     "tagImage": "Image",
     "tagVideo": "Vidéo",
     "openLabel": "Ouvrir",
+    "seeMore": "Voir plus",
+    "seeAllProjects": "Tous les projets",
+    "seeWork": "Voir le projet",
+    "year": "Année",
+    "niche": "Niche",
+    "yearValue": "Année",
+    "nicheValue": "Niche",
+    "viewAllWorks": "Voir tous les projets",
     "items": [
       { "id": "hotel-cinco", "description": "Luxury Hotel Cinco Management System" },
       { "id": "info-aymane", "description": "Votre partenaire digital de confiance. Agence spécialisée dans le marketing digital, la création web et la communication visuelle à Casablanca." },
@@ -111,6 +131,11 @@
       { "id": "bibliotique", "description": "Plateforme de gestion de bibliothèque moderne et intuitive." },
       { "id": "portfolio", "description": "Design immersif avec Three.js et animations avancées GSAP." }
     ]
+  },
+  "projectsPage": {
+    "titleWhite": "Tous mes",
+    "titleRed": "Projets",
+    "subtitle": "Une sélection complète de mes réalisations : développement web, e-commerce, applications métiers et plus."
   },
   "lightbox": {
     "close": "Fermer",
@@ -150,71 +175,7 @@
       { "label": "À propos", "href": "#about" },
       { "label": "Contact", "href": "#contact" }
     ],
-    "copyright": "© 2025 Zakaria Chamekh. Tous droits réservés."
-  },
-  "chatbot": {
-    "headerName": "Zakaria — Assistant virtuel",
-    "headerStatus": "En ligne",
-    "dateChip": "Aujourd'hui · Posez-moi vos questions !",
-    "pillsLabel": "Questions rapides",
-    "toggleLabel": "Ouvrir l'assistant de chat",
-    "closeLabel": "Fermer le chat",
-    "pillsGroupLabel": "Raccourcis de questions rapides",
-    "greeting": "Salut ! 👋 Je suis <strong>Zak</strong>, ton assistant virtuel. Pose-moi tes questions sur Zakaria !",
-    "home": [
-      {
-        "id": "who",
-        "label": "👤 Qui es-tu ?",
-        "answer": "Je suis <strong>Zakaria Chamekh</strong>, développeur web Full Stack passionné basé à <span class='cb-highlight'>Casablanca</span>. Je suis spécialisé dans la création d'applications web modernes et responsives, avec un fort accent sur la performance et les UI/UX immersives. 🚀"
-      },
-      {
-        "id": "services",
-        "label": "🛠️ Quels services proposes-tu ?",
-        "answer": "J'offre une gamme complète de services digitaux : <br>• <strong>Développement Web</strong> — React, Laravel, WordPress<br>• <strong>Design d'API</strong> & architecture backend<br>• Design <strong>UI/UX</strong> & prototypage (Figma)<br>• Expériences interactives <strong>3D / WebGL</strong><br><br>Construisons quelque chose d'incroyable ensemble ! 💡"
-      },
-      {
-        "id": "tech",
-        "label": "⚡ Quelles technologies utilises-tu ?",
-        "answer": "🧰 Ma stack technique :<br><br><strong>Front‑End :</strong> React · Three.js · GSAP · Tailwind<br><strong>Back‑End :</strong> Laravel · PHP · MySQL · Node.js<br><strong>Outils :</strong> Figma · Git · Postman · WordPress<br><br>Toujours en train d'apprendre, toujours en progression ! 📚"
-      },
-      {
-        "id": "projects",
-        "label": "🎨 Montre-moi tes projets",
-        "answer": "Avec plaisir ! En voici quelques-uns :<br><br>🎮 <strong>La Casa De Papel Game</strong> — jeu quiz interactif<br>🛒 <strong>05‑Electro</strong> — e‑commerce (React + Laravel)<br>🌐 <strong>Spark Vision</strong> — site d'entreprise (WordPress)<br>☁️ <strong>05 Météo</strong> — app météo avec API en direct<br>📚 <strong>Bibliotique</strong> — plateforme de gestion de bibliothèque<br><br>Remonte à la section <strong>Projets</strong> pour les voir en direct ! ⬆️"
-      },
-      {
-        "id": "contact",
-        "label": "📬 Comment te contacter ?",
-        "answer": "Ce serait un plaisir d'échanger ! 😊<br><br>📧 <strong>Email :</strong> utilise le formulaire de contact ci-dessus<br>💼 <strong>LinkedIn :</strong> connectons-nous<br>🐙 <strong>GitHub :</strong> jette un œil à mon code<br><br>N'hésite pas — créons quelque chose de génial ensemble ! ✨"
-      }
-    ],
-    "services": [
-      {
-        "id": "s_web",
-        "label": "💻  Développement Web ?",
-        "answer": "C'est mon cœur de métier. Je crée des applications sur-mesure hyper modernes avec React côté front et Laravel côté Backend. L'architecture est ultra-rapide (SSR/CSR) et complètement sécurisée."
-      },
-      {
-        "id": "s_3d",
-        "label": "🧊  Expériences 3D & WebGL ?",
-        "answer": "Grâce à Three.js et GSAP, je donne vie au design web. Les sites ne sont plus de simples pages 2D, ils deviennent de réelles expériences interactives virtuelles (comme mon portfolio)."
-      },
-      {
-        "id": "s_ecom",
-        "label": "🛒  Boutiques E-commerce ?",
-        "answer": "Je conçois des boutiques clés en main (WordPress/WooCommerce ou React/Laravel), faites pour générer des ventes. Incluant le paiement en ligne, le panel administrateur et la gestion des livraisons."
-      },
-      {
-        "id": "s_seo",
-        "label": "🚀  Comment se passe le SEO ?",
-        "answer": "Mon code est optimisé pour les moteurs de recherche (Google). Structure sémantique, temps de chargement éclair, et balises dynamiques. Tout est prêt pour vous placer sur la 1ère page."
-      },
-      {
-        "id": "s_contact",
-        "label": "📬  Comment démarrer un projet ?",
-        "answer": "C'est très simple ! 🚀 Utilisez le gigantesque lien email en fin de page ou écrivez-moi directement à zakariach05@gmail.com pour en discuter."
-      }
-    ]
+    "copyright": "© 2026 Zakaria Chamekh. Tous droits réservés."
   },
   "servicesPage": {
     "heroTitleWhite": "Mes",

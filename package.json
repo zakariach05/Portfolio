@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "upload:cloudinary": "node scripts/upload-cloudinary.mjs",
+    "encode:video": "node scripts/encode-video.mjs"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.4.0",
@@ -15,9 +17,11 @@
     "gsap": "^3.12.5",
     "lenis": "^1.1.14",
     "next": "^14.2.28",
+    "next-cloudinary": "^6.19.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "resend": "^6.26.0",
+    "sharp": "^0.35.4",
     "three": "^0.161.0"
   },
   "devDependencies": {

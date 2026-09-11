@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -485,6 +485,11 @@ html {
     justify-content: center;
 }
 
+#hero-text-panel.hero-centered #hero-role {
+    margin-top: 1.1rem;
+    letter-spacing: 0.04em;
+}
+
 #hero-greeting {
     font-size: clamp(0.75rem, 1.2vw, 1rem);
     letter-spacing: 0.38em;
@@ -844,103 +849,13 @@ body {
     /* Replace yellow with requested Red */
     --accent-dim: #b30000;
     /* Darker red */
+    --accent-bright: #dc2626;
+    /* Rouge vif (hover curseur/badge) — identique à colors.accent.bright Tailwind */
     --text-primary: #ffffff;
     --text-secondary: #aaaaaa;
     /* Lighter Grey */
     --error: #ff4444;
     --success: #00ff88;
-}
-
-/* --- EXPERTISE GRID (STATIC, NO ANIMATION) --- */
-.expertise-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 20px 0;
-}
-
-.expertise-card {
-    position: relative;
-    width: 100%;
-    transition: none;
-    cursor: default;
-    will-change: auto;
-    backface-visibility: visible;
-    transform: none !important;
-    opacity: 1;
-    filter: none;
-}
-
-.card-inner {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 1));
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 32px;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    /* Push content to bottom for a card feel */
-    align-items: flex-start;
-    text-align: left;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-    overflow: hidden;
-    position: relative;
-    backface-visibility: visible;
-    -webkit-font-smoothing: subpixel-antialiased;
-}
-
-.expertise-card:hover .card-inner {
-    background: linear-gradient(135deg, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 1));
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 20px var(--card-color, #ff0000);
-    border-color: var(--card-color, #ff0000);
-}
-
-.card-icon {
-    font-size: 3.5rem;
-    color: var(--card-color, #ff0000);
-    margin-bottom: auto;
-    /* Push to top */
-    opacity: 0.8;
-}
-
-.card-title {
-    font-size: 1.6rem;
-    font-weight: 900;
-    color: white;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    letter-spacing: -0.04em;
-    font-family: 'Oswald', sans-serif;
-}
-
-.card-text {
-    color: #ccc;
-    font-size: 0.85rem;
-    line-height: 1.5;
-    margin-bottom: 20px;
-    font-weight: 500;
-}
-
-.card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.card-tags span {
-    font-size: 0.65rem;
-    font-weight: 700;
-    padding: 3px 10px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
-    color: white;
-    text-transform: uppercase;
 }
 
 /* Assigned Colors */
@@ -966,6 +881,247 @@ body {
 /* Aston Green */
 .role-cloud {
     --card-color: #7b61ff;
+}
+.role-security {
+    --card-color: #FF3B5C;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   SERVICES GRID — accordéon horizontal (image 1 & 3) + icônes SVG.
+   Desktop : une seule rangée flex, hover = expansion (flex-grow), fond
+   clair #F0EFEA. Mobile : pile verticale classique.
+   Anim d'entrée GSAP : x:150 slide-in (transform/opacity), hover : flex/bg.
+   ════════════════════════════════════════════════════════════════════ */
+.services-grid {
+    display: flex;
+    gap: 12px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+    overflow: hidden;
+    align-items: stretch;
+}
+.service-card {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 420px;
+    min-height: 420px;
+    will-change: flex, transform, opacity;
+    transform-origin: center center;
+    transition:
+        flex 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 0.5s ease,
+        color 0.5s ease;
+    overflow: hidden;
+    border-radius: 24px;
+}
+.service-card-inner {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 1));
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    text-align: left;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    position: relative;
+    transition:
+        background 0.5s ease,
+        box-shadow 0.5s ease,
+        border-color 0.5s ease,
+        color 0.5s ease;
+}
+/* Hover : carte élargie, fond clair, texte noir */
+@media (hover: hover) and (pointer: fine) {
+    .service-card:hover {
+        flex: 3 1 0;
+    }
+    .service-card:hover .service-card-inner {
+        background: #F0EFEA;
+        border-color: rgba(0, 0, 0, 0.08);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    }
+    .service-card:hover .service-card-title {
+        color: #0a0a0a;
+    }
+    .service-card:hover .service-card-text {
+        color: #444;
+    }
+    .service-card:hover .service-card-tags span {
+        background: rgba(0, 0, 0, 0.06);
+        border-color: rgba(0, 0, 0, 0.12);
+        color: rgba(0, 0, 0, 0.7);
+    }
+    .service-card:hover .service-card-number {
+        color: rgba(0, 0, 0, 0.35);
+    }
+    .service-card:hover .service-icon {
+        color: var(--card-color, #ff0000);
+        opacity: 1;
+    }
+    /* Contenu tronqué en compact, complet au hover */
+    .service-card:hover .service-card-title,
+    .service-card:hover .service-card-text {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+    }
+    .service-card:hover .service-card-text,
+    .service-card:hover .service-card-tags {
+        opacity: 1;
+        max-height: 200px;
+    }
+}
+.service-icon {
+    color: var(--card-color, #ff0000);
+    margin-bottom: auto;
+    opacity: 0.9;
+    display: inline-flex;
+    will-change: transform;
+}
+.service-icon-float {
+    display: inline-flex;
+    will-change: transform;
+}
+.service-icon-float svg {
+    display: block;
+    transform-origin: center center;
+}
+.service-icon svg {
+    display: block;
+    filter: drop-shadow(0 6px 18px color-mix(in srgb, var(--card-color, #ff0000) 35%, transparent));
+}
+.service-card-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: white;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    letter-spacing: -0.04em;
+    font-family: "Oswald", sans-serif;
+    margin-top: 28px;
+}
+.service-card-text {
+    color: #ccc;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+.service-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.service-card-tags span {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.75);
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 600;
+}
+.service-card-number {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.35);
+    line-height: 1;
+    pointer-events: none;
+    z-index: 2;
+    transition: color 0.4s ease;
+}
+/* État compact desktop : titre tronqué, description/tags masqués (accordéon) */
+@media (hover: hover) and (pointer: fine) {
+    .service-card-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+    }
+    .service-card-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+        opacity: 0;
+        max-height: 0;
+        margin-bottom: 0;
+        transition:
+            opacity 0.35s ease,
+            max-height 0.45s ease,
+            color 0.4s ease;
+    }
+    .service-card-tags {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition:
+            opacity 0.35s ease 0.05s,
+            max-height 0.45s ease;
+    }
+}
+/* Mobile / tactile : désactive l'accordéon, pile verticale */
+@media (max-width: 900px), (hover: none) {
+    .services-grid {
+        flex-direction: column;
+        gap: 16px;
+        overflow: visible;
+    }
+    .service-card {
+        flex: none !important;
+        height: auto;
+        min-height: 0;
+        width: 100%;
+    }
+    .service-card-inner {
+        min-height: 320px;
+    }
+    .service-card-title,
+    .service-card-text {
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        width: auto !important;
+    }
+    .service-card-text {
+        opacity: 1 !important;
+        max-height: none !important;
+        margin-bottom: 16px !important;
+    }
+    .service-card-tags {
+        opacity: 1 !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .service-card {
+        transform: none;
+        opacity: 1;
+    }
+    .service-icon {
+        animation: none !important;
+    }
+    .service-card-inner {
+        transition: none;
+    }
 }
 
 /* Custom Scrollbar */
@@ -1870,12 +2026,9 @@ input:-webkit-autofill:active {
 }
 
 .progress-ring__circle {
-    stroke-dasharray: 138.23;
-    /* 2 * PI * 22 */
-    stroke-dashoffset: 138.23;
-    stroke: #ffffff;
-    /* White */
-    stroke-linecap: round;
+    /* stroke-dasharray / stroke-dashoffset sont pilotés en React (attribut
+       inline SVG) pour la progression du scroll. Le CSS ne doit PAS les
+       surcharger — sinon l'anneau reste figé (bug badge scroll statique). */
     transition: stroke-dashoffset 0.1s linear, stroke 0.3s ease, stroke-width 0.3s ease;
 }
 
@@ -1908,7 +2061,7 @@ input:-webkit-autofill:active {
 
 
 /* --- Custom Mouse Cursor Styles --- */
-@media (pointer: fine) {
+@media (hover: hover) and (pointer: fine) {
     body {
         cursor: default;
         /* Remet la souris par défaut */
@@ -1923,19 +2076,19 @@ input:-webkit-autofill:active {
         /* Force la main sur les liens */
     }
 
+    .project-card,
     .project-card-3d {
         cursor: none !important;
-        /* Hide default cursor to show 'View' follower only */
+        /* Hide default cursor to show 'VOIR' circle only */
     }
 
     .custom-cursor {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        inset: 0;
         pointer-events: none;
         z-index: 10000;
+        opacity: 0;
+        transition: opacity 0.3s ease-out;
     }
 
     /* Le petit point est caché car on utilise la souris native */
@@ -1943,36 +2096,45 @@ input:-webkit-autofill:active {
         display: none;
     }
 
-    /* On garde le follower (le cercle) pour les effets */
+    /* Le follower porte la position : transform setté par JS avec compensation
+       du centrage (pas de translate(-50%,-50%) en CSS, sinon écrasé/dupliqué). */
     .cursor-follower {
         position: fixed;
+        top: 0;
+        left: 0;
         width: 30px;
         height: 30px;
-        background-color: rgba(0, 0, 0, 0.1);
-        /* Blackish in white mode */
-        border: 1px solid rgba(0, 0, 0, 0.3);
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
         pointer-events: none;
         z-index: 10000;
-        transition: width 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
-            height 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
-            background-color 0.4s ease,
-            border 0.4s ease;
         display: flex;
         align-items: center;
         justify-content: center;
-        overflow: hidden;
+        transition: width 0.3s ease-out,
+            height 0.3s ease-out;
     }
 
-    .dark .cursor-follower {
+    /* Cercle visuel : pseudo-élément qui porte scale + opacity (animation
+       d'apparition/disparition indépendante du transform JS de position). */
+    .cursor-follower::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
         background-color: rgba(255, 255, 255, 0.1);
-        /* White in dark mode */
+        /* White ring in dark mode */
         border: 1px solid rgba(255, 255, 255, 0.4);
+        transform: scale(0);
+        opacity: 0;
+        transition: transform 0.3s ease-out,
+            opacity 0.3s ease-out,
+            background-color 0.3s ease-out,
+            border-color 0.3s ease-out,
+            box-shadow 0.3s ease-out;
     }
-
 
     .view-text {
+        position: relative;
+        z-index: 1;
         color: white;
         font-family: 'Outfit', sans-serif;
         font-size: 14px;
@@ -1980,8 +2142,8 @@ input:-webkit-autofill:active {
         text-transform: uppercase;
         letter-spacing: 1px;
         opacity: 0;
-        transform: scale(0.5);
-        transition: opacity 0.3s ease, transform 0.3s ease;
+        transform: scale(0);
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
         pointer-events: none;
     }
 
@@ -1994,6 +2156,11 @@ input:-webkit-autofill:active {
     .custom-cursor.active-project-view .cursor-follower {
         width: 110px;
         height: 110px;
+    }
+
+    .custom-cursor.active-project-view .cursor-follower::before {
+        transform: scale(1);
+        opacity: 1;
         background-color: rgba(0, 0, 0, 0.9);
         /* Dark circle as requested */
         border-color: rgba(255, 255, 255, 0.2);
@@ -2013,7 +2180,6 @@ input:-webkit-autofill:active {
         transform: translateY(0) scale(1);
     }
 
-
     .custom-cursor.active-project-view .cursor-dot {
         opacity: 0;
     }
@@ -2022,7 +2188,12 @@ input:-webkit-autofill:active {
     .custom-cursor.active-link .cursor-follower {
         width: 25px;
         height: 25px;
-        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .custom-cursor.active-link .cursor-follower::before {
+        transform: scale(1);
+        opacity: 1;
+        background-color: rgba(255, 255, 255, 0.2);
         border-color: rgba(255, 255, 255, 0.5);
     }
 }
@@ -2049,7 +2220,7 @@ input:-webkit-autofill:active {
 
 
 /* Mobile Support */
-@media (pointer: coarse) {
+@media (hover: none), (pointer: coarse) {
     /* Custom cursor disabled on touch devices for performance (JS rAF loop skipped too) */
     .custom-cursor {
         display: none;
@@ -2063,7 +2234,7 @@ input:-webkit-autofill:active {
     .cursor-follower {
         width: 30px;
         height: 30px;
-        transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+        transition: width 0.3s ease, height 0.3s ease;
     }
 
     .custom-cursor.active-project-view .cursor-follower {
@@ -2097,17 +2268,19 @@ input:-webkit-autofill:active {
 }
 
 /* Curseur Reveal (Cercle Transparent) */
-@media (pointer: fine) {
-.custom-cursor.active-text-reveal .cursor-follower {
+@media (hover: hover) and (pointer: fine) {
+    .custom-cursor.active-text-reveal .cursor-follower {
         width: 300px;
         height: 300px;
+    }
+
+    .custom-cursor.active-text-reveal .cursor-follower::before {
+        transform: scale(1);
+        opacity: 1;
         background-color: transparent;
         /* Fond transparent */
         border: 1px solid rgba(255, 255, 255, 0.3);
         /* Bordure subtile blanche */
-        mix-blend-mode: normal;
-        /* Plus d'inversion */
-        transform: translate(-50%, -50%) scale(1);
     }
 
     .custom-cursor.active-text-reveal .cursor-dot {
@@ -2801,489 +2974,6 @@ html.hoodie-sequence-done #hero-scroll-indicator {
     will-change: transform, filter;
 }
 
-/* ============================================================
-   CHATBOT STYLES — Zakaria Chamekh Portfolio
-   Design: dark glassmorphism · red accent #dc2626
-   ============================================================ */
-
-/* ── CSS Variables ─────────────────────────────────────────── */
-:root {
-  --cb-bg: rgba(10, 10, 10, 0.92);
-  --cb-glass: rgba(255, 255, 255, 0.04);
-  --cb-border: rgba(255, 255, 255, 0.08);
-  --cb-red: #dc2626;
-  --cb-red-dim: rgba(220, 38, 38, 0.15);
-  --cb-text: #f1f5f9;
-  --cb-muted: #94a3b8;
-  --cb-user-bg: #dc2626;
-  --cb-bot-bg: rgba(255, 255, 255, 0.07);
-  --cb-radius: 20px;
-  --cb-shadow: 0 32px 72px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06);
-  --cb-font: 'Inter', 'Outfit', sans-serif;
-  --cb-z: 9000;
-}
-
-/* ── Toggle Button ─────────────────────────────────────────── */
-#cb-toggle {
-  position: fixed;
-  bottom: 90px;
-  right: 28px;
-  z-index: var(--cb-z);
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-  box-shadow: 0 8px 32px rgba(220, 38, 38, 0.45), 0 2px 8px rgba(0, 0, 0, 0.6);
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.3s ease;
-  outline: none;
-}
-
-#cb-toggle:hover {
-  transform: scale(1.1) translateY(-2px);
-  box-shadow: 0 12px 40px rgba(220, 38, 38, 0.6), 0 4px 12px rgba(0, 0, 0, 0.6);
-}
-
-#cb-toggle:focus-visible {
-  outline: 2px solid #dc2626;
-  outline-offset: 3px;
-}
-
-/* Icon swap with CSS transform */
-.cb-icon-open,
-.cb-icon-close {
-  position: absolute;
-  transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  color: #fff;
-  font-size: 22px;
-  line-height: 1;
-}
-
-.cb-icon-close {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.6);
-}
-
-#cb-toggle.cb-toggle--active .cb-icon-open {
-  opacity: 0;
-  transform: rotate(90deg) scale(0.6);
-}
-
-#cb-toggle.cb-toggle--active .cb-icon-close {
-  opacity: 1;
-  transform: rotate(0deg) scale(1);
-}
-
-/* ── Notification Badge ────────────────────────────────────── */
-#cb-badge {
-  position: absolute;
-  top: -3px;
-  right: -3px;
-  background: #fff;
-  color: #dc2626;
-  font-size: 10px;
-  font-weight: 700;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #dc2626;
-  pointer-events: none;
-  opacity: 0;
-  transform: scale(0);
-  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-#cb-badge.cb-badge--show {
-  opacity: 1;
-  transform: scale(1);
-  animation: cb-badge-pulse 2.5s ease infinite 0.6s;
-}
-
-@keyframes cb-badge-pulse {
-
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5);
-  }
-
-  50% {
-    box-shadow: 0 0 0 6px rgba(220, 38, 38, 0);
-  }
-}
-
-/* ── Chat Window ───────────────────────────────────────────── */
-#cb-window {
-  position: fixed;
-  bottom: 162px;
-  right: 28px;
-  z-index: var(--cb-z);
-  width: 370px;
-  max-width: calc(100vw - 40px);
-  height: 560px;
-  max-height: calc(100vh - 130px);
-  border-radius: var(--cb-radius);
-  background: var(--cb-bg);
-  border: 1px solid var(--cb-border);
-  box-shadow: var(--cb-shadow);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  font-family: var(--cb-font);
-
-/* Hidden state */
-  opacity: 0;
-  transform: translateY(24px) scale(0.95);
-  pointer-events: none;
-  visibility: hidden;
-  transform-origin: bottom right;
-transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s linear 0.4s;
-}
-
-#cb-window.cb-window--open {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: all;
-  visibility: visible;
-}
-
-/* ── Header ────────────────────────────────────────────────── */
-.cb-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 18px;
-  background: rgba(220, 38, 38, 0.12);
-  border-bottom: 1px solid var(--cb-border);
-  flex-shrink: 0;
-}
-
-.cb-header-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #dc2626, #991b1b);
-  overflow: hidden;
-  flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
-}
-
-.cb-header-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-}
-
-.cb-header-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.cb-header-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--cb-text);
-  letter-spacing: 0.02em;
-}
-
-.cb-header-status {
-  font-size: 11px;
-  color: #4ade80;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 2px;
-}
-
-.cb-header-status::before {
-  content: '';
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  background: #4ade80;
-  border-radius: 50%;
-  animation: cb-status-blink 2s ease-in-out infinite;
-}
-
-@keyframes cb-status-blink {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.4;
-  }
-}
-
-.cb-close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--cb-muted);
-  font-size: 18px;
-  padding: 4px;
-  border-radius: 8px;
-  transition: color 0.2s, background 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-}
-
-.cb-close:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-/* ── Messages Area ─────────────────────────────────────────── */
-#cb-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  scroll-behavior: smooth;
-}
-
-#cb-messages::-webkit-scrollbar {
-  width: 4px;
-}
-
-#cb-messages::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-#cb-messages::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-}
-
-/* ── Message Rows ──────────────────────────────────────────── */
-.cb-msg {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  max-width: 100%;
-}
-
-.cb-msg--user {
-  flex-direction: row-reverse;
-}
-
-/* Entrance animation */
-.cb-msg--in {
-  animation: cb-msg-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-@keyframes cb-msg-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ── Avatars ───────────────────────────────────────────────── */
-.cb-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #dc2626, #7f1d1d);
-  overflow: hidden;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.35);
-}
-
-.cb-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-}
-
-/* ── Bubbles ───────────────────────────────────────────────── */
-.cb-bubble {
-  max-width: 82%;
-  padding: 11px 15px;
-  border-radius: 18px;
-  font-size: 13.5px;
-  line-height: 1.55;
-  word-break: break-word;
-}
-
-/* Bot bubble */
-.cb-msg--bot .cb-bubble {
-  background: var(--cb-bot-bg);
-  border: 1px solid var(--cb-border);
-  color: var(--cb-text);
-  border-bottom-left-radius: 4px;
-}
-
-/* User bubble */
-.cb-msg--user .cb-bubble {
-  background: var(--cb-user-bg);
-  color: #fff;
-  border-bottom-right-radius: 4px;
-  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
-  font-weight: 500;
-}
-
-/* Highlight spans inside bot answers */
-.cb-bubble .cb-highlight {
-  color: #dc2626;
-  font-weight: 700;
-}
-
-/* ── Typing Indicator ──────────────────────────────────────── */
-.cb-typing {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 12px 18px !important;
-}
-
-.cb-typing span {
-  display: block;
-  width: 8px;
-  height: 8px;
-  background: var(--cb-muted);
-  border-radius: 50%;
-  animation: cb-dot-bounce 1.2s ease-in-out infinite;
-}
-
-.cb-typing span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.cb-typing span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes cb-dot-bounce {
-
-  0%,
-  80%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.5;
-  }
-
-  40% {
-    transform: translateY(-7px);
-    opacity: 1;
-  }
-}
-
-/* ── Quick Questions Pills ─────────────────────────────────── */
-.cb-pills-label {
-  padding: 0 16px 6px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--cb-muted);
-  flex-shrink: 0;
-}
-
-#cb-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  padding: 0 14px 14px;
-  border-top: 1px solid var(--cb-border);
-  padding-top: 12px;
-  flex-shrink: 0;
-  overflow-y: auto;
-  max-height: 160px;
-}
-
-#cb-pills::-webkit-scrollbar {
-  width: 0;
-}
-
-.cb-pill {
-  background: var(--cb-glass);
-  border: 1px solid var(--cb-border);
-  color: var(--cb-text);
-  font-family: var(--cb-font);
-  font-size: 12px;
-  font-weight: 500;
-  padding: 7px 12px;
-  border-radius: 100px;
-  cursor: pointer;
-  transition: background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-    color 0.2s ease;
-  white-space: nowrap;
-  outline: none;
-}
-
-.cb-pill:hover {
-  background: var(--cb-red-dim);
-  border-color: rgba(220, 38, 38, 0.5);
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-.cb-pill:active {
-  transform: translateY(0) scale(0.97);
-}
-
-#cb-pills.cb-pills--disabled .cb-pill {
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-/* ── Divider / date chip ───────────────────────────────────── */
-.cb-date-chip {
-  text-align: center;
-  font-size: 10px;
-  color: var(--cb-muted);
-  letter-spacing: 0.08em;
-  padding: 4px 0 2px;
-  flex-shrink: 0;
-}
-
-/* ── Mobile Responsive ─────────────────────────────────────── */
-@media (max-width: 480px) {
-  #cb-toggle {
-    bottom: 85px;
-    right: 20px;
-    width: 54px;
-    height: 54px;
-  }
-
-  #cb-window {
-    right: 12px;
-    bottom: 154px;
-    width: calc(100vw - 24px);
-    height: calc(100vh - 110px);
-    max-height: 580px;
-  }
-}
-
 /* ══════════════════════════════════════════════
    CURTAIN MENU (navbar pill + rideau)
    Inspiré d'un concept adapté au thème noir/rouge.
@@ -3925,5 +3615,315 @@ transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
     }
     .splash-screen {
         transition-duration: 0.2s;
+    }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   WORKS — Section projets "sticky-stacking" (home, #projects)
+   ════════════════════════════════════════════════════════════════════ */
+.works-stage {
+    position: relative;
+}
+
+/* Stickers latéraux du site : ANNÉE (gauche) / NICHE (droite).
+   position: fixed (top 40vh) + classe .is-visible pilotée par JS
+   (IntersectionObserver) → visibles uniquement pendant la traversée de
+   la section stacking, mis à jour avec la carte active. */
+.works-side {
+    position: fixed;
+    top: 40vh;
+    /* Portés dans body (portal) car la section #projects est pivotée quant
+       ScrollTrigger (z 30→50). z-index au-dessus des sections empilées mais
+       sous le menu rideau (z 60). */
+    z-index: 55;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease-out, visibility 0.35s ease-out;
+}
+.works-side.is-visible {
+    opacity: 1;
+    visibility: visible;
+}
+.works-side-year {
+    left: max(1.5rem, 2.5vw);
+    align-items: flex-start;
+}
+.works-side-niche {
+    right: max(1.5rem, 2.5vw);
+    align-items: flex-end;
+    text-align: right;
+}
+.works-side-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+}
+.works-side-value {
+    font-family: "Outfit", sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+    color: #ffffff;
+    margin-top: 2px;
+    /* Entrée animée à chaque changement de valeur (remontage par key React). */
+    animation: works-value-in 0.38s ease-out both;
+}
+@keyframes works-value-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Pile sticky : UN seul conteneur de hauteur N×100vh (définie inline en
+   JSX) qui contient toutes les cartes en position: sticky; top. Pendant le
+   scroll du conteneur, chaque carte reste fixée à l'écran et la suivante
+   (plus bas dans le DOM) monte au-dessus de la précédente. */
+.works-stack {
+    position: relative;
+    width: 100%;
+}
+.works-card {
+    position: sticky;
+    top: 100px;
+    width: min(1200px, calc(100vw - 2rem));
+    margin: 0 auto;
+    height: calc(100vh - 130px);
+    min-height: 460px;
+    border-radius: 24px;
+    overflow: hidden;
+    isolation: isolate;
+    aspect-ratio: auto;
+    background: #0c0c0f;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0;
+    text-align: left;
+    color: #fff;
+    cursor: none;
+    transform-origin: 50% 100%;
+    transition: transform 0.45s ease-out,
+        filter 0.45s ease-out,
+        border-color 0.4s ease;
+    will-change: transform, filter;
+}
+.works-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, transparent 30%, transparent 55%, rgba(0, 0, 0, 0.65) 100%);
+    opacity: 0.9;
+    transition: opacity 0.45s ease-out;
+    pointer-events: none;
+}
+/* Cartes déjà recouvertes : léger recul + assombrissement pour la profondeur */
+.works-card.is-stacked {
+    transform: scale(0.96);
+    filter: brightness(0.62) saturate(0.9);
+    border-color: rgba(255, 255, 255, 0.06);
+}
+.works-card.is-active.is-stacked {
+    filter: brightness(0.62) saturate(0.9);
+}
+.works-card.is-active:not(.is-stacked)::after {
+    opacity: 0.65;
+}
+
+/* Média du projet en arrière-plan (image/vidéo plein cadre) */
+.works-card-media {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+.works-card-media img,
+.works-card-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Badge en haut : logo miniature + nom + "See work" */
+.works-card-badge {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 6;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(10, 10, 13, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    padding: 7px 10px 7px 7px;
+    max-width: 88%;
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+.works-card-badge-logo {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.12);
+}
+.works-card-badge-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.works-card-badge-name {
+    font-family: "Outfit", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.works-card-badge-link {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    padding: 5px 12px;
+    transition: background 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+}
+.works-card-badge-link:hover {
+    background: var(--accent-bright, #dc2626);
+    color: #fff;
+}
+
+/* Overlay bas-gauche : titre, description, tags */
+.works-card-overlay {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 20px;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    max-width: 720px;
+    pointer-events: none;
+}
+.works-card-title {
+    font-family: "Outfit", sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    color: #ffffff;
+    margin: 0;
+}
+.works-card-desc {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.8rem, 1.1vw, 0.95rem);
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.82);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.works-card-tags {
+    list-style: none;
+    margin: 2px 0 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.works-card-tags li {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    padding: 4px 10px;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+/* ── Responsive mobile (<768px) : stacking désactivé ── */
+@media (max-width: 767px) {
+    .works-side {
+        display: none;
+    }
+    .works-stack {
+        height: auto !important;
+    }
+    .works-card {
+        position: relative;
+        top: auto;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 4 / 3;
+        border-radius: 18px;
+        cursor: auto;
+        transform: none !important;
+        filter: none !important;
+        will-change: auto;
+        margin-bottom: 18px;
+    }
+    .works-card.is-stacked {
+        transform: none !important;
+        filter: none !important;
+    }
+    .works-card-badge {
+        top: 10px;
+        padding: 5px 6px 5px 6px;
+        gap: 8px;
+        max-width: 94%;
+    }
+    .works-card-badge-logo {
+        width: 22px;
+        height: 22px;
+    }
+    .works-card-badge-name {
+        font-size: 12px;
+        max-width: 46%;
+    }
+    .works-card-badge-link {
+        font-size: 10px;
+        padding: 4px 9px;
+    }
+    .works-card-overlay {
+        left: 14px;
+        right: 14px;
+        bottom: 12px;
+        gap: 6px;
+    }
+    .works-card-title {
+        font-size: 1.35rem;
+    }
+    .works-card-desc {
+        font-size: 0.78rem;
+        -webkit-line-clamp: 3;
+    }
+    .works-card-tags {
+        display: none;
     }
 }

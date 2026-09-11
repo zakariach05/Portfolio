@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
+import RevealText from "@/components/RevealText";
 import SectionTitle from "@/components/SectionTitle";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useLenis } from "@/components/providers/LenisProvider";
 
 /** Icônes par position (les titres/descs/tags viennent de locales/*.json). */
 const ICONS = [
@@ -17,6 +20,20 @@ const ICONS = [
 
 export default function ServicesPage() {
   const { t, dict } = useLanguage();
+  const router = useRouter();
+  const lenis = useLenis();
+
+  // Même navigation propre que la navbar : vers / puis scroll #contact,
+  // sans laisser de "#contact" dans l'URL.
+  const goToContact = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    router.push("/");
+    window.setTimeout(() => {
+      if (lenis) lenis.scrollTo("#contact", { offset: 0 });
+      history.replaceState(null, "", "/");
+    }, 550);
+  };
+
   return (
     <main className="relative">
       {/* Services Hero */}
@@ -26,9 +43,13 @@ export default function ServicesPage() {
         style={{ zIndex: 20 }}
       >
         <div className="container mx-auto px-6 relative z-10 flex flex-col items-center text-center">
-          <h1 className="text-[12vw] md:text-8xl font-[900] tracking-tighter text-white uppercase leading-none drop-shadow-2xl mix-blend-exclusion mb-6">
-            {t("servicesPage.heroTitleWhite")}{" "}
-            <span className="text-red-500">{t("servicesPage.heroTitleRed")}</span>
+          <h1 className="text-[12vw] md:text-8xl font-[900] tracking-tighter uppercase leading-none drop-shadow-2xl mix-blend-exclusion mb-6">
+            <RevealText as="span" fromColor="rgba(255,255,255,0.2)" toColor="#ffffff" stagger={0.05} className="text-white">
+              {t("servicesPage.heroTitleWhite")}
+            </RevealText>{" "}
+            <RevealText as="span" fromColor="rgba(248,113,113,0.25)" toColor="#ef4444" stagger={0.05} className="text-red-500">
+              {t("servicesPage.heroTitleRed")}
+            </RevealText>
           </h1>
           <p className="text-lg md:text-2xl text-gray-400 max-w-2xl">
             {t("servicesPage.heroSub")}
@@ -86,7 +107,8 @@ export default function ServicesPage() {
             className="mb-8"
           />
           <Link
-            href="/#contact"
+            href="/"
+            onClick={goToContact}
             className="inline-block bg-red-600 border-2 border-transparent text-white px-10 py-4 font-bold rounded-full uppercase tracking-widest hover:bg-transparent hover:border-red-600 transition-all duration-300"
           >
             {t("servicesPage.ctaButton")}

@@ -3,18 +3,24 @@
 /**
  * CustomCursor — portage de la section curseur de legacy/js/main.js.
  *
- * Uniquement sur pointeurs fins :
- *  - follower circulaire qui suit la souris (lerp)
- *  - états : .active-link / .active-project-view / .active-text-reveal
+ * Uniquement sur pointeurs fins + hover souris :
+ *  - follower circulaire qui suit la souris (lerp, lag fluide via rAF)
+ *  - survol d'une carte projet (.project-card) : le curseur natif est
+ *    masqué (cursor:none) et le cercle grossit (30 → 110px) avec le texte
+ *    VOIR / VIEW au centre — apparition/disparition douce (scale + opacity)
+ *  - états : .active-project-view / .active-link / .active-text-reveal
  *  - léger effet magnétique sur les liens (gsap)
+ * Désactivé sur mobile/tablette (pas de souris tactile : pointer:coarse).
  */
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const followerRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const cursor = cursorRef.current;
@@ -24,7 +30,9 @@ export default function CustomCursor() {
 
     const dot = dotEl;
     const follower = followerEl;
-    if (!window.matchMedia("(pointer: fine)").matches) return;
+
+    // Strictement souris (aucun tactile) : "hover:hover + pointer:fine".
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
     let mouseX = 0,
       mouseY = 0,
@@ -41,32 +49,28 @@ export default function CustomCursor() {
     };
 
     const onMouseMove = (e: MouseEvent) => moveCursor(e.clientX, e.clientY);
-    const onTouchMove = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        moveCursor(e.touches[0].clientX, e.touches[0].clientY);
-      }
-    };
-    const onTouchStart = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        moveCursor(e.touches[0].clientX, e.touches[0].clientY);
-      }
-    };
 
     function animateCursor() {
       dotX += (mouseX - dotX) * 1;
       dotY += (mouseY - dotY) * 1;
       dot.style.transform = `translate(${dotX}px, ${dotY}px)`;
 
-      followerX += (mouseX - followerX) * 0.15;
-      followerY += (mouseY - followerY) * 0.15;
-      follower.style.transform = `translate(${followerX}px, ${followerY}px)`;
+      // lerp léger → mouvement fluide non saccadé ("lag")
+      followerX += (mouseX - followerX) * 0.16;
+      followerY += (mouseY - followerY) * 0.16;
+
+      // Centrage : le follower a une taille variable (30px → 110px), on
+      // compense par la moitié réelle pour que le cercle reste sur le pointeur.
+      const halfW = follower.offsetWidth / 2;
+      const halfH = follower.offsetHeight / 2;
+      follower.style.transform = `translate(${followerX - halfW}px, ${followerY - halfH}px)`;
 
       rafId = requestAnimationFrame(animateCursor);
     }
     animateCursor();
 
     // ── États au survol (délégation d'événements) ──
-    const handleHover = (e: MouseEvent | null) => {
+    const handleHover = (e: MouseEvent | null, clientX?: number, clientY?: number) => {
       cursor.classList.remove(
         "active-project-view",
         "active-link",
@@ -76,7 +80,11 @@ export default function CustomCursor() {
       if (!e || !e.target) return;
 
       const target = e.target as Element;
-      const projectCard = target.closest(".project-card-3d");
+      // Cartes projets (home + /projets) ; garde le sélecteur legacy
+      // .project-card-3d au cas où.
+      const projectCard = target.closest(
+        ".project-card, .project-card-3d, .works-card"
+      );
       const link = target.closest(
         "a, button, .nav-link-item, .tech-item"
       ) as HTMLElement | null;
@@ -92,8 +100,10 @@ export default function CustomCursor() {
         const rect = link.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-        const moveX = (e.clientX - centerX) * 0.3;
-        const moveY = (e.clientY - centerY) * 0.3;
+        const cx = clientX ?? e.clientX;
+        const cy = clientY ?? e.clientY;
+        const moveX = (cx - centerX) * 0.3;
+        const moveY = (cy - centerY) * 0.3;
 
         gsap.to(link, { x: moveX, y: moveY, duration: 0.3, ease: "power2.out" });
       }
@@ -113,15 +123,11 @@ export default function CustomCursor() {
       }
     };
 
-    const onDocMouseMove = (e: MouseEvent) => handleHover(e);
+    const onDocMouseMove = (e: MouseEvent) => handleHover(e, e.clientX, e.clientY);
     const onDocMouseOut = (e: MouseEvent) => {
       handleHover(null);
       resetLinkPosition(e);
     };
-    const onDocTouchStart = (e: TouchEvent) =>
-      handleHover(e.touches[0] ? (e as unknown as MouseEvent) : null);
-    const onDocTouchEnd = () =>
-      window.setTimeout(() => handleHover(null), 300);
     const onMouseLeave = () => {
       cursor.style.opacity = "0";
     };
@@ -130,24 +136,16 @@ export default function CustomCursor() {
     };
 
     window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("touchmove", onTouchMove, { passive: true });
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
     document.addEventListener("mousemove", onDocMouseMove);
     document.addEventListener("mouseout", onDocMouseOut);
-    document.addEventListener("touchstart", onDocTouchStart, { passive: true });
-    document.addEventListener("touchend", onDocTouchEnd, { passive: true });
     document.addEventListener("mouseleave", onMouseLeave);
     document.addEventListener("mouseenter", onMouseEnter);
 
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("touchstart", onTouchStart);
       document.removeEventListener("mousemove", onDocMouseMove);
       document.removeEventListener("mouseout", onDocMouseOut);
-      document.removeEventListener("touchstart", onDocTouchStart);
-      document.removeEventListener("touchend", onDocTouchEnd);
       document.removeEventListener("mouseleave", onMouseLeave);
       document.removeEventListener("mouseenter", onMouseEnter);
     };
@@ -157,7 +155,7 @@ export default function CustomCursor() {
     <div ref={cursorRef} className="custom-cursor" aria-hidden="true">
       <div ref={dotRef} className="cursor-dot" />
       <div ref={followerRef} className="cursor-follower">
-        <span className="view-text">View</span>
+        <span className="view-text">{t("cursor.view")}</span>
       </div>
     </div>
   );

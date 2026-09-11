@@ -8,13 +8,14 @@
  *  - desktop (>768px) : split des lignes du nom en lettres + mask reveal GSAP
  *  - mobile (<768px)  : simple fade + translateY
  */
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { useIntro } from "@/components/providers/IntroProvider";
 import { useLenis } from "@/components/providers/LenisProvider";
 import { useLanguage } from "@/contexts/LanguageContext";
-import Link from "next/link";
+import AppImage from "@/components/AppImage";
+import { heroVideoSources, shouldPlayHeroVideo } from "@/lib/heroVideo";
 
 /**
  * Circonférence exacte du cercle du badge (r = 78) : le texte est ajusté
@@ -22,6 +23,96 @@ import Link from "next/link";
  * uniforme (FR comme EN), sans gaps, rotation sans couture.
  */
 const BADGE_CIRCUMFERENCE = 2 * Math.PI * 78;
+
+/**
+ * HeroVideo — vidéo d'arrière-plan avec lazy loading + data-saver.
+ *
+ * - playVideo : décidé côté client (effectiveType 2g/3g, save-data,
+ *   prefers-reduced-data). Sinon → une AppImage statique légère.
+ * - preload="none" → la vidéo n'est chargée qu'après DOMContentLoaded +
+ *   petit délai (IntersectionObserver si dispo), pour ne pas bloquer le LCP.
+ * - poster = frame de chargement (aucun écran noir/flash).
+ * - playsInline muted autoPlay loop → autoplay iOS/Android.
+ * - sources : WebM (VP9) d'abord, MP4 (H.264) en fallback, CDN ou local.
+ */
+function HeroVideo() {
+  const vidRef = useRef<HTMLVideoElement>(null);
+  const [decide, setDecide] = useState<{ playVideo: boolean; meta: string } | null>(null);
+  const [canPlay, setCanPlay] = useState(false);
+
+  useEffect(() => {
+    const d = shouldPlayHeroVideo();
+    setDecide({ playVideo: d.playVideo, meta: d.playVideo ? "video" : d.reason });
+  }, []);
+
+  // Activer le chargement tardif sans bloquer le FCP/LCP.
+  useEffect(() => {
+    if (!decide?.playVideo) return;
+    let cancelled = false;
+
+    const enable = () => {
+      if (cancelled) return;
+      setCanPlay(true);
+    };
+
+    const t = window.setTimeout(enable, 250); // laisse le poster s'afficher d'abord
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
+  }, [decide?.playVideo]);
+
+  // Lancer la lecture une fois les sources prêtes (chargés depuis preload="none").
+  useEffect(() => {
+    if (!canPlay) return;
+    const vid = vidRef.current;
+    if (!vid) return;
+    vid.preload = "auto";
+    // Décoche "pause" implicite: autoplay géré par l'attribut + reload pour
+    // récupérer les <source> nouvellement disponibles.
+    if (vid.readyState >= 1) {
+      vid.play().catch(() => {});
+    } else {
+      vid.oncanplay = () => vid.play().catch(() => {});
+    }
+    return () => {
+      vid.oncanplay = null;
+    };
+  }, [canPlay]);
+
+  if (decide && !decide.playVideo) {
+    return (
+      <AppImage
+        src="/NV-IMG/hero-mobile.webp"
+        alt=""
+        fill
+        priority
+        fetchPriority="high"
+        sizes="100vw"
+        className="hero-video-bg"
+        aria-hidden="true"
+      />
+    );
+  }
+
+  return (
+    <video
+      ref={vidRef}
+      className="hero-video-bg"
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="none"
+      poster="/NV-IMG/hero-poster.webp"
+      aria-hidden="true"
+    >
+      {heroVideoSources().map((s) => (
+        <source key={s.type} src={s.src} type={s.type} />
+      ))}
+    </video>
+  );
+}
 
 export default function Hero() {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -132,18 +223,7 @@ export default function Hero() {
   return (
     <section id="home" style={{ position: "relative", zIndex: 1 }}>
       <div id="hero-sticky">
-        <video
-          className="hero-video-bg"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster="/NV-IMG/heroP1.png"
-          aria-hidden="true"
-        >
-          <source src="/NV-IMG/vidio/video_preview_h264.mp4" type="video/mp4" />
-        </video>
+        <HeroVideo />
 
         <div className="hero-video-overlay" aria-hidden="true" />
 
@@ -160,7 +240,11 @@ export default function Hero() {
             aria-label={t("hero.nameLabel")}
           >
             <span className="hero-name-line">ZAKARIA</span>
+            <span className="hero-name-line">CHAMEKH</span>
           </h1>
+          <p id="hero-role" className="hero-sub-name">
+            {t("hero.role")}
+          </p>
         </div>
 
         <button

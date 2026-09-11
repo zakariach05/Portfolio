@@ -8,25 +8,27 @@ import ContactStatusProvider from "@/contexts/ContactStatusContext";
 import LanguageProvider from "@/contexts/LanguageContext";
 import CurtainMenu from "@/components/CurtainMenu";
 import SiteBackground from "@/components/SiteBackground";
-import CustomCursor from "@/components/CustomCursor";
+import OverlayGroup from "@/components/OverlayGroup";
 import NavigationDots from "@/components/NavigationDots";
-import Chatbot from "@/components/Chatbot";
-import ScrollTopButton from "@/components/ScrollTopButton";
 import PersonSchema from "@/components/PersonSchema";
 import "../styles/globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "700", "800"],
   variable: "--font-inter",
   display: "swap",
+  preload: true,
+  fallback: ["system-ui", "sans-serif"],
 });
 
 const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "600", "700"],
   variable: "--font-outfit",
   display: "swap",
+  preload: true,
+  fallback: ["system-ui", "sans-serif"],
 });
 
 const bebas = Bebas_Neue({
@@ -58,14 +60,18 @@ const getaiGrotesk = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL("https://zakariach05.vercel.app"),
   title: {
-    default: "Zakaria Chamekh | Développeur Web Full Stack Casablanca",
+    default: "Zakaria Chamekh | Développeur Web Full Stack & Sécurité des Applications Web",
     template: "%s | Zakaria Chamekh",
   },
   description:
-    "Développeur Web Full Stack junior à Casablanca, spécialisé en React, Laravel, WordPress et Node.js. Portfolio de projets : CRM cloud, e-commerce, gestion hôtelière.",
+    "Développeur Web Full Stack à Casablanca, Maroc. Zakaria Chamekh : développement React, Laravel, WordPress, Node.js et sécurité des applications web (OWASP, audit, hardening). Portfolio : CRM cloud, e-commerce, gestion hôtelière.",
   keywords: [
     "développeur web Casablanca",
     "développeur full stack Maroc",
+    "sécurité des applications web",
+    "application security engineer Maroc",
+    "OWASP",
+    "web audit sécurité",
     "React developer Casablanca",
     "Laravel developer Maroc",
     "WordPress développeur Casablanca",
@@ -84,23 +90,23 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: "https://zakariach05.vercel.app",
     siteName: "Zakaria Chamekh - Portfolio",
-    title: "Zakaria Chamekh | Développeur Web Full Stack Casablanca",
+    title: "Zakaria Chamekh | Développeur Web Full Stack & Sécurité des Applications Web",
     description:
-      "Développeur Web Full Stack junior à Casablanca, spécialisé en React, Laravel, WordPress et Node.js.",
+      "Développeur Web Full Stack à Casablanca. Zakaria Chamekh : React, Laravel, WordPress, Node.js, et sécurité des applications web (OWASP, audit, hardening).",
     images: [
       {
         url: "/NV-IMG/og-image.png", // 1200x630 recommandé - a créer
         width: 1200,
         height: 630,
-        alt: "Zakaria Chamekh - Développeur Web Full Stack",
+        alt: "Zakaria Chamekh - Développeur Web Full Stack & Sécurité des Applications Web",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Zakaria Chamekh | Développeur Web Full Stack Casablanca",
+    title: "Zakaria Chamekh | Développeur Web Full Stack & Sécurité des Applications Web",
     description:
-      "Développeur Web Full Stack junior à Casablanca, spécialisé en React, Laravel, WordPress et Node.js.",
+      "Développeur Web Full Stack à Casablanca. React, Laravel, WordPress, Node.js et sécurité des applications web (OWASP).",
     images: ["/NV-IMG/og-image.png"],
     creator: "@ChamekhZak33734",
   },
@@ -131,18 +137,24 @@ export default function RootLayout({
       {/* html porte la classe "dark" en permanence : le design étant 100% dark,
           on ne gère pas de toggle de thème (comme l'original, verrouillé dark). */}
       <body className="bg-gray-50 text-slate-800 dark:bg-black dark:text-slate-100 font-sans transition-colors duration-300 w-full overflow-x-clip">
+        {/* LCP : poster hero préchargé haute priorité (WebP 720p, ~80KB) */}
+        <link
+          rel="preload"
+          as="image"
+          href="/NV-IMG/hero-poster.webp"
+          type="image/webp"
+          fetchPriority="high"
+        />
         <PersonSchema />
         <ContactStatusProvider>
           <LanguageProvider>
             <SiteBackground />
-            <CustomCursor />
             <LenisProvider>
               <CurtainMenu />
               <NavigationDots />
               <IntroProvider>{children}</IntroProvider>
             </LenisProvider>
-            <Chatbot />
-            <ScrollTopButton />
+            <OverlayGroup />
           </LanguageProvider>
         </ContactStatusProvider>
       </body>

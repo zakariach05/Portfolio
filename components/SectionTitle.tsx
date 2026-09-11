@@ -1,3 +1,5 @@
+import RevealText from "@/components/RevealText";
+
 interface SectionTitleProps {
   white: string;
   red: string;
@@ -22,8 +24,24 @@ export default function SectionTitle({
     <h2
       className={`font-getai uppercase leading-[0.95] tracking-tight text-4xl md:text-6xl lg:text-7xl ${alignClass} ${className}`}
     >
-      <span className="text-white">{white} </span>
-      <span className="text-accent-bright">{red}</span>
+      <RevealText
+        as="span"
+        fromColor="rgba(255,255,255,0.2)"
+        toColor="#ffffff"
+        stagger={0.06}
+        className="text-white"
+      >
+        {white}
+      </RevealText>{" "}
+      <RevealText
+        as="span"
+        fromColor="rgba(248,113,113,0.25)"
+        toColor="#ef4444"
+        stagger={0.06}
+        className="text-accent-bright"
+      >
+        {red}
+      </RevealText>
     </h2>
   );
 }

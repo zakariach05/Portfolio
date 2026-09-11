@@ -10,7 +10,7 @@
  * Parallaxe souris sur le wrapper + trait final (#sig-line).
  */
 import { useRef } from "react";
-import Image from "next/image";
+import AppImage from "@/components/AppImage";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { SIGNATURE_PATHS } from "@/lib/signature";
@@ -232,12 +232,14 @@ export default function SignatureSection() {
           </g>
         </svg>
 
-        <Image
+        <AppImage
           id="pen-img"
           src="/NV-IMG/stylo.png"
           alt="pen"
           width={516}
           height={483}
+          sizes="140px"
+          loading="lazy"
           style={{
             position: "absolute",
             width: "140px",
