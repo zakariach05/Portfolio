@@ -34,17 +34,16 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
       /* ignore */
     }
 
-    // TBT FIX: Lenis + GSAP différés hors fenêtre TBT (après idle 2s ou premier scroll)
+    // TBT FIX: différer l'initialisation lourde (Lenis + GSAP) après le premier paint
+    // via requestIdleCallback (fallback setTimeout 300ms). Évite le long task 1581ms @932ms.
     let cancelled = false;
     let instance: import("lenis").default | null = null;
     let cleanupTicker: (() => void) | null = null;
     let raf1 = 0;
     let raf2 = 0;
-    let initialized = false;
 
-    const init = async () => {
-      if (initialized || cancelled) return;
-      initialized = true;
+    const cancelIdle = onIdle(async () => {
+      if (cancelled) return;
       const [{ default: Lenis }, { gsap }, { ScrollTrigger }] = await Promise.all([
         import("lenis"),
         import("gsap"),
@@ -52,6 +51,7 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
       ]);
       if (cancelled) return;
       gsap.registerPlugin(ScrollTrigger);
+
       instance = new Lenis(getLenisOptions());
       instance.on("scroll", ScrollTrigger.update);
       const update = (time: number) => instance!.raf(time * 1000);
@@ -59,28 +59,22 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
       gsap.ticker.lagSmoothing(0);
       ScrollTrigger.config({ limitCallbacks: true });
       setLenis(instance);
+
       raf1 = window.requestAnimationFrame(() => {
         raf2 = window.requestAnimationFrame(() => {
           instance?.resize();
           ScrollTrigger.refresh();
         });
       });
+
       cleanupTicker = () => {
         gsap.ticker.remove(update);
       };
-    };
-
-    const cancelIdle = onIdle(init, 2500);
-    const onFirstScroll = () => {
-      cancelIdle();
-      init();
-    };
-    window.addEventListener("scroll", onFirstScroll, { once: true, passive: true });
+    });
 
     return () => {
       cancelled = true;
       cancelIdle();
-      window.removeEventListener("scroll", onFirstScroll);
       window.cancelAnimationFrame(raf1);
       window.cancelAnimationFrame(raf2);
       if (cleanupTicker) cleanupTicker();
