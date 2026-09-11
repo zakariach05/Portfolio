@@ -36,6 +36,7 @@ const bebas = Bebas_Neue({
   weight: "400",
   variable: "--font-bebas",
   display: "swap",
+  preload: false,
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -43,6 +44,7 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500"],
   variable: "--font-jetbrains",
   display: "swap",
+  preload: false,
 });
 
 const getaiGrotesk = localFont({
@@ -55,6 +57,7 @@ const getaiGrotesk = localFont({
   ],
   variable: "--font-getai",
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {

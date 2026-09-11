@@ -21,8 +21,8 @@ export function onIdle(callback: () => void, timeout = 2000): () => void {
       window.cancelIdleCallback(id);
     };
   } else {
-    // Fallback: delay 300ms after load to avoid blocking FCP/LCP
-    id = setTimeout(wrapped, 300);
+    // Fallback: delay 1500ms after load to avoid blocking TBT window
+    id = setTimeout(wrapped, 1500);
     return () => {
       cancelled = true;
       clearTimeout(id as NodeJS.Timeout);
