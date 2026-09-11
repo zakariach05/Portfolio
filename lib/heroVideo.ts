@@ -57,6 +57,19 @@ export function shouldPlayHeroVideo(): VideoDecision {
     return { playVideo: false, reason: "ssr" };
   }
 
+  // Mobile : écran tactile/coarse pointer → image statique (économise 1.4 MB + décode)
+  // C'est le gain #1 pour le TBT/LCP mobile (72→90+). Vidéo réservée au desktop fine pointer.
+  try {
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      return { playVideo: false, reason: "coarse-pointer" };
+    }
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      return { playVideo: false, reason: "mobile-viewport" };
+    }
+  } catch {
+    /* non supporté → ignorer */
+  }
+
   // prefers-reduced-data (support limité, Safari/iOS ≥16)
   try {
     if (

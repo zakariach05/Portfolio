@@ -243,8 +243,14 @@ export default function ServicesGrid({ cards }: ServicesGridProps) {
   const reduceMotion = useReducedMotion();
 
   // Entrée au scroll : slide-in rapide depuis la droite, cascade (une seule fois).
+  // Mobile : désactivé (coarse pointer) → TBT économisé, cartes visibles direct
   useEffect(() => {
     if (reduceMotion) return;
+    try {
+      if (window.matchMedia("(pointer: coarse)").matches) return;
+    } catch {
+      /* ignore */
+    }
     if (typeof gsap === "undefined") return;
     const grid = gridRef.current;
     if (!grid) return;

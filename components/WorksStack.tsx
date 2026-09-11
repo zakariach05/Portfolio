@@ -71,6 +71,12 @@ export default function WorksStack({ projects, className = "" }: WorksStackProps
 
   useEffect(() => {
     if (typeof gsap === "undefined") return;
+    // Mobile : pas de sticky-stacking ni stickers (CSS display:none) → pas de ticker/IO (TBT)
+    try {
+      if (window.matchMedia("(max-width: 767px)").matches) return;
+    } catch {
+      /* ignore */
+    }
     const root = rootRef.current;
     if (!root) return;
 

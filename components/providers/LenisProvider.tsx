@@ -26,6 +26,15 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
   const [lenis, setLenis] = useState<Lenis | null>(null);
 
   useEffect(() => {
+    // Mobile : pas de smooth scroll (coarse pointer) → on garde le scroll natif
+    // Évite 15 kB d'exécution + rAF permanent sur CPU mobile (TBT)
+    try {
+      if (window.matchMedia("(pointer: coarse)").matches) {
+        return;
+      }
+    } catch {
+      /* ignore */
+    }
     const instance = new Lenis(getLenisOptions());
 
     // ScrollTrigger doit suivre la position "virtuelle" de Lenis.

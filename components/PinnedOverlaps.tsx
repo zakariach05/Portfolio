@@ -26,6 +26,13 @@ export default function PinnedOverlaps() {
   useEffect(() => {
     if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined")
       return;
+    // Mobile : pas de pin/scale (CPU + layout thrashing) — gain TBT majeur
+    try {
+      if (window.matchMedia("(pointer: coarse)").matches) return;
+      if (window.matchMedia("(max-width: 768px)").matches) return;
+    } catch {
+      /* ignore */
+    }
 
     const createdTriggers: ScrollTrigger[] = [];
     const createdTweens: gsap.core.Tween[] = [];

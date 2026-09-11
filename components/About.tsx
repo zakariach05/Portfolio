@@ -61,6 +61,12 @@ export default function About() {
   useGSAP(
     () => {
       if (typeof gsap === "undefined") return;
+      // Mobile : pas de scrub 3D (rotateX/z) — TBT
+      try {
+        if (window.matchMedia("(pointer: coarse)").matches) return;
+      } catch {
+        /* ignore */
+      }
 
       const finePointer = window.matchMedia("(pointer: fine)").matches;
 

@@ -96,6 +96,18 @@ export default function RevealText({
     const wordEls = el.querySelectorAll<HTMLElement>(".reveal-word");
     if (wordEls.length === 0) return;
 
+    // Mobile tactile : pas de scrub (TBT) — affiche direct en couleur finale
+    try {
+      if (window.matchMedia("(pointer: coarse)").matches) {
+        gsap.set(wordEls, { color: toColor });
+        return () => {
+          el.innerHTML = originalHTML;
+        };
+      }
+    } catch {
+      /* ignore */
+    }
+
     if (reduceMotion) {
       gsap.set(wordEls, { color: toColor });
       return () => {
