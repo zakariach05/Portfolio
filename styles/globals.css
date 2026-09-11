@@ -4002,12 +4002,10 @@ html.hoodie-sequence-done #hero-scroll-indicator {
     }
 }
 
-/* Performance: defer layout for below-the-fold sections (TBT/Speed Index) */
+/* Performance: defer layout for below-the-fold sections (TBT/Speed Index) — projects/signature exclus (pin ScrollTrigger) */
 #about,
 #expertise,
 #expertise-cocon,
-#projects,
-#signature-section,
 #contact,
 #site-footer {
     content-visibility: auto;

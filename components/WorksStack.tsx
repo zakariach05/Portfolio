@@ -21,7 +21,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { onIdle } from "@/lib/defer";
+import { gsap } from "@/lib/gsap";
 import { type Project } from "@/lib/projects";
 import AppImage from "@/components/AppImage";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -70,116 +70,95 @@ export default function WorksStack({ projects, className = "" }: WorksStackProps
   }, []);
 
   useEffect(() => {
+    if (typeof gsap === "undefined") return;
     // Mobile : pas de sticky-stacking ni stickers (CSS display:none) → pas de ticker/IO (TBT)
     try {
       if (window.matchMedia("(max-width: 767px)").matches) return;
     } catch {
       /* ignore */
     }
+    const root = rootRef.current;
+    if (!root) return;
 
-    let cancelled = false;
-    let gsapRef: any = null;
-    let update: (() => void) | null = null;
-    let io: IntersectionObserver | null = null;
-    let onResize: (() => void) | null = null;
+    const cards = Array.from(
+      root.querySelectorAll<HTMLElement>(".works-card")
+    );
+    if (cards.length === 0) return;
 
-    const cancelIdle = onIdle(async () => {
-      if (cancelled) return;
-      const [{ gsap }] = await Promise.all([import("gsap")]);
-      if (cancelled) return;
-      gsapRef = gsap;
-
-      const root = rootRef.current;
-      if (!root) return;
-
-      const cards = Array.from(
-        root.querySelectorAll<HTMLElement>(".works-card")
+    // Helper live — le portal déplace les stickers vers document.body après
+    // le premier rendu (isMounted). On requiert donc les nœuds à chaque toggle,
+    // pas une NodeList figée au premier montage.
+    const getMetas = () =>
+      document.querySelectorAll<HTMLElement>(
+        "[data-works-stickers] .works-side"
       );
-      if (cards.length === 0) return;
 
-      // Helper live — le portal déplace les stickers vers document.body après
-      // le premier rendu (isMounted). On requiert donc les nœuds à chaque toggle,
-      // pas une NodeList figée au premier montage.
-      const getMetas = () =>
-        document.querySelectorAll<HTMLElement>(
-          "[data-works-stickers] .works-side"
-        );
+    // Top sticky des cartes (lu du CSS .works-card → top: 100px), utilisé
+    // pour savoir quelle carte est "collée" au premier plan.
+    const stickyTop =
+      parseFloat(getComputedStyle(cards[0]).top) || 100;
 
-      // Top sticky des cartes (lu du CSS .works-card → top: 100px), utilisé
-      // pour savoir quelle carte est "collée" au premier plan.
-      const stickyTop =
-        parseFloat(getComputedStyle(cards[0]).top) || 100;
+    let currentActive = 0;
+    const setActive = (next: number) => {
+      const clamped = Math.max(0, Math.min(cards.length - 1, next));
+      if (clamped === currentActive) return;
+      currentActive = clamped;
+      cards.forEach((card, i) => {
+        card.classList.toggle("is-stacked", i < clamped);
+        card.classList.toggle("is-active", i === clamped);
+      });
+      setActiveIndex(clamped);
+    };
 
-      let currentActive = 0;
-      const setActive = (next: number) => {
-        const clamped = Math.max(0, Math.min(cards.length - 1, next));
-        if (clamped === currentActive) return;
-        currentActive = clamped;
-        cards.forEach((card, i) => {
-          card.classList.toggle("is-stacked", i < clamped);
-          card.classList.toggle("is-active", i === clamped);
-        });
-        setActiveIndex(clamped);
-      };
-
-      // Carte au premier plan = dernière carte dont le top a atteint la
-      // position sticky → celle qui est visuellement par-dessus la pile.
-      // Fonctionne à la descente ET à la montée (le callback se ré-exécute sur
-      // chaque tick du scroll). Tant qu'aucune carte n'est collée (avant
-      // d'atteindre la pile), on reste sur la carte la plus proche (index 0).
-      const detectActive = () => {
-        let active = 0;
-        for (let i = 0; i < cards.length; i++) {
-          if (cards[i].getBoundingClientRect().top <= stickyTop + 2) {
-            active = i;
-          }
-        }
-        return active;
-      };
-
-      // Ré-évaluation en continu via le ticker GSAP (piloté par Lenis) :
-      // couvre la descente ET la montée, et les changements de contenu.
-      update = () => setActive(detectActive());
-      gsap.ticker.add(update);
-
-      // Stickers latéraux Année/Niche : visibles dès qu'une portion de la pile
-      // entre à l'écran (threshold 0 — indispensable : le canvas mesure N×100vh,
-      // le ratio d'intersection max serait ~100/N %, souvent < 15%).
-      // isMounted en dépendance → après le portal vers body, l'observer est
-      // recréé et la première entrée IO déclenche le toggle sur les nœuds portés.
-      io = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            const visible = entry.isIntersecting;
-            getMetas().forEach((meta) =>
-              meta.classList.toggle("is-visible", visible)
-            );
-          }
-        },
-        { threshold: 0 }
-      );
-      io.observe(root);
-      // Si le canvas est déjà visible au moment où le portal s'active
-      // (scroll déjà à l'intérieur de la pile), l'IO va quand même émettre
-      // sa première entrée immédiatement — pas besoin de forcer un état.
-
-      // Re-évalué après un changement de langue / DPI (hauteurs de texte).
-      onResize = () => setActive(currentActive);
-      window.addEventListener("resize", onResize);
-    });
-
-    return () => {
-      cancelled = true;
-      cancelIdle();
-      if (update && gsapRef) {
-        try {
-          gsapRef.ticker.remove(update);
-        } catch {
-          /* ignore */
+    // Carte au premier plan = dernière carte dont le top a atteint la
+    // position sticky → celle qui est visuellement par-dessus la pile.
+    // Fonctionne à la descente ET à la montée (le callback se ré-exécute sur
+    // chaque tick du scroll). Tant qu'aucune carte n'est collée (avant
+    // d'atteindre la pile), on reste sur la carte la plus proche (index 0).
+    const detectActive = () => {
+      let active = 0;
+      for (let i = 0; i < cards.length; i++) {
+        if (cards[i].getBoundingClientRect().top <= stickyTop + 2) {
+          active = i;
         }
       }
-      if (io) io.disconnect();
-      if (onResize) window.removeEventListener("resize", onResize);
+      return active;
+    };
+
+    // Ré-évaluation en continu via le ticker GSAP (piloté par Lenis) :
+    // couvre la descente ET la montée, et les changements de contenu.
+    const update = () => setActive(detectActive());
+    gsap.ticker.add(update);
+
+    // Stickers latéraux Année/Niche : visibles dès qu'une portion de la pile
+    // entre à l'écran (threshold 0 — indispensable : le canvas mesure N×100vh,
+    // le ratio d'intersection max serait ~100/N %, souvent < 15%).
+    // isMounted en dépendance → après le portal vers body, l'observer est
+    // recréé et la première entrée IO déclenche le toggle sur les nœuds portés.
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const visible = entry.isIntersecting;
+          getMetas().forEach((meta) =>
+            meta.classList.toggle("is-visible", visible)
+          );
+        }
+      },
+      { threshold: 0 }
+    );
+    io.observe(root);
+    // Si le canvas est déjà visible au moment où le portal s'active
+    // (scroll déjà à l'intérieur de la pile), l'IO va quand même émettre
+    // sa première entrée immédiatement — pas besoin de forcer un état.
+
+    // Re-évalué après un changement de langue / DPI (hauteurs de texte).
+    const onResize = () => setActive(currentActive);
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      gsap.ticker.remove(update);
+      io.disconnect();
+      window.removeEventListener("resize", onResize);
     };
   }, [projects, isMounted]);
 

@@ -20,10 +20,12 @@
  * ScrollTriggers/tweens créés dans le cleanup pour éviter tout calcul périmé.
  */
 import { useEffect } from "react";
-import { onIdle } from "@/lib/defer";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 export default function PinnedOverlaps() {
   useEffect(() => {
+    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined")
+      return;
     // Mobile : pas de pin/scale (CPU + layout thrashing) — gain TBT majeur
     try {
       if (window.matchMedia("(pointer: coarse), (max-width: 768px)").matches)
@@ -32,78 +34,57 @@ export default function PinnedOverlaps() {
       /* ignore */
     }
 
-    let cancelled = false;
-    let gsapRef: any = null;
-    let ScrollTriggerRef: any = null;
-    const createdTriggers: any[] = [];
-    const createdTweens: any[] = [];
-    let raf1 = 0;
-    let raf2 = 0;
+    const createdTriggers: ScrollTrigger[] = [];
+    const createdTweens: gsap.core.Tween[] = [];
 
-    const cancelIdle = onIdle(async () => {
-      if (cancelled) return;
-      const [{ gsap }] = await Promise.all([import("gsap")]);
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-      if (cancelled) return;
-      gsapRef = gsap;
-      ScrollTriggerRef = ScrollTrigger;
+    // 1. Stacking context (les ids morts ont été retirés)
+    gsap.set("#projects", { zIndex: 40 });
+    gsap.set("#signature-section", { zIndex: 50 });
 
-      // 1. Stacking context (les ids morts ont été retirés)
-      gsap.set("#projects", { zIndex: 40 });
-      gsap.set("#signature-section", { zIndex: 50 });
+    // 2. PIN PROJECTS
+    const projectsSec = document.getElementById("projects");
+    if (projectsSec) {
+      createdTriggers.push(
+        ScrollTrigger.create({
+          trigger: projectsSec,
+          start: "bottom bottom",
+          end: () => "max",
+          pin: true,
+          pinSpacing: false,
+        })
+      );
 
-      // 2. PIN PROJECTS
-      const projectsSec = document.getElementById("projects");
-      if (projectsSec) {
-        createdTriggers.push(
-          ScrollTrigger.create({
+      createdTweens.push(
+        gsap.to(projectsSec, {
+          scale: 0.95,
+          opacity: 0.3,
+          ease: "none",
+          scrollTrigger: {
             trigger: projectsSec,
             start: "bottom bottom",
-            end: () => "max",
-            pin: true,
-            pinSpacing: false,
-          })
-        );
+            end: () => "+=" + window.innerHeight * 1.5,
+            scrub: true,
+          },
+        })
+      );
+    }
 
-        createdTweens.push(
-          gsap.to(projectsSec, {
-            scale: 0.95,
-            opacity: 0.3,
-            ease: "none",
-            scrollTrigger: {
-              trigger: projectsSec,
-              start: "bottom bottom",
-              end: () => "+=" + window.innerHeight * 1.5,
-              scrub: true,
-            },
-          })
-        );
-      }
-
-      // 4. Recalcule des positions une fois le DOM vraiment final
-      //    (double rAF : après peinture + éventuel reflow des polices/images).
-      raf1 = window.requestAnimationFrame(() => {
-        raf2 = window.requestAnimationFrame(() => {
-          ScrollTrigger.refresh();
-        });
+    // 4. Recalcule des positions une fois le DOM vraiment final
+    //    (double rAF : après peinture + éventuel reflow des polices/images).
+    let raf1 = 0;
+    let raf2 = 0;
+    raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
       });
     });
 
     return () => {
-      cancelled = true;
-      cancelIdle();
       window.cancelAnimationFrame(raf1);
       window.cancelAnimationFrame(raf2);
-      createdTweens.forEach((tween: any) => tween.kill());
-      createdTriggers.forEach((st: any) => st.kill());
-      if (ScrollTriggerRef) {
-        try {
-          ScrollTriggerRef.refresh();
-        } catch {
-          /* ignore */
-        }
-      }
+      createdTweens.forEach((tween) => tween.kill());
+      createdTriggers.forEach((st) => st.kill());
+      ScrollTrigger.refresh();
     };
   }, []);
 
