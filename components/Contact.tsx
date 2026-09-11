@@ -15,6 +15,13 @@ import Logo065Tooltip from "@/components/Logo065Tooltip";
 import SectionTitle from "@/components/SectionTitle";
 import { useContactStatus } from "@/contexts/ContactStatusContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  CheckCircleIcon,
+  ChevronRightIcon,
+  PaperPlaneIcon,
+  SpinnerIcon,
+  TriangleAlertIcon,
+} from "@/components/icons";
 
 function TopographicLines() {
   return (
@@ -277,7 +284,7 @@ export default function Contact() {
                         }}
                         className="btn-step-next bg-white text-black px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-red-600 hover:text-white transition-all"
                       >
-                        {t("contact.next")} <i className="fas fa-chevron-right"></i>
+                        {t("contact.next")} <ChevronRightIcon className="h-4 w-4" />
                       </button>
                       <span className="press-enter-hint text-xs text-gray-500 uppercase tracking-widest hidden md:block">
                         {t("contact.pressEnter")}{" "}
@@ -312,7 +319,7 @@ export default function Contact() {
                         }}
                         className="btn-step-next bg-white text-black px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-red-600 hover:text-white transition-all"
                       >
-                        {t("contact.next")} <i className="fas fa-chevron-right"></i>
+                        {t("contact.next")} <ChevronRightIcon className="h-4 w-4" />
                       </button>
                       <span className="press-enter-hint text-xs text-gray-500 uppercase tracking-widest hidden md:block">
                         {t("contact.pressEnter")}{" "}
@@ -347,7 +354,7 @@ export default function Contact() {
                         }}
                         className="btn-step-next bg-white text-black px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-red-600 hover:text-white transition-all"
                       >
-                        {t("contact.next")} <i className="fas fa-chevron-right"></i>
+                        {t("contact.next")} <ChevronRightIcon className="h-4 w-4" />
                       </button>
                       <span className="press-enter-hint text-xs text-gray-500 uppercase tracking-widest hidden md:block">
                         {t("contact.pressEnter")}{" "}
@@ -382,11 +389,11 @@ export default function Contact() {
                       >
                         {status === "loading" ? (
                           <>
-                            <i className="fas fa-spinner fa-spin"></i> {t("contact.sending")}
+                            <SpinnerIcon className="h-4 w-4 animate-spin" /> {t("contact.sending")}
                           </>
                         ) : (
                           <>
-                            {t("contact.submit")} <i className="fas fa-paper-plane"></i>
+                            {t("contact.submit")} <PaperPlaneIcon className="h-4 w-4" />
                           </>
                         )}
                       </button>
@@ -407,7 +414,7 @@ export default function Contact() {
                   ref={successMsgRef}
                   className="mt-8 p-6 bg-green-500/20 border border-green-500/50 rounded-xl text-center"
                 >
-                  <i className="fas fa-check-circle text-4xl text-green-500 mb-4 block"></i>
+                  <CheckCircleIcon className="mx-auto mb-4 block h-10 w-10 text-green-500" />
                   <h4 className="text-xl font-bold text-white mb-2">
                     {t("contact.successTitle")}
                   </h4>
@@ -419,7 +426,7 @@ export default function Contact() {
 
               {status === "error" && (
                 <div className="mt-8 p-6 bg-red-600/10 border border-red-600/50 rounded-xl text-center">
-                  <i className="fas fa-exclamation-triangle text-4xl text-red-600 mb-4 block"></i>
+                  <TriangleAlertIcon className="mx-auto mb-4 block h-10 w-10 text-red-600" />
                   <h4 className="text-xl font-bold text-white mb-2">
                     {t("contact.errorTitle")}
                   </h4>

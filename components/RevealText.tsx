@@ -19,7 +19,7 @@
  */
 import { createElement, useEffect, useRef, type ReactNode } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { useReducedMotion } from "framer-motion";
+import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 
 type RevealTextProps = {
   children: ReactNode;
@@ -81,7 +81,7 @@ export default function RevealText({
   toColor = "rgba(255,255,255,1)",
 }: RevealTextProps) {
   const ref = useRef<HTMLElement>(null);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = ref.current;
@@ -96,9 +96,9 @@ export default function RevealText({
     const wordEls = el.querySelectorAll<HTMLElement>(".reveal-word");
     if (wordEls.length === 0) return;
 
-    // Mobile tactile : pas de scrub (TBT) — affiche direct en couleur finale
+    // Mobile : pas de scrub (TBT) — affiche direct en couleur finale
     try {
-      if (window.matchMedia("(pointer: coarse)").matches) {
+      if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches) {
         gsap.set(wordEls, { color: toColor });
         return () => {
           el.innerHTML = originalHTML;

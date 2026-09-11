@@ -27,7 +27,7 @@ function MarqueeLine({ lineClass, items }: MarqueeLineProps) {
     const el = ref.current;
     if (!el || typeof gsap === "undefined") return;
 
-    const isCoarse = window.matchMedia("(pointer: coarse)").matches;
+    const isCoarse = window.matchMedia("(pointer: coarse), (max-width: 767px)").matches;
 
     const direction = lineClass === "marquee-1" || lineClass === "marquee-3" ? -1 : 1;
     const duration =

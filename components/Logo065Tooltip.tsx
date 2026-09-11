@@ -6,7 +6,6 @@
  * accent visuel. Réduit les mouvements si prefers-reduced-motion.
  */
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import type { ReactNode } from "react";
 
 type Logo065TooltipProps = {
@@ -27,20 +26,14 @@ export default function Logo065Tooltip({
       onMouseLeave={() => setHovered(false)}
     >
       {children}
-      <AnimatePresence>
-        {hovered && (
-          <motion.span
-            initial={{ opacity: 0, y: 6, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.92 }}
-            transition={{ duration: 0.18, ease: "easeOut" }}
-            aria-hidden="true"
-            className="pointer-events-none absolute right-0 top-full z-50 mt-2 whitespace-nowrap rounded-full border border-red-600/40 bg-black/90 px-2.5 py-1 font-mono text-[11px] tracking-[0.2em] text-red-500 shadow-lg shadow-red-900/30"
-          >
-            05
-          </motion.span>
-        )}
-      </AnimatePresence>
+      {hovered && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-0 top-full z-50 mt-2 whitespace-nowrap rounded-full border border-red-600/40 bg-black/90 px-2.5 py-1 font-mono text-[11px] tracking-[0.2em] text-red-500 shadow-lg shadow-red-900/30 tooltip-pop"
+        >
+          05
+        </span>
+      )}
     </span>
   );
 }

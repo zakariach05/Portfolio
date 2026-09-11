@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Outfit, Bebas_Neue, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 import LenisProvider from "@/components/providers/LenisProvider";
 import IntroProvider from "@/components/providers/IntroProvider";
 import ContactStatusProvider from "@/contexts/ContactStatusContext";

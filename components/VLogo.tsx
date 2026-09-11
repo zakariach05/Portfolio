@@ -82,7 +82,11 @@ export default function VLogo({
         (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
     };
 
-    if (!window.matchMedia("(pointer: coarse)").matches) {
+    if (
+      window.matchMedia(
+        "(pointer: fine), (min-width: 768px)"
+      ).matches
+    ) {
       window.addEventListener("mousemove", onMouseMove);
     }
 

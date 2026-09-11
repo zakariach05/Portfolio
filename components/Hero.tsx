@@ -80,10 +80,13 @@ function HeroVideo() {
     };
   }, [canPlay]);
 
-  if (decide && !decide.playVideo) {
+  // Pas de vidéo tant que la décision n'est PAS playVideo === true (SSR inclus) :
+  // le <video> (mp4 1.4 MB) n'est JAMAIS rendu sur mobile ni avant hydratation.
+  // → zéro requête média mobile, LCP = poster léger.
+  if (!decide?.playVideo) {
     return (
       <AppImage
-        src="/NV-IMG/hero-mobile.webp"
+        src="/NV-IMG/hero-poster.webp"
         alt=""
         fill
         priority
@@ -139,6 +142,14 @@ export default function Hero() {
       if (!panel || typeof gsap === "undefined") return;
 
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      // Mobile : pas d'animation d'entrée → le nom (LCP) reste visible par
+      // défaut (CSS opacity:1) et peint au premier rendu. Media combiné :
+      // pointeur coarse OU largeur ≤767 (le headless PSI ne remonte pas coarse).
+      if (
+        window.matchMedia("(pointer: coarse), (max-width: 767px)").matches
+      )
+        return;
 
       const showPanel = () => {
         gsap.set(panel, { clearProps: "all" });

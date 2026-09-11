@@ -7,7 +7,7 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === "production",
   },
   experimental: {
-    optimizePackageImports: ["gsap", "framer-motion", "three", "@gsap/react"],
+    optimizePackageImports: ["gsap", "three", "@gsap/react"],
   },
   images: {
     // NOTE SÉCURITÉ : AVIF retiré volontairement. L'advisory GHSA-2xp9-vwfh-vxw4

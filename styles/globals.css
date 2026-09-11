@@ -3508,6 +3508,16 @@ html.hoodie-sequence-done #hero-scroll-indicator {
     pointer-events: none;
 }
 
+/* Mobile : splash désactivé. Le h1 (élément LCP) doit peindre dès le
+   premier rendu, sans attendre l'hydratation (le SSR+effect laissait le
+   volet opaque couvrir le héro ~2 s sur CPU throttlé). Le JS client fait
+   de même, mais ce masque CSS garantit zéro blocage SSR → effect. */
+@media (max-width: 767px) {
+    .splash-screen {
+        display: none;
+    }
+}
+
 /* Le stage EST le V : le masque (logo.png, transparent) découpe le tout, les
    couches enfants n'ont qu'à porter des couleurs + clip-path. */
 .juice-stage {
@@ -3925,5 +3935,60 @@ html.hoodie-sequence-done #hero-scroll-indicator {
     }
     .works-card-tags {
         display: none;
+    }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Animations CSS pures (remplacement de Framer Motion → perf / TBT)
+   🔁 ring-spin : rotation des anneaux pointillés SVG (ServicesGrid)
+   ════════════════════════════════════════════════════════════════════ */
+.ring-spin {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ring-spin 28s linear infinite;
+}
+.ring-spin--reverse {
+    animation-direction: reverse;
+}
+@keyframes ring-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 🎈 icon-float : float idle des icônes de services (y 0 → -4 → 0) */
+.icon-float {
+    animation: icon-float 3.5s ease-in-out infinite;
+}
+@keyframes icon-float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+/* ✨ tooltip-pop : apparition/disparition du tooltip « 05 » (Logo065Tooltip) */
+.tooltip-pop {
+    animation: tooltip-pop 0.18s ease-out;
+}
+@keyframes tooltip-pop {
+    from {
+        opacity: 0;
+        transform: translateY(6px) scale(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ring-spin,
+    .icon-float,
+    .tooltip-pop {
+        animation: none;
     }
 }

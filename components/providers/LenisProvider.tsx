@@ -26,10 +26,11 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
   const [lenis, setLenis] = useState<Lenis | null>(null);
 
   useEffect(() => {
-    // Mobile : pas de smooth scroll (coarse pointer) → on garde le scroll natif
-    // Évite 15 kB d'exécution + rAF permanent sur CPU mobile (TBT)
+    // Mobile (coarse pointer + <768px ; headless PSI ne remonte pas coarse) :
+    // pas de smooth scroll → scroll natif. Évite 15 kB d'exécution + rAF
+    // permanent sur CPU mobile (TBT)
     try {
-      if (window.matchMedia("(pointer: coarse)").matches) {
+      if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches) {
         return;
       }
     } catch {

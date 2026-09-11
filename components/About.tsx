@@ -18,6 +18,7 @@ import Marquee from "@/components/Marquee";
 import RevealText from "@/components/RevealText";
 import SectionTitle from "@/components/SectionTitle";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { AwardIcon, GitBranchIcon, GraduationCapIcon } from "@/components/icons";
 
 /** Badge mot-clé technique (même style que les anciens badges React/Laravel). */
 const TECH_BADGE_CLASS =
@@ -35,19 +36,19 @@ function renderTechBadges(items: string[]) {
 /** Styles d'icônes par position (titres/textes depuis dict.about.cards). */
 const CARD_STYLES = [
   {
-    icon: "fas fa-graduation-cap",
+    icon: GraduationCapIcon,
     box: "bg-red-500/20",
     iconColor: "text-red-500",
     hover: "hover:border-red-500",
   },
   {
-    icon: "fas fa-certificate",
+    icon: AwardIcon,
     box: "bg-red-500/20",
     iconColor: "text-red-500",
     hover: "hover:border-red-500",
   },
   {
-    icon: "fas fa-code-branch",
+    icon: GitBranchIcon,
     box: "bg-white/10",
     iconColor: "text-white",
     hover: "hover:border-white",
@@ -61,9 +62,10 @@ export default function About() {
   useGSAP(
     () => {
       if (typeof gsap === "undefined") return;
-      // Mobile : pas de scrub 3D (rotateX/z) — TBT
+      // Mobile : pas de scrub 3D (rotateX/z) — TBT. Media combiné coarse+largeur.
       try {
-        if (window.matchMedia("(pointer: coarse)").matches) return;
+        if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches)
+          return;
       } catch {
         /* ignore */
       }
@@ -292,7 +294,7 @@ export default function About() {
                 <div
                   className={`w-12 h-12 ${style.box} rounded-xl flex items-center justify-center mb-4`}
                 >
-                  <i className={`${style.icon} text-2xl ${style.iconColor}`}></i>
+                  <style.icon className={`h-6 w-6 ${style.iconColor}`} />
                 </div>
                 <h4 className="font-bold text-white text-xl mb-2">
                   {card.title}

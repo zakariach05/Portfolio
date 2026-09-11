@@ -7,16 +7,17 @@ import RevealText from "@/components/RevealText";
 import SectionTitle from "@/components/SectionTitle";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useLenis } from "@/components/providers/LenisProvider";
+import {
+  CodeIcon,
+  CubeIcon,
+  PenNibIcon,
+  RocketIcon,
+  ServerIcon,
+  ShoppingCartIcon,
+} from "@/components/icons";
 
 /** Icônes par position (les titres/descs/tags viennent de locales/*.json). */
-const ICONS = [
-  "fas fa-code",
-  "fas fa-cube",
-  "fas fa-shopping-cart",
-  "fas fa-pen-nib",
-  "fas fa-rocket",
-  "fas fa-server",
-];
+const ICONS = [CodeIcon, CubeIcon, ShoppingCartIcon, PenNibIcon, RocketIcon, ServerIcon];
 
 export default function ServicesPage() {
   const { t, dict } = useLanguage();
@@ -71,7 +72,10 @@ export default function ServicesPage() {
                 className="p-8 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 hover:border-red-500 transition-all duration-300 group shadow-2xl"
               >
                 <div className="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
-                  <i className={`${ICONS[i] ?? "fas fa-code"} text-3xl text-red-500`} />
+                  {(() => {
+                    const IconComponent = ICONS[i] ?? CodeIcon;
+                    return <IconComponent className="h-8 w-8 text-red-500" />;
+                  })()}
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4">{s.title}</h3>
                 <p className="text-gray-400 mb-6 leading-relaxed">{s.desc}</p>

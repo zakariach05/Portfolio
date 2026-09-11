@@ -14,7 +14,7 @@
  * Accessibilité : prefers-reduced-motion → pas d'anim, cartes visibles.
  */
 import { useEffect, useRef, type ReactElement } from "react";
-import { motion, MotionConfig, useReducedMotion } from "framer-motion";
+import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 export interface ServiceCardData {
@@ -46,7 +46,7 @@ function FrontendIcon() {
         <path d="M56 50 L66 57 L56 64" />
       </g>
       {/* Anneau pointillé en rotation lente (derrière le code) */}
-      <motion.circle
+      <circle
         cx="48"
         cy="57"
         r="20"
@@ -54,9 +54,8 @@ function FrontendIcon() {
         strokeWidth="2.5"
         strokeDasharray="6 9"
         strokeLinecap="round"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-        style={{ transformBox: "fill-box", transformOrigin: "center" }}
+        className="ring-spin"
+        style={{ animationDuration: "28s" }}
         opacity="0.6"
       />
     </svg>
@@ -76,18 +75,17 @@ function BackendIcon() {
       </g>
       {/* Disque + anneau pointillé (rotation visible) */}
       <circle cx="62" cy="44" r="5" fill="currentColor" />
-      <motion.g
+      <g
         stroke="currentColor"
         strokeWidth="2.5"
         strokeDasharray="5 7"
         strokeLinecap="round"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-        style={{ transformBox: "fill-box", transformOrigin: "center" }}
+        className="ring-spin"
+        style={{ animationDuration: "22s", animationDirection: "reverse" }}
         opacity="0.7"
       >
         <circle cx="62" cy="44" r="13" />
-      </motion.g>
+      </g>
     </svg>
   );
 }
@@ -102,22 +100,21 @@ function DesignIcon() {
         <circle cx="48" cy="44" r="10" />
       </g>
       {/* Aiguilles jumelles "radar" (formes symétriques → rotation centrée) */}
-      <motion.g
+      <g
         stroke="currentColor"
         strokeWidth="3"
         strokeLinecap="round"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-        style={{ transformBox: "fill-box", transformOrigin: "center" }}
+        className="ring-spin"
+        style={{ animationDuration: "18s" }}
         opacity="0.8"
       >
         <path d="M48 16 L48 24" />
         <circle cx="48" cy="20" r="3" fill="currentColor" stroke="none" />
         <path d="M48 64 L48 72" />
         <circle cx="48" cy="68" r="3" fill="currentColor" stroke="none" />
-      </motion.g>
+      </g>
       {/* Anneau pointillé en sens inverse, vitesse différente */}
-      <motion.circle
+      <circle
         cx="48"
         cy="44"
         r="34"
@@ -125,9 +122,8 @@ function DesignIcon() {
         strokeWidth="2"
         strokeDasharray="3 8"
         strokeLinecap="round"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 34, repeat: Infinity, ease: "linear" }}
-        style={{ transformBox: "fill-box", transformOrigin: "center" }}
+        className="ring-spin"
+        style={{ animationDuration: "34s", animationDirection: "reverse" }}
         opacity="0.45"
       />
     </svg>
@@ -148,7 +144,7 @@ function TestingIcon() {
         <path d="M56 48 L66 58 L78 42" />
       </g>
       {/* Anneau pointillé en rotation (test "en cours") */}
-      <motion.circle
+      <circle
         cx="48"
         cy="52"
         r="36"
@@ -156,9 +152,8 @@ function TestingIcon() {
         strokeWidth="2"
         strokeDasharray="5 9"
         strokeLinecap="round"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        style={{ transformBox: "fill-box", transformOrigin: "center" }}
+        className="ring-spin"
+        style={{ animationDuration: "30s" }}
         opacity="0.5"
       />
     </svg>
@@ -177,7 +172,7 @@ function CloudIcon() {
         <path d="M40 32 L48 24 L56 32" />
       </g>
       {/* Anneau pointillé (synchro / CI-CD) */}
-      <motion.circle
+      <circle
         cx="48"
         cy="52"
         r="34"
@@ -185,9 +180,8 @@ function CloudIcon() {
         strokeWidth="2"
         strokeDasharray="6 8"
         strokeLinecap="round"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
-        style={{ transformBox: "fill-box", transformOrigin: "center" }}
+        className="ring-spin"
+        style={{ animationDuration: "26s", animationDirection: "reverse" }}
         opacity="0.55"
       />
     </svg>
@@ -207,7 +201,7 @@ function SecurityIcon() {
         <path d="M48 57.8 V59.5" strokeWidth="2" />
       </g>
       {/* Anneau pointillé en rotation (cohérent avec QA & Cloud) */}
-      <motion.circle
+      <circle
         cx="48"
         cy="52"
         r="36"
@@ -215,9 +209,8 @@ function SecurityIcon() {
         strokeWidth="2"
         strokeDasharray="5 9"
         strokeLinecap="round"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        style={{ transformBox: "fill-box", transformOrigin: "center" }}
+        className="ring-spin"
+        style={{ animationDuration: "30s" }}
         opacity="0.5"
       />
     </svg>
@@ -234,20 +227,20 @@ const ROLE_ICONS: Record<string, () => ReactElement> = {
 };
 
 /* ── Accordéon horizontal : le hover est 100% CSS (flex + background).
-   Framer Motion ne gère que le float idle des icônes et les rotations
-   des anneaux pointillés — pas de variants hover sur la carte (conflit
-   avec flex). */
+   Les rotations des anneaux pointillés et le float idle des icônes sont
+   en CSS pur (ring-spin / icon-float) — plus de Framer Motion (perf). */
 
 export default function ServicesGrid({ cards }: ServicesGridProps) {
   const gridRef = useRef<HTMLDivElement>(null);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
 
   // Entrée au scroll : slide-in rapide depuis la droite, cascade (une seule fois).
-  // Mobile : désactivé (coarse pointer) → TBT économisé, cartes visibles direct
+  // Mobile : désactivé → TBT économisé, cartes visibles direct
   useEffect(() => {
     if (reduceMotion) return;
     try {
-      if (window.matchMedia("(pointer: coarse)").matches) return;
+      if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches)
+        return;
     } catch {
       /* ignore */
     }
@@ -274,42 +267,36 @@ export default function ServicesGrid({ cards }: ServicesGridProps) {
   }, [reduceMotion]);
 
   return (
-    <MotionConfig reducedMotion="user">
-      <div ref={gridRef} className="services-grid">
-        {cards.map((card, index) => {
-          const CardIcon = ROLE_ICONS[card.role] ?? FrontendIcon;
-          return (
-            <div key={card.role} className={`service-card ${card.role}`}>
-              <div className="service-card-inner">
-                <span className="service-card-number">{String(index + 1).padStart(2, "0")}</span>
-                <div className="service-icon">
-                  <motion.div
-                    className="service-icon-float"
-                    animate={reduceMotion ? {} : { y: [0, -4, 0] }}
-                    transition={{
-                      y: {
-                        duration: 3.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: index * 0.3,
-                      },
-                    }}
-                  >
-                    <CardIcon />
-                  </motion.div>
-                </div>
-                <h3 className="service-card-title">{card.title}</h3>
-                <p className="service-card-text">{card.text}</p>
-                <div className="service-card-tags">
-                  {card.tags.map((tag) => (
-                    <span key={tag}>{tag}</span>
-                  ))}
+    <div ref={gridRef} className="services-grid">
+      {cards.map((card, index) => {
+        const CardIcon = ROLE_ICONS[card.role] ?? FrontendIcon;
+        return (
+          <div key={card.role} className={`service-card ${card.role}`}>
+            <div className="service-card-inner">
+              <span className="service-card-number">{String(index + 1).padStart(2, "0")}</span>
+              <div className="service-icon">
+                <div
+                  className="service-icon-float icon-float"
+                  style={
+                    reduceMotion
+                      ? undefined
+                      : { animationDelay: `${index * 0.3}s` }
+                  }
+                >
+                  <CardIcon />
                 </div>
               </div>
+              <h3 className="service-card-title">{card.title}</h3>
+              <p className="service-card-text">{card.text}</p>
+              <div className="service-card-tags">
+                {card.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
             </div>
-          );
-        })}
-      </div>
-    </MotionConfig>
+          </div>
+        );
+      })}
+    </div>
   );
 }

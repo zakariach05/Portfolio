@@ -9,8 +9,18 @@
  * Props limitées volontairement à ce que le site utilise réellement.
  */
 import Image from "next/image";
-import { CldImage } from "next-cloudinary";
+import dynamic from "next/dynamic";
 import { CLOUDINARY_ENABLED, toPublicId, type AppImageProps } from "@/lib/cloudinary";
+
+/**
+ * CldImage chargé UNIQUEMENT si Cloudinary est activé : le SDK @cloudinary/url-gen
+ * (~30 KB) était bundlé inutilement alors que NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+ * n'est pas défini. Chunk séparé + non-fetch quand désactivé → -28 KB unused JS.
+ */
+const CldImage = dynamic(
+  () => import("next-cloudinary").then((m) => m.CldImage),
+  { ssr: false }
+);
 
 export default function AppImage({
   src,
@@ -64,6 +74,7 @@ export default function AppImage({
   }
 
   return (
+    // eslint-disable-next-line jsx-a11y/alt-text -- alt défini via les props et propagé via `shared`
     <Image {...shared} src={src} {...(rest as Record<string, unknown>)} />
   );
 }

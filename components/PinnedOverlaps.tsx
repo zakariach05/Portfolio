@@ -28,8 +28,8 @@ export default function PinnedOverlaps() {
       return;
     // Mobile : pas de pin/scale (CPU + layout thrashing) — gain TBT majeur
     try {
-      if (window.matchMedia("(pointer: coarse)").matches) return;
-      if (window.matchMedia("(max-width: 768px)").matches) return;
+      if (window.matchMedia("(pointer: coarse), (max-width: 768px)").matches)
+        return;
     } catch {
       /* ignore */
     }

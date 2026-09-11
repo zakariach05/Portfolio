@@ -22,12 +22,12 @@ import { ScrollTrigger } from "@/lib/gsap";
 import type Lenis from "lenis";
 
 const FILL_DELAY_MS = 150;
-const FILL_DURATION_MS = 1600;
-const HOLD_MS = 350;
-const FADE_MS = 600;
+const FILL_DURATION_MS = 450; // 1600 → 450 (LCP : h1 = élément LCP ; 2.1 s de splash = -1.5 s)
+const HOLD_MS = 150; // 350 → 150
+const FADE_MS = 350; // 600 → 350
 
-const HIDE_AT_MS = FILL_DELAY_MS + FILL_DURATION_MS + HOLD_MS; // 2100
-const COMPLETE_AT_MS = HIDE_AT_MS + FADE_MS; // 2700
+const HIDE_AT_MS = FILL_DELAY_MS + FILL_DURATION_MS + HOLD_MS; // 750
+const COMPLETE_AT_MS = HIDE_AT_MS + FADE_MS; // 1100
 
 const SEEN_KEY = "vo-splash-seen";
 
@@ -87,6 +87,13 @@ export default function SplashScreen({
     // Pas d'animation pour les personnes sensibles au mouvement.
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    // Mobile : le splash coûte ~2.1 s de LCP (h1 masqué). On saute entièrement
+    // → le héro peint immédiatement. (pointer: coarse) ne remonterait pas en
+    // headless (Lighthouse PSI virtuel) → on ajoute la règle de largeur ≤767.
+    const skipForMobile = window.matchMedia(
+      "(pointer: coarse), (max-width: 767px)"
+    ).matches;
+
     // Déjà vu dans cette session → skip direct.
     let seen = false;
     try {
@@ -97,7 +104,7 @@ export default function SplashScreen({
       seen = false;
     }
 
-    if (reduced || seen) {
+    if (reduced || seen || skipForMobile) {
       skipToEnd();
       return;
     }
