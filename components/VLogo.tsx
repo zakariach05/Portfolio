@@ -50,6 +50,12 @@ export default function VLogo({
     const canvas = canvasEl;
     const ctxt = ctx;
 
+    // Mobile (coarse + largeur ≤767 ; le headless PSI ne remonte pas coarse) :
+    // pas de boucle rAF 60fps sur un canvas dans le header → logo statique
+    // (une image dessinée + son glow rouge). Gros gain Style & Layout / CPU.
+    const mobile =
+      window.matchMedia("(pointer: coarse), (max-width: 767px)").matches;
+
     const img = new Image();
     img.src = src;
 
@@ -60,7 +66,7 @@ export default function VLogo({
 
     // ── Visibilité (pause hors viewport, comme l'original) ──
     let io: IntersectionObserver | null = null;
-    if (typeof IntersectionObserver !== "undefined") {
+    if (!mobile && typeof IntersectionObserver !== "undefined") {
       io = new IntersectionObserver(
         (entries) => {
           isVisible = entries[0].isIntersecting;
@@ -129,6 +135,9 @@ export default function VLogo({
       canvas.style.filter =
         `drop-shadow(0 0 ${15 * g}px rgba(255,0,0,0.85)) ` +
         `drop-shadow(0 0 ${30 * g}px rgba(255,50,50,0.6))`;
+
+      // Mobile : une seule image statique, pas de boucle d'animation.
+      if (mobile) return;
 
       animFrameId = requestAnimationFrame(animateColor);
     }

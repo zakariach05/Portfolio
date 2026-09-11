@@ -59,6 +59,14 @@ export default function Contact() {
     () => {
       if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined")
         return;
+      // Mobile : pas d'entrée animée (ScrollTrigger → mesures/écouteurs qui
+      // alourdissent Style & Layout au chargement). Contenu visible par défaut.
+      try {
+        if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches)
+          return;
+      } catch {
+        /* ignore */
+      }
       gsap.fromTo(
         ".contact-split-container",
         { y: 90, opacity: 0 },

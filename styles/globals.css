@@ -2839,6 +2839,15 @@ input:-webkit-autofill:active {
     }
 }
 
+/* Mobile (≤767px) : la signature est statique (js désactivé) → on affiche
+   directement le trait de finition au lieu de le faire pousser au scrub. */
+@media (max-width: 767px) {
+    .sig-line {
+        width: 100%;
+        opacity: 1;
+    }
+}
+
 /* Subtle pulse on corners during the sequence */
 #hero-img-wrapper:not(.hoodie-sequence-done) .hud-corner {
     animation: hudCornerPulse 2.4s ease-in-out infinite;

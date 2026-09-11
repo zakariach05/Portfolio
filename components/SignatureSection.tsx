@@ -23,6 +23,16 @@ export default function SignatureSection() {
       if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined")
         return;
 
+      // Mobile : pas de signature animée au stylo (scrub + mesures SVG très
+      // coûteuses en Style & Layout). Les paths restent entiers par défaut
+      // (signature statique déjà visible), le stylo reste opacity:0 en CSS.
+      try {
+        if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches)
+          return;
+      } catch {
+        /* ignore */
+      }
+
       const section = sectionRef.current;
       const sigWrap = section?.querySelector<HTMLElement>("#sig-wrap");
       const sigSVG = section?.querySelector<SVGSVGElement>("#sig-svg");
