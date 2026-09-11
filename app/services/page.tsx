@@ -19,6 +19,16 @@ import {
 /** Icônes par position (les titres/descs/tags viennent de locales/*.json). */
 const ICONS = [CodeIcon, CubeIcon, ShoppingCartIcon, PenNibIcon, RocketIcon, ServerIcon];
 
+/** Liens vers les 6 pages du cocon sémantique — ordre = COCOON_SLUGS */
+const COCOON_LINKS = [
+  "/services/developpement-web-full-stack-casablanca",
+  "/services/developpeur-react-nextjs-casablanca",
+  "/services/developpeur-laravel-maroc",
+  "/services/securite-applications-web-owasp",
+  "/services/audit-securite-web-casablanca",
+  "/services/creation-site-web-professionnel-maroc",
+];
+
 export default function ServicesPage() {
   const { t, dict } = useLanguage();
   const router = useRouter();
@@ -66,31 +76,37 @@ export default function ServicesPage() {
       >
         <div className="container mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {dict.servicesPage.items.map((s, i) => (
-              <div
-                key={s.title}
-                className="p-8 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 hover:border-red-500 transition-all duration-300 group shadow-2xl"
-              >
-                <div className="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
-                  {(() => {
-                    const IconComponent = ICONS[i] ?? CodeIcon;
-                    return <IconComponent className="h-8 w-8 text-red-500" />;
-                  })()}
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-4">{s.title}</h3>
-                <p className="text-gray-400 mb-6 leading-relaxed">{s.desc}</p>
-                <div className="flex flex-wrap gap-2 mt-auto">
-                  {s.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
+            {dict.servicesPage.items.map((s, i) => {
+              const href = COCOON_LINKS[i] ?? "/services/developpement-web-full-stack-casablanca";
+              return (
+                <Link
+                  key={s.title}
+                  href={href}
+                  className="block p-8 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 hover:border-red-500 transition-all duration-300 group shadow-2xl"
+                >
+                  <div className="w-16 h-16 bg-red-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors">
+                    {(() => {
+                      const IconComponent = ICONS[i] ?? CodeIcon;
+                      return <IconComponent className="h-8 w-8 text-red-500" />;
+                    })()}
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-red-400 transition-colors">
+                    {s.title}
+                  </h3>
+                  <p className="text-gray-400 mb-6 leading-relaxed">{s.desc}</p>
+                  <div className="flex flex-wrap gap-2 mt-auto">
+                    {s.tags.map((t) => (
+                      <span key={t} className="text-xs font-bold px-2 py-1 rounded bg-white/5 text-gray-300">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <span className="mt-4 inline-flex text-xs font-bold tracking-widest text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    Voir le détail →
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

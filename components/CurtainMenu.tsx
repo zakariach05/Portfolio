@@ -81,8 +81,8 @@ export default function CurtainMenu() {
     const [path, hash] = href.split("#");
     const targetHash = hash ? `#${hash}` : null;
 
-    if (path === "/services" || path === "/projets") {
-      router.push(path);
+    if (path.startsWith("/services") || path.startsWith("/projets")) {
+      router.push(href.split("#")[0]);
       return;
     }
     if (!targetHash) {
