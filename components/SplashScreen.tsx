@@ -18,7 +18,7 @@
  */
 import { useEffect, useRef } from "react";
 import { useLenis } from "@/components/providers/LenisProvider";
-import { ScrollTrigger } from "@/lib/gsap";
+import { onIdle } from "@/lib/defer";
 import type Lenis from "lenis";
 
 const FILL_DELAY_MS = 150;
@@ -118,7 +118,17 @@ export default function SplashScreen({
     hideTimer = window.setTimeout(() => {
       splash.classList.add("splash-screen--hide");
       onRevealRef.current();
-      ScrollTrigger.refresh();
+      // Defer ScrollTrigger refresh via idle + dynamic import (TBT)
+      onIdle(async () => {
+        try {
+          const [{ gsap }] = await Promise.all([import("gsap")]);
+          const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+          gsap.registerPlugin(ScrollTrigger);
+          ScrollTrigger.refresh();
+        } catch {
+          /* ignore */
+        }
+      });
       lenisRef.current?.resize();
     }, HIDE_AT_MS);
 

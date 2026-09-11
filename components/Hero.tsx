@@ -10,12 +10,12 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
 import { useIntro } from "@/components/providers/IntroProvider";
 import { useLenis } from "@/components/providers/LenisProvider";
 import { useLanguage } from "@/contexts/LanguageContext";
 import AppImage from "@/components/AppImage";
 import { heroVideoSources, shouldPlayHeroVideo } from "@/lib/heroVideo";
+import { onIdle } from "@/lib/defer";
 
 /**
  * Circonférence exacte du cercle du badge (r = 78) : le texte est ajusté
@@ -139,93 +139,78 @@ export default function Hero() {
       if (!done) return;
       const panel = panelRef.current;
       const nameEl = nameRef.current;
-      if (!panel || typeof gsap === "undefined") return;
+      if (!panel) return;
 
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches) return;
 
-      // Mobile : pas d'animation d'entrée → le nom (LCP) reste visible par
-      // défaut (CSS opacity:1) et peint au premier rendu. Media combiné :
-      // pointeur coarse OU largeur ≤767 (le headless PSI ne remonte pas coarse).
-      if (
-        window.matchMedia("(pointer: coarse), (max-width: 767px)").matches
-      )
-        return;
+      let mm: ReturnType<typeof import("gsap").gsap.matchMedia> | null = null;
+      let cancelled = false;
 
-      const showPanel = () => {
-        gsap.set(panel, { clearProps: "all" });
-        panel.style.opacity = "1";
-        panel.style.pointerEvents = "auto";
-      };
-
-      const mm = gsap.matchMedia();
-
-      // Desktop (>768px) : nom découpé en lettres avec révélation
-      mm.add("(min-width: 768px)", () => {
-        try {
-          const lines = nameEl
-            ? gsap.utils.toArray<HTMLElement>(".hero-name-line", nameEl)
-            : [];
-          if (lines.length === 0) return;
-
-          const originals = lines.map((l) => l.textContent || "");
-
-          const chars: HTMLElement[] = [];
-          lines.forEach((line) => {
-            const text = line.textContent || "";
-            line.textContent = "";
-            [...text].forEach((ch) => {
-              const s = document.createElement("span");
-              s.textContent = ch;
-              s.style.display = "inline-block";
-              line.appendChild(s);
-              chars.push(s);
+      const cancelIdle = onIdle(async () => {
+        if (cancelled) return;
+        const [{ gsap }] = await Promise.all([import("gsap")]);
+        if (cancelled) return;
+        const showPanel = () => {
+          gsap.set(panel, { clearProps: "all" });
+          panel.style.opacity = "1";
+          panel.style.pointerEvents = "auto";
+        };
+        mm = gsap.matchMedia();
+        mm.add("(min-width: 768px)", () => {
+          try {
+            const lines = nameEl ? gsap.utils.toArray<HTMLElement>(".hero-name-line", nameEl) : [];
+            if (lines.length === 0) return;
+            const originals = lines.map((l) => l.textContent || "");
+            const chars: HTMLElement[] = [];
+            lines.forEach((line) => {
+              const text = line.textContent || "";
+              line.textContent = "";
+              ;[...text].forEach((ch) => {
+                const s = document.createElement("span");
+                s.textContent = ch;
+                s.style.display = "inline-block";
+                line.appendChild(s);
+                chars.push(s);
+              });
             });
-          });
-
-          // État initial caché appliqué juste avant le play de la timeline
-          gsap.set(chars, { yPercent: 115, opacity: 0 });
-          gsap.set("#hero-role", { y: 28, opacity: 0 });
-          gsap.set(".hero-description", { y: 22, opacity: 0 });
-          gsap.set("#hero-cta-group a", { y: 18, opacity: 0 });
-
-          const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-          tl.to(chars, { yPercent: 0, opacity: 1, duration: 0.7, stagger: 0.04 }, 0.1)
-            .to("#hero-role", { y: 0, opacity: 1, duration: 0.7 }, "-=0.3")
-            .to(".hero-description", { y: 0, opacity: 1, duration: 0.7 }, "-=0.45")
-            .to(
-              "#hero-cta-group a",
-              { y: 0, opacity: 1, stagger: 0.12, duration: 0.6 },
-              "-=0.45"
-            )
-            .eventCallback("onComplete", showPanel);
-
-          return () => {
-            lines.forEach((l, i) => {
-              l.textContent = originals[i];
-            });
-          };
-        } catch (e) {
-          console.warn("[HeroReveal] desktop reveal skipped:", e);
-          showPanel();
-        }
-      });
-
-      // Mobile (<768px) : fade simple
-      mm.add("(max-width: 767px)", () => {
-        try {
-          gsap.fromTo(
-            panel,
-            { opacity: 0, y: 24 },
-            { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }
-          );
-        } catch (e) {
-          console.warn("[HeroReveal] mobile reveal skipped:", e);
-          showPanel();
-        }
+            gsap.set(chars, { yPercent: 115, opacity: 0 });
+            gsap.set("#hero-role", { y: 28, opacity: 0 });
+            gsap.set(".hero-description", { y: 22, opacity: 0 });
+            gsap.set("#hero-cta-group a", { y: 18, opacity: 0 });
+            const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+            tl.to(chars, { yPercent: 0, opacity: 1, duration: 0.7, stagger: 0.04 }, 0.1)
+              .to("#hero-role", { y: 0, opacity: 1, duration: 0.7 }, "-=0.3")
+              .to(".hero-description", { y: 0, opacity: 1, duration: 0.7 }, "-=0.45")
+              .to("#hero-cta-group a", { y: 0, opacity: 1, stagger: 0.12, duration: 0.6 }, "-=0.45")
+              .eventCallback("onComplete", showPanel);
+            return () => {
+              lines.forEach((l, i) => {
+                l.textContent = originals[i];
+              });
+            };
+          } catch (e) {
+            console.warn("[HeroReveal] desktop reveal skipped:", e);
+            showPanel();
+          }
+        });
+        mm.add("(max-width: 767px)", () => {
+          try {
+            gsap.fromTo(panel, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" });
+          } catch (e) {
+            console.warn("[HeroReveal] mobile reveal skipped:", e);
+            const { gsap: g } = require("gsap");
+            g.set(panel, { clearProps: "all" });
+            panel.style.opacity = "1";
+            panel.style.pointerEvents = "auto";
+          }
+        });
       });
 
       return () => {
-        mm.revert();
+        cancelled = true;
+        cancelIdle();
+        if (mm) mm.revert();
       };
     },
     { dependencies: [done], scope: panelRef }

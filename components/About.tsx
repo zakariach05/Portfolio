@@ -12,13 +12,13 @@
  */
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
 import AppImage from "@/components/AppImage";
 import Marquee from "@/components/Marquee";
 import RevealText from "@/components/RevealText";
 import SectionTitle from "@/components/SectionTitle";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AwardIcon, GitBranchIcon, GraduationCapIcon } from "@/components/icons";
+import { onIdle } from "@/lib/defer";
 
 /** Badge mot-clé technique (même style que les anciens badges React/Laravel). */
 const TECH_BADGE_CLASS =
@@ -61,25 +61,22 @@ export default function About() {
 
   useGSAP(
     () => {
-      if (typeof gsap === "undefined") return;
-      // Mobile : pas de scrub 3D (rotateX/z) — TBT. Media combiné coarse+largeur.
       try {
-        if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches)
-          return;
+        if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches) return;
       } catch {
         /* ignore */
       }
-
-      const finePointer = window.matchMedia("(pointer: fine)").matches;
-
-      sectionRef.current
-        ?.querySelectorAll<HTMLElement>(".reveal-type")
-        .forEach((el) => {
-          const container = el.querySelector<HTMLElement>(
-            ".perspective-container"
-          );
+      let cancelled = false;
+      const cancelIdle = onIdle(async () => {
+        if (cancelled) return;
+        const [{ gsap }] = await Promise.all([import("gsap")]);
+        const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+        gsap.registerPlugin(ScrollTrigger);
+        if (cancelled) return;
+        const finePointer = window.matchMedia("(pointer: fine)").matches;
+        sectionRef.current?.querySelectorAll<HTMLElement>(".reveal-type").forEach((el) => {
+          const container = el.querySelector<HTMLElement>(".perspective-container");
           if (!container) return;
-
           gsap.fromTo(
             container,
             { rotateX: 45, z: -500, opacity: 0, skewY: 5 },
@@ -89,25 +86,12 @@ export default function About() {
               opacity: 1,
               skewY: 0,
               ease: "power4.out",
-              scrollTrigger: {
-                trigger: el,
-                start: "top 95%",
-                end: "bottom 20%",
-                scrub: 1.5,
-              },
+              scrollTrigger: { trigger: el, start: "top 95%", end: "bottom 20%", scrub: 1.5 },
             }
           );
-
           if (finePointer) {
-            const rotY = gsap.quickTo(container, "rotationY", {
-              duration: 0.6,
-              ease: "power2.out",
-            });
-            const rotX = gsap.quickTo(container, "rotationX", {
-              duration: 0.6,
-              ease: "power2.out",
-            });
-
+            const rotY = gsap.quickTo(container, "rotationY", { duration: 0.6, ease: "power2.out" });
+            const rotX = gsap.quickTo(container, "rotationX", { duration: 0.6, ease: "power2.out" });
             const onMove = (e: MouseEvent) => {
               const r = el.getBoundingClientRect();
               const x = (e.clientX - r.left) / r.width - 0.5;
@@ -119,11 +103,15 @@ export default function About() {
               rotY(0);
               rotX(0);
             };
-
             el.addEventListener("mousemove", onMove);
             el.addEventListener("mouseleave", onLeave);
           }
         });
+      });
+      return () => {
+        cancelled = true;
+        cancelIdle();
+      };
     },
     { scope: sectionRef }
   );

@@ -1,11 +1,10 @@
 "use client";
 
-import Lenis from "lenis";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { onIdle } from "@/lib/defer";
 import { getLenisOptions } from "@/lib/lenis";
 
-export const LenisContext = createContext<Lenis | null>(null);
+export const LenisContext = createContext<import("lenis").default | null>(null);
 
 /** Accès à l'instance Lenis depuis n'importe quel composant client. */
 export function useLenis() {
@@ -23,12 +22,10 @@ export function useLenis() {
  * toute fuite mémoire en React.
  */
 export default function LenisProvider({ children }: { children: ReactNode }) {
-  const [lenis, setLenis] = useState<Lenis | null>(null);
+  const [lenis, setLenis] = useState<import("lenis").default | null>(null);
 
   useEffect(() => {
-    // Mobile (coarse pointer + <768px ; headless PSI ne remonte pas coarse) :
-    // pas de smooth scroll → scroll natif. Évite 15 kB d'exécution + rAF
-    // permanent sur CPU mobile (TBT)
+    // Mobile : pas de smooth scroll → immédiat
     try {
       if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches) {
         return;
@@ -36,39 +33,52 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
     } catch {
       /* ignore */
     }
-    const instance = new Lenis(getLenisOptions());
 
-    // ScrollTrigger doit suivre la position "virtuelle" de Lenis.
-    instance.on("scroll", ScrollTrigger.update);
-
-    // Lenis est piloté par le ticker GSAP → un seul rAF, animations synchro.
-    const update = (time: number) => instance.raf(time * 1000);
-    gsap.ticker.add(update);
-    gsap.ticker.lagSmoothing(0);
-
-    // Rappelle les limites de ScrollTrigger à l'initialisation.
-    ScrollTrigger.config({ limitCallbacks: true });
-
-    setLenis(instance);
-
-    // Le contenu peut changer de hauteur juste après le premier rendu
-    // (sections retirées/ajoutées, footer simplifié, polices & images qui
-    // chargent). On resynchronise Lenis + ScrollTrigger une fois le DOM
-    // stabilisé pour éviter tout offset de mesure périmé.
+    // TBT FIX: différer l'initialisation lourde (Lenis + GSAP) après le premier paint
+    // via requestIdleCallback (fallback setTimeout 300ms). Évite le long task 1581ms @932ms.
+    let cancelled = false;
+    let instance: import("lenis").default | null = null;
+    let cleanupTicker: (() => void) | null = null;
     let raf1 = 0;
     let raf2 = 0;
-    raf1 = window.requestAnimationFrame(() => {
-      raf2 = window.requestAnimationFrame(() => {
-        instance.resize();
-        ScrollTrigger.refresh();
+
+    const cancelIdle = onIdle(async () => {
+      if (cancelled) return;
+      const [{ default: Lenis }, { gsap }, { ScrollTrigger }] = await Promise.all([
+        import("lenis"),
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+      if (cancelled) return;
+      gsap.registerPlugin(ScrollTrigger);
+
+      instance = new Lenis(getLenisOptions());
+      instance.on("scroll", ScrollTrigger.update);
+      const update = (time: number) => instance!.raf(time * 1000);
+      gsap.ticker.add(update);
+      gsap.ticker.lagSmoothing(0);
+      ScrollTrigger.config({ limitCallbacks: true });
+      setLenis(instance);
+
+      raf1 = window.requestAnimationFrame(() => {
+        raf2 = window.requestAnimationFrame(() => {
+          instance?.resize();
+          ScrollTrigger.refresh();
+        });
       });
+
+      cleanupTicker = () => {
+        gsap.ticker.remove(update);
+      };
     });
 
     return () => {
+      cancelled = true;
+      cancelIdle();
       window.cancelAnimationFrame(raf1);
       window.cancelAnimationFrame(raf2);
-      gsap.ticker.remove(update);
-      instance.destroy();
+      if (cleanupTicker) cleanupTicker();
+      if (instance) instance.destroy();
     };
   }, []);
 

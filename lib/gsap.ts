@@ -2,12 +2,9 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 /**
- * Enregistrement global des plugins GSAP.
- * Importé une seule fois par les composants client qui utilisent GSAP,
- * afin de garantir un singleton sans doublon de registration.
+ * Exports GSAP sans auto-register (évite coût synchrone au chargement initial).
+ * Chaque composant enregistre via requestIdleCallback avant usage.
+ * LenisProvider s'occupe du register principal en différé.
  */
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 export { gsap, ScrollTrigger };

@@ -46,7 +46,7 @@ export default function NavigationDots() {
         lenis.scrollTo(target as HTMLElement, {
           offset: 0,
           duration: 1.2,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         });
       } else {
         (target as HTMLElement).scrollIntoView({

@@ -12,7 +12,7 @@
  * ralentissement au survol d'un mot (pointeurs fins).
  */
 import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import { onIdle } from "@/lib/defer";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 type MarqueeLineProps = {
@@ -25,64 +25,90 @@ function MarqueeLine({ lineClass, items }: MarqueeLineProps) {
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || typeof gsap === "undefined") return;
+    if (!el) return;
 
     const isCoarse = window.matchMedia("(pointer: coarse), (max-width: 767px)").matches;
 
-    const direction = lineClass === "marquee-1" || lineClass === "marquee-3" ? -1 : 1;
-    const duration =
-      lineClass === "marquee-1" ? 20 : lineClass === "marquee-2" ? 25 : 15;
-
-    el.innerHTML += el.innerHTML;
-    const width = el.scrollWidth / 2;
-
-    gsap.set(el, { x: direction === -1 ? 0 : -width });
-
-    const tween = gsap.to(el, {
-      x: direction === -1 ? -width : 0,
-      duration,
-      ease: "none",
-      repeat: -1,
-      modifiers: { x: gsap.utils.unitize((x) => parseFloat(x) % width) },
-    });
-
-    if (isCoarse) tween.timeScale(0.6);
-
+    let cancelled = false;
+    let tween: any = null;
+    let gsapRef: any = null;
     let io: IntersectionObserver | null = null;
-    if (typeof IntersectionObserver !== "undefined") {
-      io = new IntersectionObserver(
-        (entries) => {
-          const entering = entries[0].isIntersecting;
-          if (entering) tween.play();
-          else tween.pause();
-        },
-        { rootMargin: "100px" }
-      );
-      io.observe(el);
-    }
+    let words: NodeListOf<HTMLElement> | null = null;
+    let onEnter: (() => void) | null = null;
+    let onLeave: (() => void) | null = null;
 
-    if (!isCoarse) {
-      const words = el.querySelectorAll<HTMLElement>(".marquee-word");
-      const onEnter = () => gsap.to(tween, { timeScale: 0.1, duration: 0.5 });
-      const onLeave = () => gsap.to(tween, { timeScale: 1, duration: 0.5 });
-      words.forEach((w) => {
-        w.addEventListener("mouseenter", onEnter);
-        w.addEventListener("mouseleave", onLeave);
+    const cancelIdle = onIdle(async () => {
+      if (cancelled) return;
+      const [{ gsap }] = await Promise.all([import("gsap")]);
+      if (cancelled) return;
+      gsapRef = gsap;
+
+      const direction = lineClass === "marquee-1" || lineClass === "marquee-3" ? -1 : 1;
+      const duration =
+        lineClass === "marquee-1" ? 20 : lineClass === "marquee-2" ? 25 : 15;
+
+      el.innerHTML += el.innerHTML;
+      const width = el.scrollWidth / 2;
+
+      gsap.set(el, { x: direction === -1 ? 0 : -width });
+
+      tween = gsap.to(el, {
+        x: direction === -1 ? -width : 0,
+        duration,
+        ease: "none",
+        repeat: -1,
+        modifiers: { x: gsap.utils.unitize((x: string) => parseFloat(x) % width) },
       });
 
-      return () => {
+      if (isCoarse) tween.timeScale(0.6);
+
+      if (typeof IntersectionObserver !== "undefined") {
+        io = new IntersectionObserver(
+          (entries) => {
+            const entering = entries[0].isIntersecting;
+            if (!tween) return;
+            if (entering) tween.play();
+            else tween.pause();
+          },
+          { rootMargin: "100px" }
+        );
+        io.observe(el);
+      }
+
+      if (!isCoarse) {
+        words = el.querySelectorAll<HTMLElement>(".marquee-word");
+        onEnter = () => gsap.to(tween, { timeScale: 0.1, duration: 0.5 });
+        onLeave = () => gsap.to(tween, { timeScale: 1, duration: 0.5 });
         words.forEach((w) => {
-          w.removeEventListener("mouseenter", onEnter);
-          w.removeEventListener("mouseleave", onLeave);
+          w.addEventListener("mouseenter", onEnter!);
+          w.addEventListener("mouseleave", onLeave!);
         });
-        if (io) io.disconnect();
-        tween.kill();
-      };
-    }
+      }
+    });
 
     return () => {
+      cancelled = true;
+      cancelIdle();
+      if (words && onEnter && onLeave) {
+        words.forEach((w) => {
+          w.removeEventListener("mouseenter", onEnter!);
+          w.removeEventListener("mouseleave", onLeave!);
+        });
+      }
       if (io) io.disconnect();
-      tween.kill();
+      if (tween) {
+        try {
+          tween.kill();
+        } catch {
+          /* ignore */
+        }
+      }
+      // Restore original to avoid double duplication on HMR
+      try {
+        if (gsapRef) gsapRef.set(el, { clearProps: "x" });
+      } catch {
+        /* ignore */
+      }
     };
   }, [lineClass]);
 

@@ -22,6 +22,7 @@ import Logo065Tooltip from "@/components/Logo065Tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLenis } from "@/components/providers/LenisProvider";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { COCOON_PAGES } from "@/lib/seo-cocoon";
 
 type NavItemProps = {
   label: string;
@@ -279,6 +280,23 @@ export default function CurtainMenu() {
               className="curtain-link font-getai uppercase"
             />
           ))}
+        </div>
+
+        {/* Sous-menu Services — cocon sémantique (crawlabilité) */}
+        <div className="curtain-services-submenu mx-auto max-w-3xl px-6 text-center">
+          <p className="mb-3 font-mono text-[10px] tracking-[0.25em] text-zinc-500">SERVICES DÉTAILLÉS</p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {Object.values(COCOON_PAGES).map((p) => (
+              <Link
+                key={p.slug}
+                href={`/services/${p.slug}`}
+                onClick={close}
+                className="rounded-full border border-white/10 px-3 py-1.5 text-[11px] font-medium tracking-wide text-zinc-300 transition-colors hover:border-red-500/40 hover:text-white"
+              >
+                {p.serviceType}
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* Footer */}

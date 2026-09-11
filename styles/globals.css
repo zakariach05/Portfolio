@@ -4001,3 +4001,15 @@ html.hoodie-sequence-done #hero-scroll-indicator {
         animation: none;
     }
 }
+
+/* Performance: defer layout for below-the-fold sections (TBT/Speed Index) */
+#about,
+#expertise,
+#expertise-cocon,
+#projects,
+#signature-section,
+#contact,
+#site-footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 800px;
+}

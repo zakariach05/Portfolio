@@ -9,8 +9,8 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
 import JuiceLogo from "@/components/JuiceLogo";
+import { onIdle } from "@/lib/defer";
 import Logo065Tooltip from "@/components/Logo065Tooltip";
 import SectionTitle from "@/components/SectionTitle";
 import { useContactStatus } from "@/contexts/ContactStatusContext";
@@ -54,34 +54,37 @@ export default function Contact() {
   const stepsContainerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Entrée au scroll : la section (logo V + formulaire) monte depuis le bas.
+  // Entrée au scroll : différée après paint (TBT)
   useGSAP(
     () => {
-      if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined")
-        return;
-      // Mobile : pas d'entrée animée (ScrollTrigger → mesures/écouteurs qui
-      // alourdissent Style & Layout au chargement). Contenu visible par défaut.
       try {
-        if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches)
-          return;
+        if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches) return;
       } catch {
         /* ignore */
       }
-      gsap.fromTo(
-        ".contact-split-container",
-        { y: 90, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 78%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
+      let cancelled = false;
+      const cancelIdle = onIdle(async () => {
+        if (cancelled) return;
+        const [{ gsap }] = await Promise.all([import("gsap")]);
+        const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+        gsap.registerPlugin(ScrollTrigger);
+        if (cancelled) return;
+        gsap.fromTo(
+          ".contact-split-container",
+          { y: 90, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: { trigger: sectionRef.current, start: "top 78%", toggleActions: "play none none reverse" },
+          }
+        );
+      });
+      return () => {
+        cancelled = true;
+        cancelIdle();
+      };
     },
     { scope: sectionRef }
   );
@@ -99,11 +102,9 @@ export default function Contact() {
 
   useEffect(() => {
     if (status === "success" && successMsgRef.current) {
-      gsap.fromTo(
-        successMsgRef.current,
-        { opacity: 0, translateY: 20 },
-        { opacity: 1, translateY: 0, duration: 0.8, ease: "power2.out" }
-      );
+      import("gsap").then(({ gsap }) => {
+        gsap.fromTo(successMsgRef.current, { opacity: 0, translateY: 20 }, { opacity: 1, translateY: 0, duration: 0.8, ease: "power2.out" });
+      });
     }
   }, [status]);
 

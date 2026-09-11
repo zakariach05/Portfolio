@@ -13,7 +13,7 @@
  * Désactivé sur mobile/tablette (pas de souris tactile : pointer:coarse).
  */
 import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import { onIdle } from "@/lib/defer";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function CustomCursor() {
@@ -41,6 +41,8 @@ export default function CustomCursor() {
       followerX = 0,
       followerY = 0;
     let rafId = 0;
+    let gsapRef: any = null;
+    let cancelled = false;
 
     const moveCursor = (clientX: number, clientY: number) => {
       mouseX = clientX;
@@ -68,6 +70,14 @@ export default function CustomCursor() {
       rafId = requestAnimationFrame(animateCursor);
     }
     animateCursor();
+
+    // Defer GSAP para carga magnética (TBT)
+    const cancelIdle = onIdle(async () => {
+      if (cancelled) return;
+      const [{ gsap }] = await Promise.all([import("gsap")]);
+      if (cancelled) return;
+      gsapRef = gsap;
+    });
 
     // ── États au survol (délégation d'événements) ──
     const handleHover = (e: MouseEvent | null, clientX?: number, clientY?: number) => {
@@ -105,7 +115,12 @@ export default function CustomCursor() {
         const moveX = (cx - centerX) * 0.3;
         const moveY = (cy - centerY) * 0.3;
 
-        gsap.to(link, { x: moveX, y: moveY, duration: 0.3, ease: "power2.out" });
+        if (gsapRef) {
+          gsapRef.to(link, { x: moveX, y: moveY, duration: 0.3, ease: "power2.out" });
+        } else {
+          // Fallback immediate transform if gsap not yet loaded
+          link.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        }
       }
     };
 
@@ -114,12 +129,16 @@ export default function CustomCursor() {
         "a, button, .nav-link-item, .tech-item"
       ) as HTMLElement | null;
       if (link) {
-        gsap.to(link, {
-          x: 0,
-          y: 0,
-          duration: 0.5,
-          ease: "elastic.out(1, 0.3)",
-        });
+        if (gsapRef) {
+          gsapRef.to(link, {
+            x: 0,
+            y: 0,
+            duration: 0.5,
+            ease: "elastic.out(1, 0.3)",
+          });
+        } else {
+          link.style.transform = "";
+        }
       }
     };
 
@@ -142,6 +161,8 @@ export default function CustomCursor() {
     document.addEventListener("mouseenter", onMouseEnter);
 
     return () => {
+      cancelled = true;
+      cancelIdle();
       cancelAnimationFrame(rafId);
       window.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mousemove", onDocMouseMove);

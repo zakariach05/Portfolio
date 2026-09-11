@@ -18,7 +18,7 @@
  *   (si l'utilisateur ajoute juste la classe sans le composant).
  */
 import { createElement, useEffect, useRef, type ReactNode } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { onIdle } from "@/lib/defer";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 
 type RevealTextProps = {
@@ -96,46 +96,79 @@ export default function RevealText({
     const wordEls = el.querySelectorAll<HTMLElement>(".reveal-word");
     if (wordEls.length === 0) return;
 
-    // Mobile : pas de scrub (TBT) — affiche direct en couleur finale
-    try {
-      if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches) {
-        gsap.set(wordEls, { color: toColor });
-        return () => {
-          el.innerHTML = originalHTML;
-        };
-      }
-    } catch {
-      /* ignore */
-    }
+    let cancelled = false;
+    let ctx: any = null;
+    let gsapRef: any = null;
+    let ScrollTriggerRef: any = null;
 
-    if (reduceMotion) {
-      gsap.set(wordEls, { color: toColor });
-      return () => {
-        el.innerHTML = originalHTML;
-      };
-    }
+    const cancelIdle = onIdle(async () => {
+      if (cancelled) return;
+      const [{ gsap }] = await Promise.all([import("gsap")]);
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      gsap.registerPlugin(ScrollTrigger);
+      if (cancelled) return;
+      gsapRef = gsap;
+      ScrollTriggerRef = ScrollTrigger;
 
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        wordEls,
-        { color: fromColor },
-        {
-          color: toColor,
-          stagger,
-          ease: "none",
-          scrollTrigger: {
-            trigger: el,
-            start,
-            end,
-            scrub: scrub === true ? true : scrub,
-          },
+      // Mobile : pas de scrub (TBT) — affiche direct en couleur finale
+      try {
+        if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches) {
+          gsap.set(wordEls, { color: toColor });
+          return;
         }
-      );
-    }, el);
+      } catch {
+        /* ignore */
+      }
+
+      if (reduceMotion) {
+        gsap.set(wordEls, { color: toColor });
+        return;
+      }
+
+      ctx = gsap.context(() => {
+        gsap.fromTo(
+          wordEls,
+          { color: fromColor },
+          {
+            color: toColor,
+            stagger,
+            ease: "none",
+            scrollTrigger: {
+              trigger: el,
+              start,
+              end,
+              scrub: scrub === true ? true : scrub,
+            },
+          }
+        );
+      }, el);
+    });
 
     return () => {
-      ctx.revert();
-      el.innerHTML = originalHTML;
+      cancelled = true;
+      cancelIdle();
+      if (ctx) {
+        try {
+          ctx.revert();
+        } catch {
+          /* ignore */
+        }
+      } else if (gsapRef && ScrollTriggerRef) {
+        // Cleanup any ScrollTriggers that may have been created before ctx revert
+        try {
+          ScrollTriggerRef.getAll().forEach((st: any) => {
+            if (st.trigger === el) st.kill();
+          });
+        } catch {
+          /* ignore */
+        }
+      }
+      // Restore original HTML in all cases
+      try {
+        el.innerHTML = originalHTML;
+      } catch {
+        /* ignore */
+      }
     };
   }, [reduceMotion, stagger, start, end, scrub, fromColor, toColor, children]);
 
