@@ -98,7 +98,13 @@ export default function Contact() {
   >("idle");
 
   const { startSubmit, resolveSubmit } = useContactStatus();
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
+
+  // Le titre français de la section est volontairement explicite ici :
+  // cela évite qu'un ancien dictionnaire mis en cache puisse réafficher
+  // « Contactez Moi » après un déploiement.
+  const contactTitleWhite = lang === "fr" ? "TRAVAILLONS" : t("contact.titleWhite");
+  const contactTitleRed = lang === "fr" ? "ENSEMBLE" : t("contact.titleRed");
 
   useEffect(() => {
     if (status === "success" && successMsgRef.current) {
@@ -229,7 +235,7 @@ export default function Contact() {
       <TopographicLines />
 
       <div className="container mx-auto px-6 relative z-10">
-        <SectionTitle white={t("contact.titleWhite")} red={t("contact.titleRed")} align="center" className="mb-14" />
+        <SectionTitle white={contactTitleWhite} red={contactTitleRed} align="center" className="mb-14" />
 
         <div className="contact-split-container transition-all duration-300">
           {/* Logo Side */}

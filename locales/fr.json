@@ -146,8 +146,8 @@
     "goTo": "Aller à la section "
   },
   "contact": {
-    "titleWhite": "Contactez",
-    "titleRed": "Moi",
+    "titleWhite": "TRAVAILLONS",
+    "titleRed": "ENSEMBLE",
     "stepLabel": "Étape",
     "steps": [
       { "heading": "Commençons par votre nom.", "placeholder": "Écrivez votre nom ici" },
