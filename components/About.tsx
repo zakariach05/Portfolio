@@ -126,7 +126,7 @@ export default function About() {
       {/* Large Background Photo */}
       <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
         <AppImage
-          src="/NV-IMG/about-bg.webp"
+          src="/NV-IMG/hero-poster.webp"
           alt={t("about.bgAlt")}
           fill
           sizes="(max-width: 1200px) 100vw, 1200px"

@@ -20,8 +20,6 @@
 /** Résolution max mobile retenue : 720p / bitrate ~1–2 Mbps (voir le script scripts/encode-video.ps1). */
 export const HERO_VIDEO_LOCAL = {
   mp4: "/NV-IMG/vidio/video_preview_h264.mp4",
-  // Généré par scripts/encode-video.ps1 (ffmpeg) — absent tant que non encodé.
-  webm: "/NV-IMG/vidio/hero-video-mobile.webm",
 };
 
 /** URL CDN configurée (vide = locale). */
@@ -33,16 +31,14 @@ function cdnBase(): string {
 }
 
 /**
- * Sources ordonnées pour le <video> : [webm?, mp4]… si le webm local n'existe
- * pas côté rendu, we pouvons le laisser ; le navigateur passera au mp4 en cas
- * d'erreur. Avec CDN, on utilise aussi le webm CDN.
+ * Source vidéo disponible localement. Le WebM n'est pas inclus tant qu'il
+ * n'est pas généré, afin d'éviter une requête 404 inutile avant le fallback.
  */
 export function heroVideoSources(): { src: string; type: string }[] {
   const base = cdnBase();
   const src = (file: string) => `${base}/${file}`;
 
   const sources: { src: string; type: string }[] = [];
-  sources.push({ src: base ? src("hero-video-mobile.webm") : HERO_VIDEO_LOCAL.webm, type: "video/webm" });
   sources.push({ src: base ? src("video_preview_h264.mp4") : HERO_VIDEO_LOCAL.mp4, type: "video/mp4" });
   return sources;
 }

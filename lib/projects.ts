@@ -105,6 +105,32 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
+    id: "maghrebdeco",
+    title: "Maghrebdeco",
+    href: "https://maghrebdeco-web.vercel.app/fr",
+    imageSrc: "/img/Maghrebdeco.png",
+    imageWidth: 1900,
+    imageHeight: 936,
+    imageAlt: "Maghrebdeco",
+    description: "Site web de décoration et d’aménagement intérieur.",
+    year: 2026,
+    niche: "Decoration",
+    tags: ["Next.js", "React", "Tailwind CSS", "Vercel"],
+  },
+  {
+    id: "ringover",
+    title: "Ringover",
+    href: "https://github.com/zakariach05/RingOver-CRM",
+    imageSrc: "/img/Ringover.png",
+    imageWidth: 1919,
+    imageHeight: 936,
+    imageAlt: "Ringover CRM",
+    description: "Application CRM inspirée de Ringover pour gérer les relations clients et les échanges commerciaux.",
+    year: 2026,
+    niche: "Ringover CRM",
+    tags: ["React", "CRM", "Tailwind CSS"],
+  },
+  {
     id: "spark-vision",
     title: "Spark Vision",
     href: "https://sparkvision.ma",
@@ -116,19 +142,6 @@ export const PROJECTS: Project[] = [
     year: 2025,
     niche: "AI-Powered Products",
     tags: ["WordPress", "Elementor"],
-  },
-  {
-    id: "portfolio",
-    title: "Mon Portfolio",
-    href: "https://github.com/zakariach05/portfolio",
-    imageSrc: "/img/portfolio.png",
-    imageWidth: 1919,
-    imageHeight: 1079,
-    imageAlt: "Project Portfolio",
-    description: "Design immersif avec Three.js et animations avancées GSAP.",
-    year: 2026,
-    niche: "Personal Branding",
-    tags: ["Three.js", "GSAP", "Tailwind"],
   },
   {
     id: "meteo-05",
@@ -161,13 +174,14 @@ export const PROJECTS: Project[] = [
 /**
  * Sélection des projets pour la section "Works" (effet sticky-stacking).
  * Ordre d'empilement : le premier est la carte du bas, le dernier arrive
- * par-dessus en haut de la pile. 6 projets (Home) — "Autres projets" supprimé.
+ * par-dessus en haut de la pile. 7 projets (Home) — "Autres projets" supprimé.
  */
 export const WORKS: Project[] = [
   PROJECTS.find((p) => p.id === "hotel-cinco")!,       // 2026 · Hospitality
   PROJECTS.find((p) => p.id === "immo-estrie")!,       // 2026 · Real Estate
   PROJECTS.find((p) => p.id === "electro-05")!,        // 2025 · E-Commerce
-  PROJECTS.find((p) => p.id === "portfolio")!,         // 2026 · Personal Branding
+  PROJECTS.find((p) => p.id === "maghrebdeco")!,      // 2026 · Decoration
+  PROJECTS.find((p) => p.id === "ringover")!,         // 2026 · Ringover CRM
   PROJECTS.find((p) => p.id === "casa-papel")!,        // 2025 · Entertainment
   PROJECTS.find((p) => p.id === "spark-vision")!,      // 2025 · AI-Powered Products
 ];

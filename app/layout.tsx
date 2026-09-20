@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Outfit, Bebas_Neue, JetBrains_Mono } from "next/font/google";
+import {
+  Inter,
+  Outfit,
+  Bebas_Neue,
+  JetBrains_Mono,
+  Architects_Daughter,
+} from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
 import LenisProvider from "@/components/providers/LenisProvider";
@@ -43,6 +49,14 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-jetbrains",
+  display: "swap",
+  preload: false,
+});
+
+const architectsDaughter = Architects_Daughter({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-architects",
   display: "swap",
   preload: false,
 });
@@ -135,7 +149,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`dark ${inter.variable} ${outfit.variable} ${bebas.variable} ${jetbrainsMono.variable} ${getaiGrotesk.variable}`}
+      className={`dark ${inter.variable} ${outfit.variable} ${bebas.variable} ${jetbrainsMono.variable} ${architectsDaughter.variable} ${getaiGrotesk.variable}`}
     >
       {/* html porte la classe "dark" en permanence : le design étant 100% dark,
           on ne gère pas de toggle de thème (comme l'original, verrouillé dark). */}

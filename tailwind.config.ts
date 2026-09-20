@@ -16,6 +16,7 @@ const config: Config = {
         bebas: ["var(--font-bebas)", "cursive"],
         getai: ["var(--font-getai)", "sans-serif"],
         mono: ["var(--font-jetbrains)", "monospace"],
+        architects: ["var(--font-architects)", "cursive"],
       },
       colors: {
         slate: {

@@ -3621,6 +3621,48 @@ html.hoodie-sequence-done #hero-scroll-indicator {
 .juice-logo--lg:hover {
     transform: scale(1.06);
 }
+
+/* Au survol du logo Contact, le V laisse place au monogramme manuscrit 05. */
+.contact-logo-hover {
+    outline: none;
+    display: block;
+    width: min(380px, 90vw);
+    aspect-ratio: 447 / 461;
+}
+.contact-logo-hover .juice-logo--lg {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+}
+.contact-logo-hover .juice-logo--lg,
+.contact-logo-05 {
+    transition: opacity 0.28s ease, transform 0.28s ease;
+}
+.contact-logo-05 {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #dc2626;
+    font-family: var(--font-architects), "Architects Daughter", cursive;
+    font-size: clamp(10rem, 18vw, 17rem);
+    line-height: 0.8;
+    opacity: 0;
+    transform: scale(0.86) rotate(-4deg);
+    pointer-events: none;
+    text-shadow: 0 0 18px rgba(220, 38, 38, 0.28);
+}
+.contact-logo-hover:hover .juice-logo--lg,
+.contact-logo-hover:focus-visible .juice-logo--lg {
+    opacity: 0;
+    transform: scale(0.9);
+}
+.contact-logo-hover:hover .contact-logo-05,
+.contact-logo-hover:focus-visible .contact-logo-05 {
+    opacity: 1;
+    transform: scale(1) rotate(-4deg);
+}
 .juice-fill--full {
     clip-path: inset(0% 0 0 0) !important;
     animation: none !important;

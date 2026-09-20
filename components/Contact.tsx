@@ -11,7 +11,6 @@ import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import JuiceLogo from "@/components/JuiceLogo";
 import { onIdle } from "@/lib/defer";
-import Logo065Tooltip from "@/components/Logo065Tooltip";
 import SectionTitle from "@/components/SectionTitle";
 import { useContactStatus } from "@/contexts/ContactStatusContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -240,10 +239,11 @@ export default function Contact() {
         <div className="contact-split-container transition-all duration-300">
           {/* Logo Side */}
           <div className="contact-logo-side">
-            <div className="relative inline-block">
-              <Logo065Tooltip>
-                <JuiceLogo className="juice-logo--lg" />
-              </Logo065Tooltip>
+            <div className="contact-logo-hover relative inline-block" tabIndex={0}>
+              <JuiceLogo className="juice-logo--lg" />
+              <span className="contact-logo-05" aria-hidden="true">
+                05
+              </span>
             </div>
           </div>
 
