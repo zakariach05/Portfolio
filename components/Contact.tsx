@@ -284,6 +284,7 @@ export default function Contact() {
                       <input
                         type="text"
                         id="step-name"
+                        aria-label={t("contact.steps.0.heading")}
                         className="step-input-large"
                         placeholder={t("contact.steps.0.placeholder")}
                         value={name}
@@ -319,6 +320,7 @@ export default function Contact() {
                       <input
                         type="email"
                         id="step-email"
+                        aria-label={t("contact.steps.1.heading")}
                         className="step-input-large"
                         placeholder={t("contact.steps.1.placeholder")}
                         value={email}
@@ -354,6 +356,7 @@ export default function Contact() {
                       <input
                         type="text"
                         id="step-subject"
+                        aria-label={t("contact.steps.2.heading")}
                         className="step-input-large"
                         placeholder={t("contact.steps.2.placeholder")}
                         value={subject}
@@ -388,6 +391,7 @@ export default function Contact() {
                     <div className="input-wrapper">
                       <textarea
                         id="step-message"
+                        aria-label={t("contact.steps.3.heading")}
                         className="step-input-large"
                         placeholder={t("contact.steps.3.placeholder")}
                         rows={1}

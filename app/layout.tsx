@@ -123,6 +123,7 @@ export const metadata: Metadata = {
   icons: {
     icon: "/NV-IMG/V.png",
   },
+  manifest: "/manifest.webmanifest",
   alternates: {
     canonical: "https://zakariach05.vercel.app",
   },
