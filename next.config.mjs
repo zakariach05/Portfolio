@@ -20,6 +20,24 @@ const nextConfig = {
     minimumCacheTTL: 31536000,
   },
   async headers() {
+    // Content-Security-Policy : liste exhaustive des origines réellement utilisées.
+    // 'unsafe-inline' requis pour GSAP (inline styles) et le script de thème.
+    // 'unsafe-eval' requis pour Three.js (WebGL shader compilation via eval sur certains moteurs).
+    const CSP = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.clarity.ms",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
+      "img-src 'self' data: blob: https://res.cloudinary.com",
+      "media-src 'self' blob:",
+      "connect-src 'self' https://www.clarity.ms https://b.clarity.ms https://api.resend.com",
+      "worker-src 'self' blob:",
+      "frame-src 'none'",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join("; ");
+
     return [
       {
         source: "/(.*)",
@@ -43,6 +61,10 @@ const nextConfig = {
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=(), payment=()",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: CSP,
           },
         ],
       },

@@ -67,7 +67,7 @@ const nabla = Nabla({
   subsets: ["latin"],
   variable: "--font-nabla",
   display: "swap",
-  preload: false,
+  preload: true,
 });
 
 const getaiGrotesk = localFont({
@@ -181,6 +181,9 @@ export default function RootLayout({
       <head>
         {/* No-flash theme bootstrap — must stay inline and before <body>. */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* Préconnexion DNS/TLS Google Fonts (utilisé par Hero3DText pour Creepster, Grechen Fuemen, Architects Daughter) */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="bg-bg text-ink font-sans transition-colors duration-300 w-full overflow-x-clip">
         <PersonSchema />
