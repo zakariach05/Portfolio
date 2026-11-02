@@ -25,12 +25,12 @@ const nextConfig = {
     // 'unsafe-eval' requis pour Three.js (WebGL shader compilation via eval sur certains moteurs).
     const CSP = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.clarity.ms",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.clarity.ms https://*.clarity.ms",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
-      "img-src 'self' data: blob: https://res.cloudinary.com",
+      "img-src 'self' data: blob: https://res.cloudinary.com https://cdn.jsdelivr.net https://*.clarity.ms",
       "media-src 'self' blob:",
-      "connect-src 'self' https://www.clarity.ms https://b.clarity.ms https://api.resend.com",
+      "connect-src 'self' https://www.clarity.ms https://*.clarity.ms https://api.resend.com",
       "worker-src 'self' blob:",
       "frame-src 'none'",
       "object-src 'none'",
@@ -94,6 +94,15 @@ const nextConfig = {
             },
             {
               source: "/NV-IMG/:path*",
+              headers: [
+                {
+                  key: "Cache-Control",
+                  value: "public, max-age=31536000, immutable",
+                },
+              ],
+            },
+            {
+              source: "/icons/:path*",
               headers: [
                 {
                   key: "Cache-Control",

@@ -36,19 +36,17 @@ type StackIcon = {
   invertLight?: boolean;
 };
 
-const DEVICON = "https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons";
-
 /** Colonne de gauche — ces icônes n'apparaissent que dans ce cluster. */
 const LEFT_ICONS: StackIcon[] = [
-  { name: "React", src: `${DEVICON}/react/react-original.svg` },
+  { name: "React", src: "/icons/react.svg" },
   {
     name: "Next.js",
-    src: `${DEVICON}/nextjs/nextjs-original.svg`,
+    src: "/icons/nextjs.svg",
     invert: true,
   },
-  { name: "TypeScript", src: `${DEVICON}/typescript/typescript-original.svg` },
+  { name: "TypeScript", src: "/icons/typescript.svg" },
   { name: "UML", src: null },
-  { name: "Figma", src: `${DEVICON}/figma/figma-original.svg` },
+  { name: "Figma", src: "/icons/figma.svg" },
   { name: "Vercel", src: "/NV-IMG/vercel.svg", invertLight: true },
 ];
 
@@ -56,16 +54,16 @@ const LEFT_ICONS: StackIcon[] = [
 const RIGHT_ICONS: StackIcon[] = [
   {
     name: "PostgreSQL",
-    src: `${DEVICON}/postgresql/postgresql-original.svg`,
+    src: "/icons/postgresql.svg",
   },
-  { name: "Git", src: `${DEVICON}/git/git-original.svg` },
+  { name: "Git", src: "/icons/git.svg" },
   {
     name: "GitHub",
-    src: `${DEVICON}/github/github-original.svg`,
+    src: "/icons/github.svg",
     invert: true,
   },
-  { name: "Docker", src: `${DEVICON}/docker/docker-original.svg` },
-  { name: "Redux", src: `${DEVICON}/redux/redux-original.svg` },
+  { name: "Docker", src: "/icons/docker.svg" },
+  { name: "Redux", src: "/icons/redux.svg" },
   {
     name: "Google Search Console",
     src: "/NV-IMG/google-search-console.svg",
