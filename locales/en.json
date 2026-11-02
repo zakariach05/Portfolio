@@ -2,15 +2,17 @@
   "common": {
     "backTop": "Back to top",
     "switchToFr": "Passer au français",
-    "switchToEn": "Switch to English"
+    "switchToEn": "Switch to English",
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme"
   },
   "cursor": {
     "view": "VIEW"
   },
   "nav": {
     "work": "WORK",
-    "services": "SERVICES",
     "about": "ABOUT",
+    "experience": "EXPERIENCE",
     "contact": "CONTACT",
     "mainNav": "Main navigation",
     "openMenu": "Open menu",
@@ -20,7 +22,6 @@
   },
   "curtain": {
     "work": "Work",
-    "services": "Services",
     "about": "About",
     "contact": "Contact",
     "name": "ZAKARIA CHAMEKH",
@@ -34,6 +35,10 @@
     "introLabel": "Hero introduction",
     "nameLabel": "Zakaria Chamekh",
     "role": "Full-Stack Web Developer & Application Security",
+    "roleShort": "Full stack web developer",
+    "ctaProjects": "View projects",
+    "ctaContact": "Contact me",
+    "canvasLabel": "Zakaria Chamekh's name in 3D, tilted in perspective",
     "scrollLabel": "Scroll to explore",
     "badgeText": "SCROLL TO EXPLORE • SCROLL TO EXPLORE •"
   },
@@ -41,6 +46,10 @@
     "titleWhite": "Who I",
     "titleRed": "Am",
     "bgAlt": "Zakaria About Background",
+    "profileLabel": "Profile",
+    "intro1": "I'm Zakaria Chamekh, a Full Stack Developer based in Casablanca, currently pursuing a Master's in Artificial Intelligence at ENSAM Casablanca.",
+    "intro2": "I build secure and scalable web applications, combining backend architecture, application security, and modern user interfaces.",
+    "sceneLabel": "Portrait of Zakaria Chamekh",
     "tagline1": "More than a developer,",
     "tagline2": "a digital architect.",
     "para1a": "Based in",
@@ -67,44 +76,90 @@
   "expertise": {
     "titleWhite": "Areas of",
     "titleRed": "Expertise",
+    "region": "Areas of expertise",
     "cards": [
+      { "title": "Front-End", "subtitle": "Smooth and immersive interfaces" },
+      { "title": "Back-End", "subtitle": "Robust software and high-performance APIs" },
+      { "title": "UI/UX Design", "subtitle": "Modern design and strong visual identity" },
+      { "title": "QA & Testing", "subtitle": "Rigorous and automated testing" },
+      { "title": "Cloud & DevOps", "subtitle": "Scalable infrastructure and CI/CD" },
+      { "title": "Security & OWASP", "subtitle": "Vulnerability audits and best practices" },
+      { "title": "SEO & Performance", "subtitle": "Visibility and fast, optimized apps" }
+    ]
+  },
+  "experience": {
+    "titleWhite": "My",
+    "titleRed": "Experience",
+    "region": "Professional experience",
+    "projectLabel": "Project",
+    "expand": "Explore details",
+    "collapse": "Collapse",
+    "labels": {
+      "problem": "Context & problem",
+      "solution": "Solution",
+      "contribution": "My contribution",
+      "implementation": "Technical implementation",
+      "impact": "Results"
+    },
+    "items": [
       {
-        "role": "role-frontend",
-        "title": "Front-End Developer",
-        "text": "Smooth, immersive interfaces. Focused on UX and performance.",
-        "tags": ["REACT", "THREE.JS", "GSAP"]
+        "number": "01",
+        "company": "3LM Solutions — RingOver",
+        "role": "Full Stack Web Developer Intern",
+        "location": "Ariana, Tunisia — Remote",
+        "period": "July 2026 – September 2026",
+        "project": "CRM & Cloud Telephony Platform",
+        "problem": "Contacts, deals, and calls were scattered across multiple tools.",
+        "solution": "A unified CRM and cloud telephony platform.",
+        "contribution": [
+          "Designed and developed the complete application independently, covering frontend and backend.",
+          "Implemented JWT authentication with Admin, Manager, and Agent roles.",
+          "Integrated Twilio for calls and SMS.",
+          "Developed a real-time dashboard.",
+          "Implemented 106 automated tests using Jest and Supertest."
+        ],
+        "implementation": [
+          "JWT — Admin / Manager / Agent",
+          "Twilio — calls & SMS",
+          "Real-time dashboard",
+          "Jest + Supertest — 106 tests"
+        ],
+        "impact": "Centralized the commercial workflow into one platform, with real-time team monitoring and a solid testing foundation."
       },
       {
-        "role": "role-backend",
-        "title": "Back-End Engineer",
-        "text": "Robust software and high-performance APIs. Security & Scalability.",
-        "tags": ["LARAVEL", "PHP", "MYSQL"]
-      },
-      {
-        "role": "role-design",
-        "title": "UI/UX Designer",
-        "text": "Modern design and strong visual identity. Figma proficient.",
-        "tags": ["FIGMA", "PS", "UX DESIGN"]
-      },
-      {
-        "role": "role-testing",
-        "title": "QA & Testing",
-        "text": "Total quality assurance through rigorous, automated testing.",
-        "tags": ["POSTMAN", "UNIT TEST", "JEST"]
-      },
-      {
-        "role": "role-cloud",
-        "title": "Cloud & DevOps",
-        "text": "Scalable infrastructure and CI/CD. Cloud solutions expertise.",
-        "tags": ["AWS", "DOCKER", "CI/CD"]
-      },
-      {
-        "role": "role-security",
-        "title": "SECURITY & OWASP",
-        "text": "Vulnerability audit and OWASP Top 10 best practices. Secure by design.",
-        "tags": ["OWASP", "PENTEST", "JWT"]
+        "number": "02",
+        "company": "M2E Automation",
+        "role": "Full Stack Web Developer Intern",
+        "location": "Casablanca — Remote",
+        "period": "May 2026 – July 2026",
+        "project": "Multi-vendor Marketplace",
+        "problem": "The need for a secure and scalable multi-vendor marketplace.",
+        "solution": "A headless architecture based on React and Laravel 12.",
+        "contribution": [
+          "Designed UML diagrams and the MySQL database structure.",
+          "Created a database containing more than 20 tables.",
+          "Developed secure REST APIs.",
+          "Implemented Laravel Sanctum, OTP authentication, and Google OAuth.",
+          "Integrated Redis caching.",
+          "Configured deployment using Docker Compose."
+        ],
+        "implementation": [
+          "UML + MySQL — 20+ tables",
+          "Secure REST APIs",
+          "Sanctum + OTP + Google OAuth",
+          "Redis caching",
+          "Docker Compose"
+        ],
+        "impact": "Created an independent frontend/backend architecture with secure authentication, caching, and reproducible deployment."
       }
     ]
+  },
+  "stack": {
+    "label": "Tech Stack",
+    "line1": "Modern",
+    "line2": "Web Development",
+    "para": "I build responsive, performant, and accessible web applications using modern standards.",
+    "btn": "View Work"
   },
   "projects": {
     "titleWhite": "My",
@@ -169,6 +224,8 @@
     "titleWhite": "Always",
     "titleRed": "shipping code",
     "cta": "Download resume",
+    "cubesHint": "CLICK MY NAME",
+    "cubesButton": "Pop the logos",
     "links": [
       { "label": "Home", "href": "#home" },
       { "label": "Work", "href": "#projects" },
@@ -176,45 +233,5 @@
       { "label": "Contact", "href": "#contact" }
     ],
     "copyright": "© 2026 Zakaria Chamekh. All rights reserved."
-  },
-  "servicesPage": {
-    "heroTitleWhite": "My",
-    "heroTitleRed": "Services",
-    "heroSub": "Cutting-edge technical solutions to bring your projects to life and dominate the digital web ecosystem.",
-    "items": [
-      {
-        "title": "Advanced Web Development",
-        "desc": "Design of ultra-high-performance, secure and dynamic web applications using modern web standards.",
-        "tags": ["REACT", "LARAVEL"]
-      },
-      {
-        "title": "Creative & 3D Web",
-        "desc": "Integration of interactive 3D experiences and smooth animations, delivering a premium, highly immersive level of interaction.",
-        "tags": ["THREE.JS", "GSAP"]
-      },
-      {
-        "title": "E-commerce Stores",
-        "desc": "Building high-conversion e-commerce platforms. Integrated payment processes, simplified stock management and admin dashboard.",
-        "tags": ["WORDPRESS", "TAILWIND"]
-      },
-      {
-        "title": "Minimalist UI/UX Design",
-        "desc": "Thoughtful design focused on premium aesthetics and user experience, with clean interfaces (pixel-perfect Figma).",
-        "tags": ["FIGMA", "PROTOTYPING"]
-      },
-      {
-        "title": "SEO & Web Perf Optimization",
-        "desc": "Drastic acceleration of load times (Lighthouse +95) and clean code structure to boost your Google visibility.",
-        "tags": ["TECHNICAL SEO", "ANALYTICS"]
-      },
-      {
-        "title": "Maintenance & Infrastructure",
-        "desc": "Keeping your apps in optimal condition: backend-type security fixes, VPS management, and long-term support.",
-        "tags": ["PHP BACKEND", "API MAINTENANCE"]
-      }
-    ],
-    "ctaTitleWhite": "Ready to dominate",
-    "ctaTitleRed": "your digital market",
-    "ctaButton": "Discuss My Project"
   }
 }

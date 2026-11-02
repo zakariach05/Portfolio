@@ -20,9 +20,9 @@ import { usePathname, useRouter } from "next/navigation";
 import JuiceLogo from "@/components/JuiceLogo";
 import Logo065Tooltip from "@/components/Logo065Tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import ThemeToggle from "@/components/ThemeToggle";
 import { useLenis } from "@/components/providers/LenisProvider";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { COCOON_PAGES } from "@/lib/seo-cocoon";
 
 type NavItemProps = {
   label: string;
@@ -60,14 +60,13 @@ export default function CurtainMenu() {
   const isHome = pathname === "/";
   const NAV = [
     { label: t("nav.about"), href: isHome ? "#about" : "/#about" },
+    { label: t("nav.experience"), href: isHome ? "#experience" : "/#experience" },
     { label: t("nav.work"), href: isHome ? "#projects" : "/#projects" },
-    { label: t("nav.services"), href: "/services" },
     { label: t("nav.contact"), href: isHome ? "#contact" : "/#contact" },
   ];
   const CURTAIN = [
     { label: t("curtain.about"), href: isHome ? "#about" : "/#about" },
     { label: t("curtain.work"), href: isHome ? "#projects" : "/#projects" },
-    { label: t("curtain.services"), href: "/services" },
     { label: t("curtain.contact"), href: isHome ? "#contact" : "/#contact" },
   ];
 
@@ -81,7 +80,7 @@ export default function CurtainMenu() {
     const [path, hash] = href.split("#");
     const targetHash = hash ? `#${hash}` : null;
 
-    if (path.startsWith("/services") || path.startsWith("/projets")) {
+    if (path.startsWith("/projets")) {
       router.push(href.split("#")[0]);
       return;
     }
@@ -138,25 +137,19 @@ export default function CurtainMenu() {
     }
   }, [lenis]);
 
-  // ── Scramble léger du lien SERVICES au survol (façon "texte vivant") ──
+  // ── Mouvement réduit : ticker du rideau à l'arrêt ──
   const prefersReduced = () =>
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   return (
     <>
-      {/* ══════════ NAVBAR PILL ══════════ */}
-      <nav
+      {/* ══════════ NAVBAR — 3-column grid header ══════════ */}
+      <header
         aria-label={t("nav.mainNav")}
-        className={`fixed top-4 left-1/2 -translate-x-1/2 z-[60] flex items-center justify-between gap-4
-          w-[min(960px,calc(100%-2rem))] h-16 px-4 md:px-6 rounded-full
-          backdrop-blur-md border transition-all duration-500
-          ${open
-            ? "bg-transparent border-transparent backdrop-blur-none"
-            : "bg-white/5 border-white/10 shadow-lg shadow-black/40"
-          }`}
+        className="navbar-header fixed top-0 left-0 right-0 z-[60] transition-all duration-500"
       >
-        {/* Logo V électrique → accueil */}
+        {/* ── Col 1: Logo (far left) ── */}
         {isHome ? (
           <a
             href="#home"
@@ -166,7 +159,7 @@ export default function CurtainMenu() {
               close();
               if (lenis) lenis.scrollTo(0);
             }}
-            className="w-12 h-12 flex items-center justify-center shrink-0"
+            className="navbar-logo w-16 h-16 flex items-center justify-center"
           >
             <Logo065Tooltip>
               <JuiceLogo className="juice-logo--sm" />
@@ -176,7 +169,7 @@ export default function CurtainMenu() {
           <Link
             href="/"
             aria-label={t("nav.backHome")}
-            className="w-12 h-12 flex items-center justify-center shrink-0"
+            className="navbar-logo w-16 h-16 flex items-center justify-center"
           >
             <Logo065Tooltip>
               <JuiceLogo className="juice-logo--sm" />
@@ -184,64 +177,76 @@ export default function CurtainMenu() {
           </Link>
         )}
 
-        {/* Liens centraux (slide) — masqués sur petit écran */}
-        <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
-          {NAV.map((item) => (
-            <li key={item.label}>
-              <SlidingLink
-                label={item.label}
-                href={item.href}
-                onNavClick={onNavClick}
-                className={`nav-slide text-xs font-mono tracking-[0.25em] ${
-                  open ? "text-white/90" : "text-gray-300"
-                }`}
-              />
-            </li>
-          ))}
-        </ul>
-
-        {/* Sélecteur de langue FR/EN — toujours visible dans la pill */}
-        <LanguageSwitcher />
-
-        {/* Bouton grille ⇄ X */}
-        <button
-          type="button"
-          onClick={toggle}
-          aria-label={open ? t("nav.closeMenu") : t("nav.openMenu")}
-          aria-expanded={open}
-          aria-controls="curtain"
-          className="menu-toggle-btn w-10 h-10 rounded-full border flex items-center justify-center
-            transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-500
-            focus-visible:outline-offset-2 shrink-0"
+        {/* ── Col 2: Pill (links only, centered) — hidden on mobile ── */}
+        <nav
+          className={`navbar-pill-center hidden md:flex items-center rounded-full
+            backdrop-blur-md border transition-all duration-500 px-6 py-3 gap-8
+            ${open
+              ? "bg-transparent border-transparent backdrop-blur-none"
+              : "bg-ink/5 border-line shadow-lg"
+            }`}
         >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-            className={`grid-icon transition-all duration-300 ${
-              open ? "opacity-0 rotate-45" : "opacity-100"
-            }`}
-            aria-hidden="true"
+          {NAV.map((item) => (
+            <SlidingLink
+              key={item.label}
+              label={item.label}
+              href={item.href}
+              onNavClick={onNavClick}
+              className={`nav-slide text-xs font-mono tracking-[0.25em] ${
+                open ? "text-ink/90" : "text-muted"
+              }`}
+            />
+          ))}
+        </nav>
+
+        {/* ── Col 3: Language toggle + Grid button (far right) ── */}
+        <div className="navbar-actions flex items-center gap-4">
+          {/* Sélecteur de langue FR/EN */}
+          <LanguageSwitcher />
+
+          {/* Thème clair / sombre */}
+          <ThemeToggle />
+
+          {/* Bouton grille ⇄ X */}
+          <button
+            type="button"
+            onClick={toggle}
+            aria-label={open ? t("nav.closeMenu") : t("nav.openMenu")}
+            aria-expanded={open}
+            aria-controls="curtain"
+            className="menu-toggle-btn w-10 h-10 rounded-full border flex items-center justify-center
+              transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-500
+              focus-visible:outline-offset-2 shrink-0"
           >
-            <rect x="0" y="0" width="7" height="7" rx="1.5" fill="#ffffff" />
-            <rect x="11" y="0" width="7" height="7" rx="1.5" fill="#ffffff" />
-            <rect x="0" y="11" width="7" height="7" rx="1.5" fill="#ffffff" />
-            <rect x="11" y="11" width="7" height="7" rx="1.5" fill="#ffffff" />
-          </svg>
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-            className={`close-icon absolute transition-all duration-300 ${
-              open ? "opacity-100 rotate-0" : "opacity-0 -rotate-45"
-            }`}
-            aria-hidden="true"
-          >
-            <rect x="8" y="0" width="2" height="18" rx="1" fill="#DC2626" />
-            <rect x="0" y="8" width="18" height="2" rx="1" fill="#DC2626" />
-          </svg>
-        </button>
-      </nav>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              className={`grid-icon transition-all duration-300 ${
+                open ? "opacity-0 rotate-45" : "opacity-100"
+              }`}
+              aria-hidden="true"
+            >
+              <rect x="0" y="0" width="7" height="7" rx="1.5" fill="currentColor" />
+              <rect x="11" y="0" width="7" height="7" rx="1.5" fill="currentColor" />
+              <rect x="0" y="11" width="7" height="7" rx="1.5" fill="currentColor" />
+              <rect x="11" y="11" width="7" height="7" rx="1.5" fill="currentColor" />
+            </svg>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              className={`close-icon absolute transition-all duration-300 ${
+                open ? "opacity-100 rotate-0" : "opacity-0 -rotate-45"
+              }`}
+              aria-hidden="true"
+            >
+              <rect x="8" y="0" width="2" height="18" rx="1" fill="var(--accent)" />
+              <rect x="0" y="8" width="18" height="2" rx="1" fill="var(--accent)" />
+            </svg>
+          </button>
+        </div>
+      </header>
 
       {/* ══════════ CURTAIN ══════════ */}
       <div
@@ -252,7 +257,7 @@ export default function CurtainMenu() {
         <TickerGlow running={open && !prefersReduced()} />
 
         {/* Coins (infos) */}
-        <div className="curtain-corners px-6 md:px-14 pt-24 font-mono text-[11px] md:text-xs leading-relaxed tracking-[0.15em] text-gray-400">
+        <div className="curtain-corners px-6 md:px-14 pt-24 font-mono text-[11px] md:text-xs leading-relaxed tracking-[0.15em] text-muted">
           <div>
             {t("curtain.name")}
             <br />
@@ -282,27 +287,12 @@ export default function CurtainMenu() {
           ))}
         </div>
 
-        {/* Sous-menu Services — cocon sémantique (crawlabilité) */}
-        <div className="curtain-services-submenu mx-auto max-w-3xl px-6 text-center">
-          <p className="mb-3 font-mono text-[10px] tracking-[0.25em] text-zinc-500">SERVICES DÉTAILLÉS</p>
-          <div className="flex flex-wrap justify-center gap-2">
-            {Object.values(COCOON_PAGES).map((p) => (
-              <Link
-                key={p.slug}
-                href={`/services/${p.slug}`}
-                onClick={close}
-                className="rounded-full border border-white/10 px-3 py-1.5 text-[11px] font-medium tracking-wide text-zinc-300 transition-colors hover:border-red-500/40 hover:text-white"
-              >
-                {p.serviceType}
-              </Link>
-            ))}
-          </div>
-        </div>
-
         {/* Footer */}
-        <div className="curtain-footer px-6 md:px-14 pb-8 md:pb-10 flex items-end justify-between font-mono text-[11px] text-gray-500">
+        <div className="curtain-footer px-6 md:px-14 pb-8 md:pb-10 flex items-end justify-between font-mono text-[11px] text-muted">
           <span>{t("curtain.copyright")}</span>
-          <div className="lang-toggle flex gap-2">
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <div className="lang-toggle flex gap-2">
             <button
               type="button"
               aria-pressed={lang === "en"}
@@ -320,6 +310,7 @@ export default function CurtainMenu() {
               FR
             </button>
           </div>
+        </div>
         </div>
       </div>
     </>

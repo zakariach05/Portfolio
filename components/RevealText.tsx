@@ -17,9 +17,18 @@
  *   Classe .reveal-text exposée. Aussi auto-init sur tout .reveal-text du DOM
  *   (si l'utilisateur ajoute juste la classe sans le composant).
  */
-import { createElement, useEffect, useRef, type ReactNode } from "react";
+import {
+  createElement,
+  isValidElement,
+  useEffect,
+  useRef,
+  type ReactNode,
+} from "react";
 import { onIdle } from "@/lib/defer";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
+import { useTheme } from "@/contexts/ThemeContext";
+
+type RevealTone = "ink" | "accent";
 
 type RevealTextProps = {
   children: ReactNode;
@@ -32,7 +41,25 @@ type RevealTextProps = {
   scrub?: boolean | number;
   fromColor?: string;
   toColor?: string;
+  /** Theme-aware palette. Overrides fromColor/toColor and follows theme changes. */
+  tone?: RevealTone;
 };
+
+/** Builds an rgba() string from a CSS colour-channel variable (e.g. "26 13 15"). */
+function channelsToRgba(value: string, alpha: number): string | null {
+  const channels = value.trim().split(/\s+/).join(", ");
+  if (!channels) return null;
+  return `rgba(${channels}, ${alpha})`;
+}
+
+function toneColors(el: HTMLElement, tone: RevealTone) {
+  const styles = getComputedStyle(el);
+  const variable = tone === "accent" ? "--accent-rgb" : "--ink-rgb";
+  const channels = styles.getPropertyValue(variable);
+  const from = channelsToRgba(channels, tone === "accent" ? 0.25 : 0.2);
+  const to = channelsToRgba(channels, 1);
+  return from && to ? { from, to } : null;
+}
 
 function splitTextNodes(root: HTMLElement) {
   const walker: Node[] = Array.from(root.childNodes);
@@ -68,7 +95,24 @@ function splitTextNodes(root: HTMLElement) {
   }
 }
 
-export default function RevealText({
+export default function RevealText(props: RevealTextProps) {
+  // Le composant découpe ses textes dans le DOM et restaure son HTML au
+  // cleanup : sur un changement de langue (children différents), React doit
+  // repartir d'une instance neuve, sinon l'ancien texte est réinjecté.
+  return <RevealTextInner key={plainText(props.children)} {...props} />;
+}
+
+function plainText(node: ReactNode): string {
+  if (node === null || node === undefined || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(plainText).join("|");
+  if (isValidElement(node)) {
+    return plainText((node.props as { children?: ReactNode }).children);
+  }
+  return "";
+}
+
+function RevealTextInner({
   children,
   as = "p",
   className = "",
@@ -79,13 +123,20 @@ export default function RevealText({
   scrub = true,
   fromColor = "rgba(255,255,255,0.2)",
   toColor = "rgba(255,255,255,1)",
+  tone,
 }: RevealTextProps) {
   const ref = useRef<HTMLElement>(null);
   const reduceMotion = usePrefersReducedMotion();
+  const { theme } = useTheme();
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    // Theme-aware palette, resolved at run time so it follows theme switches.
+    const themed = tone ? toneColors(el, tone) : null;
+    const resolvedFrom = themed?.from ?? fromColor;
+    const resolvedTo = themed?.to ?? toColor;
 
     // Sauvegarde pour cleanup (restaure le HTML d'origine)
     const originalHTML = el.innerHTML;
@@ -113,7 +164,7 @@ export default function RevealText({
       // Mobile : pas de scrub (TBT) — affiche direct en couleur finale
       try {
         if (window.matchMedia("(pointer: coarse), (max-width: 767px)").matches) {
-          gsap.set(wordEls, { color: toColor });
+          gsap.set(wordEls, { color: resolvedTo });
           return;
         }
       } catch {
@@ -121,16 +172,16 @@ export default function RevealText({
       }
 
       if (reduceMotion) {
-        gsap.set(wordEls, { color: toColor });
+        gsap.set(wordEls, { color: resolvedTo });
         return;
       }
 
       ctx = gsap.context(() => {
         gsap.fromTo(
           wordEls,
-          { color: fromColor },
+          { color: resolvedFrom },
           {
-            color: toColor,
+            color: resolvedTo,
             stagger,
             ease: "none",
             scrollTrigger: {
@@ -170,7 +221,7 @@ export default function RevealText({
         /* ignore */
       }
     };
-  }, [reduceMotion, stagger, start, end, scrub, fromColor, toColor, children]);
+  }, [reduceMotion, stagger, start, end, scrub, fromColor, toColor, tone, theme, children]);
 
   return createElement(
     as as never,

@@ -18,7 +18,8 @@ export default function SiteBackground() {
         height: "100%",
         zIndex: 0,
         pointerEvents: "none",
-        background: "#000",
+        background: "var(--bg)",
+        transition: "background-color 250ms ease",
       }}
     />
   );

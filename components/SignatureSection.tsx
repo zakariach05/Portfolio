@@ -266,7 +266,7 @@ export default function SignatureSection() {
                 id={`sp${i + 1}`}
                 d={d}
                 fill="none"
-                stroke="rgba(255,255,255,0.85)"
+                stroke="rgb(var(--ink-rgb) / 0.85)"
                 strokeWidth={7}
               />
             ))}

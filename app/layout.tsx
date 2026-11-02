@@ -5,6 +5,7 @@ import {
   Bebas_Neue,
   JetBrains_Mono,
   Architects_Daughter,
+  Nabla,
 } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
@@ -12,6 +13,7 @@ import LenisProvider from "@/components/providers/LenisProvider";
 import IntroProvider from "@/components/providers/IntroProvider";
 import ContactStatusProvider from "@/contexts/ContactStatusContext";
 import LanguageProvider from "@/contexts/LanguageContext";
+import ThemeProvider from "@/contexts/ThemeContext";
 import CurtainMenu from "@/components/CurtainMenu";
 import SiteBackground from "@/components/SiteBackground";
 import OverlayGroup from "@/components/OverlayGroup";
@@ -61,6 +63,13 @@ const architectsDaughter = Architects_Daughter({
   preload: false,
 });
 
+const nabla = Nabla({
+  subsets: ["latin"],
+  variable: "--font-nabla",
+  display: "swap",
+  preload: false,
+});
+
 const getaiGrotesk = localFont({
   src: [
     {
@@ -74,10 +83,25 @@ const getaiGrotesk = localFont({
   preload: false,
 });
 
+/** Runs before first paint: picks the saved theme, or the OS preference. */
+const themeScript = `(function(){try{
+  var stored = localStorage.getItem('theme');
+  var theme = (stored === 'light' || stored === 'dark') ? stored
+    : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  var root = document.documentElement;
+  root.setAttribute('data-theme', theme);
+  root.classList.toggle('dark', theme === 'dark');
+  root.style.colorScheme = theme;
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (!meta) { meta = document.createElement('meta'); meta.setAttribute('name', 'theme-color'); document.head.appendChild(meta); }
+  meta.setAttribute('content', theme === 'light' ? '#faf6f5' : '#050203');
+}catch(e){}})();`;
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://zakariach05.vercel.app"),
   title: {
-    default: "Zakaria Chamekh | Développeur Web Full Stack & Sécurité des Applications Web",
+    default:
+      "Zakaria Chamekh | Développeur Web Full Stack & Sécurité des Applications Web",
     template: "%s | Zakaria Chamekh",
   },
   description:
@@ -107,7 +131,8 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: "https://zakariach05.vercel.app",
     siteName: "Zakaria Chamekh - Portfolio",
-    title: "Zakaria Chamekh | Développeur Web Full Stack & Sécurité des Applications Web",
+    title:
+      "Zakaria Chamekh | Développeur Web Full Stack & Sécurité des Applications Web",
     description:
       "Développeur Web Full Stack à Casablanca. Zakaria Chamekh : React, Laravel, WordPress, Node.js, et sécurité des applications web (OWASP, audit, hardening).",
     images: [
@@ -121,7 +146,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Zakaria Chamekh | Développeur Web Full Stack & Sécurité des Applications Web",
+    title:
+      "Zakaria Chamekh | Développeur Web Full Stack & Sécurité des Applications Web",
     description:
       "Développeur Web Full Stack à Casablanca. React, Laravel, WordPress, Node.js et sécurité des applications web (OWASP).",
     images: ["/NV-IMG/og-image.png"],
@@ -149,30 +175,27 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`dark ${inter.variable} ${outfit.variable} ${bebas.variable} ${jetbrainsMono.variable} ${architectsDaughter.variable} ${getaiGrotesk.variable}`}
+      suppressHydrationWarning
+      className={`${inter.variable} ${outfit.variable} ${bebas.variable} ${jetbrainsMono.variable} ${architectsDaughter.variable} ${getaiGrotesk.variable} ${nabla.variable}`}
     >
-      {/* html porte la classe "dark" en permanence : le design étant 100% dark,
-          on ne gère pas de toggle de thème (comme l'original, verrouillé dark). */}
-      <body className="bg-gray-50 text-slate-800 dark:bg-black dark:text-slate-100 font-sans transition-colors duration-300 w-full overflow-x-clip">
-        {/* LCP : poster hero préchargé haute priorité (WebP 720p, ~80KB) */}
-        <link
-          rel="preload"
-          as="image"
-          href="/NV-IMG/hero-poster.webp"
-          type="image/webp"
-          fetchPriority="high"
-        />
+      <head>
+        {/* No-flash theme bootstrap — must stay inline and before <body>. */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body className="bg-bg text-ink font-sans transition-colors duration-300 w-full overflow-x-clip">
         <PersonSchema />
         <ContactStatusProvider>
-          <LanguageProvider>
-            <SiteBackground />
-            <LenisProvider>
-              <CurtainMenu />
-              <NavigationDots />
-              <IntroProvider>{children}</IntroProvider>
-            </LenisProvider>
-            <OverlayGroup />
-          </LanguageProvider>
+          <ThemeProvider>
+            <LanguageProvider>
+              <SiteBackground />
+              <LenisProvider>
+                <CurtainMenu />
+                <NavigationDots />
+                <IntroProvider>{children}</IntroProvider>
+              </LenisProvider>
+              <OverlayGroup />
+            </LanguageProvider>
+          </ThemeProvider>
         </ContactStatusProvider>
         <Script id="microsoft-clarity" strategy="lazyOnload">
           {`

@@ -61,7 +61,7 @@ export default function ScrollTopButton() {
       color={color}
       ringWidth={ringWidth}
       rotation={progress * 360}
-      background="#000000"
+      background="var(--bg)"
       label={t("common.backTop")}
       className={`scroll-top-progress${visible ? " show" : ""}`}
       onClick={(e) => {

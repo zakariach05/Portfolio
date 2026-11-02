@@ -1,7 +1,12 @@
 import type { Config } from "tailwindcss";
 
-/** Strict-slate (custom dark palette) is the site's permanent theme. */
+/**
+ * The site is token-driven: every semantic colour resolves to the CSS
+ * variables declared in styles/globals.css. Switching `data-theme` on <html>
+ * therefore re-colours the whole UI without touching component code.
+ */
 const config: Config = {
+  darkMode: ["selector", '[data-theme="dark"]'],
   content: [
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -17,16 +22,29 @@ const config: Config = {
         getai: ["var(--font-getai)", "sans-serif"],
         mono: ["var(--font-jetbrains)", "monospace"],
         architects: ["var(--font-architects)", "cursive"],
+        nabla: ["'Nabla'", "var(--font-nabla)", "cursive"],
       },
       colors: {
+        // Semantic theme tokens (see styles/globals.css).
+        bg: "rgb(var(--bg-rgb) / <alpha-value>)",
+        surface: "rgb(var(--surface-rgb) / <alpha-value>)",
+        elevated: "rgb(var(--elevated-rgb) / <alpha-value>)",
+        ink: "rgb(var(--ink-rgb) / <alpha-value>)",
+        muted: "rgb(var(--muted-rgb) / <alpha-value>)",
+        line: "rgb(var(--line-rgb) / <alpha-value>)",
+        btn: {
+          DEFAULT: "rgb(var(--btn-bg-rgb) / <alpha-value>)",
+          fg: "rgb(var(--btn-fg-rgb) / <alpha-value>)",
+          hover: "rgb(var(--btn-hover-rgb) / <alpha-value>)",
+        },
         slate: {
           850: "#111111",
           900: "#000000",
         },
         accent: {
-          DEFAULT: "#e50000",
-          dim: "#b30000",
-          bright: "#dc2626",
+          DEFAULT: "rgb(var(--accent-rgb) / <alpha-value>)",
+          dim: "rgb(var(--accent-dim-rgb) / <alpha-value>)",
+          bright: "rgb(var(--accent-rgb) / <alpha-value>)",
         },
       },
       animation: {

@@ -1,8 +1,8 @@
 import dynamic from "next/dynamic";
 import Hero from "@/components/Hero";
-import CocoonServicesBlock from "@/components/seo/CocoonServicesBlock";
 // Below-the-fold : code-split pour réduire le JS initial (LCP)
 const About = dynamic(() => import("@/components/About"), { ssr: true });
+const Experience = dynamic(() => import("@/components/Experience"), { ssr: true });
 const Expertise = dynamic(() => import("@/components/Expertise"), { ssr: true });
 const Projects = dynamic(() => import("@/components/Projects"), { ssr: true });
 const SignatureSection = dynamic(() => import("@/components/SignatureSection"), {
@@ -20,8 +20,8 @@ export default function Home() {
     <main>
       <Hero />
       <About />
+      <Experience />
       <Expertise />
-      <CocoonServicesBlock />
       <Projects />
       <SignatureSection />
       <Contact />

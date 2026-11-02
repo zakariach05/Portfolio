@@ -228,7 +228,7 @@ export default function Contact() {
     <section
       ref={sectionRef}
       id="contact"
-      className="py-24 bg-white dark:bg-black transition-colors duration-300 relative overflow-clip"
+      className="py-24 bg-bg transition-colors duration-300 relative overflow-clip"
       style={{ position: "relative", zIndex: 30 }}
     >
       <TopographicLines />
@@ -277,7 +277,7 @@ export default function Contact() {
                 <div ref={stepsContainerRef}>
                   {/* Step 1 */}
                   <div className="form-step active" data-step="1">
-                    <h3 className="step-heading text-3xl md:text-5xl font-black text-white uppercase mb-8">
+                    <h3 className="step-heading text-3xl md:text-5xl font-black text-ink uppercase mb-8">
                       {t("contact.steps.0.heading")}
                     </h3>
                     <div className="input-wrapper">
@@ -297,13 +297,13 @@ export default function Contact() {
                         onClick={() => {
                           if (validateStep(1)) showStep(2);
                         }}
-                        className="btn-step-next bg-white text-black px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-red-600 hover:text-white transition-all"
+                        className="btn-step-next bg-btn text-btn-fg px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-accent-bright hover:text-white transition-all"
                       >
                         {t("contact.next")} <ChevronRightIcon className="h-4 w-4" />
                       </button>
-                      <span className="press-enter-hint text-xs text-gray-500 uppercase tracking-widest hidden md:block">
+                      <span className="press-enter-hint text-xs text-muted uppercase tracking-widest hidden md:block">
                         {t("contact.pressEnter")}{" "}
-                        <span className="border border-gray-700 px-1 rounded">
+                        <span className="border border-line px-1 rounded">
                           {t("contact.enterKey")}
                         </span>
                       </span>
@@ -312,7 +312,7 @@ export default function Contact() {
 
                   {/* Step 2 */}
                   <div className="form-step" data-step="2">
-                    <h3 className="step-heading text-3xl md:text-5xl font-black text-white uppercase mb-8">
+                    <h3 className="step-heading text-3xl md:text-5xl font-black text-ink uppercase mb-8">
                       {t("contact.steps.1.heading")}
                     </h3>
                     <div className="input-wrapper">
@@ -332,13 +332,13 @@ export default function Contact() {
                         onClick={() => {
                           if (validateStep(2)) showStep(3);
                         }}
-                        className="btn-step-next bg-white text-black px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-red-600 hover:text-white transition-all"
+                        className="btn-step-next bg-btn text-btn-fg px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-accent-bright hover:text-white transition-all"
                       >
                         {t("contact.next")} <ChevronRightIcon className="h-4 w-4" />
                       </button>
-                      <span className="press-enter-hint text-xs text-gray-500 uppercase tracking-widest hidden md:block">
+                      <span className="press-enter-hint text-xs text-muted uppercase tracking-widest hidden md:block">
                         {t("contact.pressEnter")}{" "}
-                        <span className="border border-gray-700 px-1 rounded">
+                        <span className="border border-line px-1 rounded">
                           {t("contact.enterKey")}
                         </span>
                       </span>
@@ -347,7 +347,7 @@ export default function Contact() {
 
                   {/* Step 3 */}
                   <div className="form-step" data-step="3">
-                    <h3 className="step-heading text-3xl md:text-5xl font-black text-white uppercase mb-8">
+                    <h3 className="step-heading text-3xl md:text-5xl font-black text-ink uppercase mb-8">
                       {t("contact.steps.2.heading")}
                     </h3>
                     <div className="input-wrapper">
@@ -367,13 +367,13 @@ export default function Contact() {
                         onClick={() => {
                           if (validateStep(3)) showStep(4);
                         }}
-                        className="btn-step-next bg-white text-black px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-red-600 hover:text-white transition-all"
+                        className="btn-step-next bg-btn text-btn-fg px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-accent-bright hover:text-white transition-all"
                       >
                         {t("contact.next")} <ChevronRightIcon className="h-4 w-4" />
                       </button>
-                      <span className="press-enter-hint text-xs text-gray-500 uppercase tracking-widest hidden md:block">
+                      <span className="press-enter-hint text-xs text-muted uppercase tracking-widest hidden md:block">
                         {t("contact.pressEnter")}{" "}
-                        <span className="border border-gray-700 px-1 rounded">
+                        <span className="border border-line px-1 rounded">
                           {t("contact.enterKey")}
                         </span>
                       </span>
@@ -382,7 +382,7 @@ export default function Contact() {
 
                   {/* Step 4 */}
                   <div className="form-step" data-step="4">
-                    <h3 className="step-heading text-3xl md:text-5xl font-black text-white uppercase mb-8">
+                    <h3 className="step-heading text-3xl md:text-5xl font-black text-ink uppercase mb-8">
                       {t("contact.steps.3.heading")}
                     </h3>
                     <div className="input-wrapper">
@@ -400,7 +400,7 @@ export default function Contact() {
                       <button
                         type="submit"
                         disabled={status === "loading"}
-                        className="btn-step-submit bg-white text-black px-10 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-red-600 hover:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                        className="btn-step-submit bg-btn text-btn-fg px-10 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-accent-bright hover:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                       >
                         {status === "loading" ? (
                           <>
@@ -412,9 +412,9 @@ export default function Contact() {
                           </>
                         )}
                       </button>
-                      <span className="press-enter-hint text-xs text-gray-500 uppercase tracking-widest hidden md:block">
+                      <span className="press-enter-hint text-xs text-muted uppercase tracking-widest hidden md:block">
                         {t("contact.pressEnter")}{" "}
-                        <span className="border border-gray-700 px-1 rounded">
+                        <span className="border border-line px-1 rounded">
                           {t("contact.enterKey")}
                         </span>
                       </span>
@@ -430,10 +430,10 @@ export default function Contact() {
                   className="mt-8 p-6 bg-green-500/20 border border-green-500/50 rounded-xl text-center"
                 >
                   <CheckCircleIcon className="mx-auto mb-4 block h-10 w-10 text-green-500" />
-                  <h4 className="text-xl font-bold text-white mb-2">
+                  <h4 className="text-xl font-bold text-ink mb-2">
                     {t("contact.successTitle")}
                   </h4>
-                  <p className="text-gray-400">
+                  <p className="text-muted">
                     {t("contact.successText")}
                   </p>
                 </div>
@@ -442,10 +442,10 @@ export default function Contact() {
               {status === "error" && (
                 <div className="mt-8 p-6 bg-red-600/10 border border-red-600/50 rounded-xl text-center">
                   <TriangleAlertIcon className="mx-auto mb-4 block h-10 w-10 text-red-600" />
-                  <h4 className="text-xl font-bold text-white mb-2">
+                  <h4 className="text-xl font-bold text-ink mb-2">
                     {t("contact.errorTitle")}
                   </h4>
-                  <p className="text-gray-400">
+                  <p className="text-muted">
                     {t("contact.errorText")}
                   </p>
                 </div>

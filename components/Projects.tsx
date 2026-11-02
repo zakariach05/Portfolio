@@ -16,7 +16,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="bg-black text-white relative"
+      className="bg-bg text-ink relative"
       style={{ position: "relative", zIndex: 30 }}
     >
       <div className="container mx-auto px-6 pt-24 pb-8 relative z-10">
@@ -27,7 +27,7 @@ export default function Projects() {
           className="mb-4"
         />
         {/* eslint-disable-next-line react/no-unescaped-entities */}
-        <p className="text-center text-white/50 uppercase tracking-[0.2em] text-xs mt-2">
+        <p className="text-center text-muted uppercase tracking-[0.2em] text-xs mt-2">
           {"— 04 / Works —"}
         </p>
       </div>
@@ -38,7 +38,7 @@ export default function Projects() {
       <div className="container mx-auto px-6 relative z-10 flex justify-center pb-24 pt-4">
         <Link
           href="/projets"
-          className="inline-flex items-center gap-3 bg-white text-black font-bold uppercase tracking-[0.15em] px-10 py-5 rounded-full transition-all duration-300 hover:bg-accent-bright hover:text-white"
+          className="inline-flex items-center gap-3 bg-btn text-btn-fg font-bold uppercase tracking-[0.15em] px-10 py-5 rounded-full transition-all duration-300 hover:bg-accent-bright hover:text-white"
         >
           {t("projects.viewAllWorks")} ↗
         </Link>

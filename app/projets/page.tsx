@@ -42,18 +42,18 @@ export default function ProjetsPage() {
     <main
       ref={sectionRef}
       id="projets-page"
-      className="relative min-h-screen pt-32 pb-20 bg-white dark:bg-black transition-colors duration-300 overflow-clip"
+      className="relative min-h-screen pt-32 pb-20 bg-bg transition-colors duration-300 overflow-clip"
     >
       <div className="container mx-auto px-6 relative z-10">
-        <h1 className="text-4xl md:text-6xl font-[900] tracking-tighter uppercase leading-none mb-4 text-center">
-          <RevealText as="span" fromColor="rgba(255,255,255,0.2)" toColor="#ffffff" stagger={0.05} className="text-black dark:text-white">
+        <h1 className="section-title font-nabla text-4xl md:text-6xl uppercase leading-none mb-4 text-center">
+          <RevealText as="span" tone="ink" stagger={0.05} className="text-ink">
             {t("projectsPage.titleWhite")}
           </RevealText>{" "}
-          <RevealText as="span" fromColor="rgba(248,113,113,0.25)" toColor="#ef4444" stagger={0.05} className="text-red-500">
+          <RevealText as="span" tone="accent" stagger={0.05} className="text-accent">
             {t("projectsPage.titleRed")}
           </RevealText>
         </h1>
-        <p className="text-center text-gray-500 dark:text-gray-400 max-w-xl mx-auto mb-12">
+        <p className="text-center text-muted max-w-xl mx-auto mb-12">
           {t("projectsPage.subtitle")}
         </p>
       </div>

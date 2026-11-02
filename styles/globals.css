@@ -1,6 +1,264 @@
-﻿@tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ======================================================================
+   CUSTOM FONTS
+   Google Fonts — ne pas supprimer ou renommer sans mettre à jour
+   les références font-family dans le CSS.
+   ====================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Creepster&family=Grechen+Fuemen&family=Nabla&family=Permanent+Marker&display=swap');
+
+/* ══════════════════════════════════════════════════════════════════════
+   NABLA COLOR PALETTES (COLRv1)
+   Nabla has 10 color slots (0–9) per palette in its CPAL table:
+     0: Main face (was yellow #FFD214)
+     1: Primary 3D extrusion depth (was red-orange #FF552D)
+     2: Middle side extrusion (was orange #FF9B00)
+     3: Lower side extrusion (was dark orange #FF9123)
+     4: Top isometric face (was yellow #FFD214)
+     5: Face highlight (was light yellow #FFEB6E)
+     6: Secondary face (was yellow #FFD214)
+     7: Bevel highlight (was light yellow #FFEB6E)
+     8: Corner highlight (was pale yellow #FFFABE)
+     9: Specular highlight (was white #FFFFFF)
+
+   Requirements:
+   - "en place de jaune fait blanc" -> Dark mode: all yellow slots -> WHITE
+   - "cote de light mode fait black" -> Light mode: all yellow slots -> BLACK
+   - Extrusions/sides -> portfolio's luxury red & black palette (#E11D2E, #B91C1C, #7F1D1D)
+   - Zero yellow/orange left anywhere.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── Dark Mode Palette (White face + Red 3D extrusion) ── */
+@font-palette-values --nabla-dark {
+    font-family: 'Nabla';
+    base-palette: 0;
+    override-colors:
+        0 #FFFFFF,
+        1 #E11D2E,
+        2 #B91C1C,
+        3 #7F1D1D,
+        4 #FFFFFF,
+        5 #F5F5F5,
+        6 #FFFFFF,
+        7 #F5F5F5,
+        8 #EAEAEA,
+        9 #FFFFFF;
+}
+
+@font-palette-values --nabla-dark {
+    font-family: '__Nabla_cd0480';
+    base-palette: 0;
+    override-colors:
+        0 #FFFFFF,
+        1 #E11D2E,
+        2 #B91C1C,
+        3 #7F1D1D,
+        4 #FFFFFF,
+        5 #F5F5F5,
+        6 #FFFFFF,
+        7 #F5F5F5,
+        8 #EAEAEA,
+        9 #FFFFFF;
+}
+
+/* ── Light Mode Palette (Black face + Red 3D extrusion) ── */
+@font-palette-values --nabla-light {
+    font-family: 'Nabla';
+    base-palette: 0;
+    override-colors:
+        0 #0A0A0A,
+        1 #E11D2E,
+        2 #B91C1C,
+        3 #7F1D1D,
+        4 #0A0A0A,
+        5 #222222,
+        6 #0A0A0A,
+        7 #222222,
+        8 #333333,
+        9 #444444;
+}
+
+@font-palette-values --nabla-light {
+    font-family: '__Nabla_cd0480';
+    base-palette: 0;
+    override-colors:
+        0 #0A0A0A,
+        1 #E11D2E,
+        2 #B91C1C,
+        3 #7F1D1D,
+        4 #0A0A0A,
+        5 #222222,
+        6 #0A0A0A,
+        7 #222222,
+        8 #333333,
+        9 #444444;
+}
+
+/* ── Red Accent Palette (For red words in section titles) ── */
+@font-palette-values --nabla-accent {
+    font-family: 'Nabla';
+    base-palette: 0;
+    override-colors:
+        0 #E11D2E,
+        1 #991B1B,
+        2 #7F1D1D,
+        3 #3D0A0D,
+        4 #E11D2E,
+        5 #FF4D5E,
+        6 #E11D2E,
+        7 #FF4D5E,
+        8 #FF808E,
+        9 #FFFFFF;
+}
+
+@font-palette-values --nabla-accent {
+    font-family: '__Nabla_cd0480';
+    base-palette: 0;
+    override-colors:
+        0 #E11D2E,
+        1 #991B1B,
+        2 #7F1D1D,
+        3 #3D0A0D,
+        4 #E11D2E,
+        5 #FF4D5E,
+        6 #E11D2E,
+        7 #FF4D5E,
+        8 #FF808E,
+        9 #FFFFFF;
+}
+
+/* ── Nabla Section Title — reusable class for all main section headings ── */
+/* Dark mode default: white face with red 3D depth */
+.section-title {
+    font-family: 'Nabla', var(--font-nabla), cursive !important;
+    font-optical-sizing: auto;
+    font-palette: --nabla-dark;
+    text-transform: uppercase;
+    line-height: 1;
+    letter-spacing: normal;
+}
+
+/* Light mode: black face with red 3D depth */
+:root[data-theme="light"] .section-title {
+    font-palette: --nabla-light;
+}
+
+/* Red accent words inside Nabla titles (e.g. "JE SUIS", "PARCOURS", "PROJETS", "ENSEMBLE") */
+.section-title .text-accent,
+.section-title .text-accent-bright,
+.section-title [data-tone="accent"] {
+    font-palette: --nabla-accent;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   THEME TOKENS
+   Every semantic colour is declared here. `data-theme` is set on <html>
+   before paint (see app/layout.tsx) and toggled by ThemeProvider.
+   The light palette lives in :root — edit the values below to re-skin
+   the light mode; dark overrides live in :root[data-theme="dark"].
+   ════════════════════════════════════════════════════════════════════ */
+:root {
+    color-scheme: light;
+
+    /* RGB channels (used by Tailwind: rgb(var(--x-rgb) / <alpha-value>)) */
+    --bg-rgb: 250 246 245;
+    --surface-rgb: 255 255 255;
+    --elevated-rgb: 245 236 234;
+    --ink-rgb: 26 13 15;
+    --muted-rgb: 107 90 92;
+    --line-rgb: 232 217 217;
+    --accent-rgb: 225 29 46;
+    --accent-dim-rgb: 179 22 40;
+    --btn-bg-rgb: 26 13 15;
+    --btn-fg-rgb: 250 246 245;
+    --btn-hover-rgb: 225 29 46;
+    --shadow-rgb: 26 13 15;
+
+    /* Convenience aliases */
+    --bg: rgb(var(--bg-rgb));
+    --surface: rgb(var(--surface-rgb));
+    --elevated: rgb(var(--elevated-rgb));
+    --text: rgb(var(--ink-rgb));
+    --muted: rgb(var(--muted-rgb));
+    --border: rgb(var(--line-rgb));
+    --accent: rgb(var(--accent-rgb));
+    --accent-dim: rgb(var(--accent-dim-rgb));
+    --accent-bright: rgb(var(--accent-rgb));
+    --btn-bg: rgb(var(--btn-bg-rgb));
+    --btn-fg: rgb(var(--btn-fg-rgb));
+    --btn-hover: rgb(var(--btn-hover-rgb));
+    --shadow: rgb(var(--shadow-rgb));
+    --focus-ring: rgb(var(--accent-rgb));
+
+    /* Legacy tokens kept for the existing stylesheet */
+    --bg-deep: var(--bg);
+    --bg-surface: var(--surface);
+    --bg-elevated: var(--elevated);
+    --text-primary: var(--text);
+    --text-secondary: var(--muted);
+    --error: #d11a2a;
+    --success: #0f7a4a;
+
+    /* Hero glow behind the 3D canvas */
+    --hero-glow: radial-gradient(60% 55% at 50% 42%,
+            rgba(225, 29, 46, 0.08) 0%,
+            rgba(225, 29, 46, 0.03) 42%,
+            transparent 72%);
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --bg-rgb: 5 2 3;
+    --surface-rgb: 15 7 9;
+    --elevated-rgb: 26 10 12;
+    --ink-rgb: 245 239 239;
+    --muted-rgb: 185 169 171;
+    --line-rgb: 42 21 24;
+    --accent-rgb: 225 29 46;
+    --accent-dim-rgb: 179 22 40;
+    --btn-bg-rgb: 245 239 239;
+    --btn-fg-rgb: 5 2 3;
+    --btn-hover-rgb: 225 29 46;
+    --shadow-rgb: 0 0 0;
+    --error: #ff6b6b;
+    --success: #3ddc97;
+
+    --hero-glow: radial-gradient(60% 55% at 50% 42%,
+            rgba(225, 29, 46, 0.22) 0%,
+            rgba(225, 29, 46, 0.08) 42%,
+            transparent 72%);
+}
+
+html {
+    background-color: var(--bg);
+    transition: background-color 250ms ease;
+}
+
+body {
+    transition: background-color 250ms ease, color 250ms ease;
+}
+
+/* Theme switch: the main surfaces ease bg/colour/border over 250ms.
+   Elements carrying their own transition utility keep it (higher
+   specificity wins). */
+main section,
+footer {
+    transition: background-color 250ms ease, color 250ms ease,
+        border-color 250ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    html,
+    body,
+    main section,
+    footer {
+        transition: none !important;
+    }
+}
 
 /* GLITCH HORIZONTAL EFFECT FOR LINKS */
 .glitch-link {
@@ -837,26 +1095,11 @@ body {
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: var(--bg-surface);
-    color: var(--text-primary);
+    background-color: var(--bg);
+    color: var(--text);
 }
 
-:root {
-    --bg-deep: #050505;
-    --bg-surface: #0f0f0f;
-    --bg-elevated: #1a1a1a;
-    --accent: #e50000;
-    /* Replace yellow with requested Red */
-    --accent-dim: #b30000;
-    /* Darker red */
-    --accent-bright: #dc2626;
-    /* Rouge vif (hover curseur/badge) — identique à colors.accent.bright Tailwind */
-    --text-primary: #ffffff;
-    --text-secondary: #aaaaaa;
-    /* Lighter Grey */
-    --error: #ff4444;
-    --success: #00ff88;
-}
+/* Colour tokens are declared once at the top of this file. */
 
 /* Assigned Colors */
 .role-frontend {
@@ -1726,7 +1969,8 @@ input:-webkit-autofill:active {
 }
 
 
-/* --- New Modern Pill Navbar --- */
+/* --- New Modern Pill Navbar (3-column grid) --- */
+/* Legacy #main-header kept for any remaining references */
 #main-header {
     width: 100%;
     z-index: 1000;
@@ -1735,9 +1979,52 @@ input:-webkit-autofill:active {
     pointer-events: auto;
 }
 
-#main-header>* {
+#main-header > * {
     pointer-events: auto;
     /* Re-enable clicks for the logo, navbar, and buttons */
+}
+
+/* -- 3-column grid header -- */
+.navbar-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 16px 24px;
+    width: 100%;
+    z-index: 1000;
+    background: transparent;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+}
+
+@media (min-width: 768px) {
+    .navbar-header {
+        padding: 16px 48px;
+    }
+}
+
+.navbar-header > * {
+    pointer-events: auto;
+}
+
+/* Logo -- Col 1: far left */
+.navbar-logo {
+    justify-self: start;
+    flex-shrink: 0;
+}
+
+/* Pill (links only) -- Col 2: perfectly centered */
+.navbar-pill-center {
+    justify-self: center;
+}
+
+/* Actions (lang + grid button) -- Col 3: far right */
+.navbar-actions {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 1000;
 }
 
 .navbar-pill-wrapper {
@@ -1927,57 +2214,29 @@ input:-webkit-autofill:active {
     scrollbar-width: none;
 }
 
-/* Mobile Menu Overlay Removed */
+/* Mobile: hide pill links, keep logo left + actions right */
 
-@media (max-width: 768px) {
-    #main-header {
-        padding-top: 20px;
-        padding-bottom: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
+@media (max-width: 767px) {
+    /* Switch to 2-col grid: logo | actions */
+    .navbar-header {
+        grid-template-columns: 1fr auto;
+        padding: 16px 20px;
     }
 
-    .navbar-pill-wrapper {
-        position: fixed;
-        bottom: 20px;
-        /* Positioned at the bottom */
-        left: 0;
-        right: 0;
-        width: 100%;
-        transform: none;
-        display: flex;
-        justify-content: center;
-        margin: 0;
-        z-index: 1001;
+    /* Hide the centered pill nav on mobile */
+    .navbar-pill-center {
+        display: none !important;
     }
 
-    .navbar-pill {
-        width: 100%;
+    /* Logo stays at col 1, far left */
+    .navbar-logo {
+        justify-self: start;
     }
 
-    .navbar-pill-inner {
-        width: 100%;
-        padding: 12px 15px;
-        justify-content: center;
-        /* Background removed to inherit desktop/dark mode styles correctly */
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .navbar-external-controls {
-        width: auto;
+    /* Actions (lang + grid btn) move to col 2 */
+    .navbar-actions {
+        justify-self: end;
         gap: 10px;
-    }
-
-    .navbar-external-controls a {
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-
-    /* Hide text on very small screens for buttons */
-    .navbar-external-controls a span {
-        display: none;
     }
 }
 
@@ -3073,6 +3332,83 @@ html.hoodie-sequence-done #hero-scroll-indicator {
     border-color: rgba(220, 38, 38, 0.6);
 }
 
+/* --- bouton thème clair/sombre (même gabarit rond que le bouton grille) --- */
+.theme-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--ink-rgb) / 0.14);
+    background: rgb(var(--ink-rgb) / 0.06);
+    color: var(--text);
+    cursor: pointer;
+    transition: background-color 250ms ease, border-color 250ms ease,
+        color 250ms ease, box-shadow 250ms ease;
+}
+
+.theme-toggle:hover {
+    background: rgb(var(--ink-rgb) / 0.12);
+    border-color: rgb(var(--accent-rgb) / 0.6);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.theme-toggle__icons {
+    position: relative;
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
+.theme-toggle__icon {
+    position: absolute;
+    inset: 0;
+    transform-origin: 50% 60%;
+    transition: opacity 250ms ease, transform 320ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+/* Dark: unlit outlined bulb (action = turn the lights on). */
+.theme-toggle__icon--off {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+.theme-toggle__icon--on {
+    opacity: 0;
+    transform: rotate(-15deg) scale(0.6);
+}
+
+/* Light: lit yellow bulb with a soft glow (action = switch back to dark). */
+:root[data-theme="light"] .theme-toggle__icon--off {
+    opacity: 0;
+    transform: rotate(15deg) scale(0.6);
+}
+
+:root[data-theme="light"] .theme-toggle__icon--on {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+    color: #b07a00;
+    filter: drop-shadow(0 0 6px rgba(255, 190, 0, 0.7));
+}
+
+.theme-toggle__bulb-glass {
+    fill: #ffd21f;
+    fill-opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .theme-toggle__icon {
+        transition: none;
+    }
+}
+
 /* --- curtain --- */
 .curtain {
     position: fixed;
@@ -3214,6 +3550,11 @@ html.hoodie-sequence-done #hero-scroll-indicator {
 /* ============================================================
    Vidéo + overlay du hero (full-bleed)
    ============================================================ */
+.hero-media-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
 .hero-video-bg {
     position: absolute;
     inset: 0;
@@ -3606,7 +3947,7 @@ html.hoodie-sequence-done #hero-scroll-indicator {
     inset: 0;
 }
 .juice-logo--sm {
-    width: 44px;
+    width: 60px;
 }
 .juice-logo--sm:hover {
     filter: drop-shadow(0 0 12px rgba(220, 38, 38, 0.7));
@@ -4047,9 +4388,1138 @@ html.hoodie-sequence-done #hero-scroll-indicator {
 /* Performance: defer layout for below-the-fold sections (TBT/Speed Index) — projects/signature exclus (pin ScrollTrigger) */
 #about,
 #expertise,
-#expertise-cocon,
 #contact,
 #site-footer {
     content-visibility: auto;
     contain-intrinsic-size: 800px;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   TECH STACK SECTION (replaces scrolling marquee)
+   3-column grid: left cluster | center text | right cluster
+   ═══════════════════════════════════════════════════════════════ */
+
+.ts-section {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    min-height: 620px;
+    padding: 80px 6vw;
+    background: #050505;
+    position: relative;
+    overflow: hidden;
+    gap: 40px;
+}
+
+/* ── Clusters ── */
+/* Le cluster est un rail de 5 slots ; les tuiles sont positionnées en
+   absolu puis animées par transforms. */
+.ts-cluster {
+    position: relative;
+    width: 100px;
+    height: 428px; /* 4 × 82px + 100px de zone logo */
+    justify-self: start;
+    --ts-dir: 1;
+    transform: translate3d(var(--ts-px, 0px), var(--ts-py, 0px), 0);
+    will-change: transform;
+}
+.ts-cluster--right {
+    justify-self: end;
+    --ts-dir: -1;
+}
+
+/* ── Rail mobile/desktop ── */
+.ts-tile-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: var(--ts-z, 1);
+    transform: translate3d(
+        calc(var(--ts-dx, 0px) * var(--ts-dir, 1)),
+        var(--ts-dy, 0px),
+        0
+    ) scale(var(--ts-scale, 1));
+    opacity: var(--ts-opacity, 1);
+    transition:
+        transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
+    pointer-events: none;
+}
+
+/* Positions et échelle de chaque slot (desktop). */
+.ts-slot--1 {
+    --ts-n: -1;
+    --ts-dx: 0px;
+    --ts-dy: -82px;
+    --ts-opacity: 0;
+    --ts-scale: 0.85;
+    --ts-z: 0;
+}
+.ts-slot-0 {
+    --ts-n: 0;
+    --ts-dx: 0px;
+    --ts-dy: 0px;
+    --ts-opacity: 1;
+    --ts-scale: 1;
+    --ts-z: 1;
+}
+.ts-slot-1 {
+    --ts-n: 1;
+    --ts-dx: -40px;
+    --ts-dy: 82px;
+    --ts-opacity: 1;
+    --ts-scale: 1;
+    --ts-z: 2;
+}
+.ts-slot-2 {
+    --ts-n: 2;
+    --ts-dx: 10px;
+    --ts-dy: 164px;
+    --ts-opacity: 1;
+    --ts-scale: 1;
+    --ts-z: 3;
+}
+.ts-slot-3 {
+    --ts-n: 3;
+    --ts-dx: -30px;
+    --ts-dy: 246px;
+    --ts-opacity: 1;
+    --ts-scale: 1;
+    --ts-z: 4;
+}
+.ts-slot-4 {
+    --ts-n: 4;
+    --ts-dx: 0px;
+    --ts-dy: 328px;
+    --ts-opacity: 1;
+    --ts-scale: 1;
+    --ts-z: 5;
+}
+.ts-slot-5 {
+    --ts-n: 5;
+    --ts-dx: 0px;
+    --ts-dy: 410px;
+    --ts-opacity: 0;
+    --ts-scale: 0.6;
+    --ts-z: 6;
+}
+
+/* Entrée d'une nouvelle tuile depuis l'extérieur du rail. L'animation
+   part de la position du slot -1 (ou 5 si le sens est "up") et rejoint
+   le slot cible sans second render React. */
+.ts-enter-down {
+    animation: ts-enter-down 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ts-enter-up {
+    animation: ts-enter-up 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes ts-enter-down {
+    from {
+        transform: translate3d(0, -82px, 0) scale(0.85);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes ts-enter-up {
+    from {
+        transform: translate3d(0, 410px, 0) scale(0.6);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 328px, 0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* ── Logo flottant : aucun conteneur visuel ── */
+.ts-tile {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+    pointer-events: none;
+    animation: ts-icon-float var(--ts-float-duration, 8s) ease-in-out
+        var(--ts-float-delay, 0s) infinite;
+    will-change: transform;
+}
+
+/* ── Icône seule ── */
+.ts-icon-content {
+    display: block;
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+    position: relative;
+    z-index: 1;
+}
+
+/* UML n'a pas de logo officiel : simple texte, sans cadre. */
+.ts-uml-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #c6ff00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Flottement lent, décalé et légèrement incliné pour chaque logo. */
+@keyframes ts-icon-float {
+    0%,
+    100% {
+        transform: translate3d(0, 2px, 0) rotate(var(--ts-float-rotate, 0deg));
+    }
+    50% {
+        transform: translate3d(0, -6px, 0) rotate(var(--ts-float-rotate-back, 0deg));
+    }
+}
+
+/* ── Center text ── */
+.ts-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    max-width: 420px;
+    padding: 0 20px;
+}
+
+.ts-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: #ff6b76;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.ts-heading {
+    font-family: 'Nabla', var(--font-nabla), cursive !important;
+    font-optical-sizing: auto;
+    font-palette: --nabla-dark;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 400;
+    line-height: 1.1;
+    margin: 0;
+    letter-spacing: normal;
+    text-transform: uppercase;
+}
+
+:root[data-theme="light"] .ts-heading {
+    font-palette: --nabla-light;
+}
+
+.ts-heading--muted {
+    color: #6b7280;
+    display: block;
+}
+
+.ts-heading--white {
+    color: #ffffff;
+    display: block;
+}
+
+.ts-para {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #9ca3af;
+    margin: 0;
+    max-width: 360px;
+}
+
+.ts-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--ink-rgb) / 0.15);
+    background-color: rgb(var(--ink-rgb) / 0.05);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.25s ease, border-color 0.25s ease,
+        color 0.25s ease;
+    cursor: pointer;
+}
+.ts-btn:hover {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+}
+
+/* ── Responsive: ≤ 900px — single column, horizontal tile rows ── */
+@media (max-width: 900px) {
+    .ts-section {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        min-height: unset;
+        padding: 60px 24px;
+        gap: 48px;
+    }
+
+    .ts-cluster {
+        /* Une seule rangée horizontale : 5 slots, comme le rail vertical. */
+        width: 100%;
+        height: var(--ts-mobile-tile);
+        justify-self: stretch;
+        transform: none;
+        --ts-mobile-tile: clamp(44px, calc((100vw - 96px) / 5), 72px);
+        --ts-mobile-step: calc(var(--ts-mobile-tile) + 8px);
+    }
+    .ts-cluster--right {
+        justify-self: stretch;
+    }
+
+    /* Le rail devient horizontal : le slot 0 est à gauche, le 4 à droite. */
+    .ts-tile-item {
+        left: 50%;
+        transform: translate3d(
+            calc(-50% + (var(--ts-n, 0) - 2) * var(--ts-mobile-step)),
+            0,
+            0
+        ) scale(var(--ts-scale, 1));
+    }
+
+    /* L'entrée est aussi horizontale : la tuile vient de l'extérieur du rail. */
+    .ts-enter-down {
+        animation-name: ts-enter-down-m;
+    }
+    .ts-enter-up {
+        animation-name: ts-enter-up-m;
+    }
+
+    .ts-tile {
+        width: var(--ts-mobile-tile);
+        height: var(--ts-mobile-tile);
+        border-radius: 0;
+    }
+
+    .ts-icon-content,
+    .ts-uml-text {
+        width: 72%;
+        height: 72%;
+    }
+    .ts-uml-text {
+        font-size: 11px;
+    }
+
+    .ts-center {
+        order: 2;
+        padding: 0;
+    }
+
+    .ts-cluster:first-child {
+        order: 1;
+    }
+
+    .ts-cluster:last-child {
+        order: 3;
+    }
+}
+
+@keyframes ts-enter-down-m {
+    from {
+        transform: translate3d(
+            calc(-50% + (var(--ts-n, 0) - 3) * var(--ts-mobile-step)),
+            0,
+            0
+        ) scale(0.85);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(
+            calc(-50% + (var(--ts-n, 0) - 2) * var(--ts-mobile-step)),
+            0,
+            0
+        ) scale(var(--ts-scale, 1));
+        opacity: var(--ts-opacity, 1);
+    }
+}
+
+@keyframes ts-enter-up-m {
+    from {
+        transform: translate3d(
+            calc(-50% + (var(--ts-n, 0) - 1) * var(--ts-mobile-step)),
+            0,
+            0
+        ) scale(0.85);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(
+            calc(-50% + (var(--ts-n, 0) - 2) * var(--ts-mobile-step)),
+            0,
+            0
+        ) scale(var(--ts-scale, 1));
+        opacity: var(--ts-opacity, 1);
+    }
+}
+
+/* Respect prefers-reduced-motion: aucun mouvement automatique. */
+@media (prefers-reduced-motion: reduce) {
+    .ts-tile-item,
+    .ts-tile {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    .ts-cluster {
+        transform: none;
+    }
+}
+
+/* ============================================================
+   EXPERTISE TUNNEL — WebGL « tunnel fold slider »
+   8 cartes PNG sur une ellipse, caméra à l'intérieur.
+   ============================================================ */
+
+.xt-stage {
+    position: relative;
+    width: 100%;
+    height: min(86vh, 880px);
+    min-height: 560px;
+    border-radius: 30px;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: grab;
+    touch-action: pan-y;
+    outline: none;
+    background:
+        radial-gradient(56% 48% at 50% 50%, rgba(225, 6, 0, 0.1), transparent 72%),
+        #050505;
+}
+
+.xt-stage:active {
+    cursor: grabbing;
+}
+
+.xt-stage:focus-visible {
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.7);
+}
+
+.xt-stage[data-theme="light"] {
+    background: #ebebeb;
+}
+
+.xt-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Halo rouge derrière le centre (thème sombre uniquement) */
+.xt-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+        50% 44% at 50% 50%,
+        rgba(239, 68, 68, 0.09),
+        transparent 70%
+    );
+}
+
+.xt-stage[data-theme="light"] .xt-glow {
+    background: none;
+}
+
+/* Profondeur sol / plafond + vignettage */
+.xt-gradient {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.55),
+            transparent 22%,
+            transparent 78%,
+            rgba(0, 0, 0, 0.6)
+        ),
+        radial-gradient(
+            120% 100% at 50% 50%,
+            transparent 55%,
+            rgba(0, 0, 0, 0.5) 100%
+        );
+}
+
+.xt-stage[data-theme="light"] .xt-gradient {
+    background: linear-gradient(
+        to bottom,
+        rgba(235, 235, 235, 0.7),
+        transparent 20%,
+        transparent 80%,
+        rgba(235, 235, 235, 0.8)
+    );
+}
+
+/* Chargement */
+.xt-loading {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+}
+
+.xt-loading span {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 2px solid rgba(255, 255, 255, 0.14);
+    border-top-color: #ef4444;
+    animation: xt-spin 0.9s linear infinite;
+}
+
+@keyframes xt-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.xt-stage[data-status="fallback"] .xt-canvas,
+.xt-stage[data-status="fallback"] .xt-glow,
+.xt-stage[data-status="fallback"] .xt-gradient,
+.xt-stage[data-status="fallback"] .xt-loading {
+    display: none;
+}
+
+/* Fallback sans WebGL : grille statique des 8 cartes */
+.xt-fallback {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+    align-content: start;
+    height: 100%;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.xt-fallback-card {
+    position: relative;
+    margin: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #0d0d0d;
+}
+
+.xt-fallback-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.xt-fallback-card figcaption {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
+}
+
+.xt-fallback-card figcaption span {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    color: rgba(255, 255, 255, 0.68);
+}
+
+.xt-stage[data-theme="light"] .xt-fallback-card {
+    background: #f5f3ee;
+}
+
+.xt-stage[data-theme="light"] .xt-fallback-card figcaption {
+    color: #111;
+    text-shadow: 0 1px 10px rgba(255, 255, 255, 0.85);
+}
+
+.xt-stage[data-theme="light"] .xt-fallback-card figcaption span {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+/* Squelette pendant le chargement du chunk client */
+.xt-shell-skeleton {
+    width: 100%;
+    height: min(86vh, 880px);
+    min-height: 560px;
+    border-radius: 30px;
+    background:
+        radial-gradient(
+            56% 48% at 50% 50%,
+            rgba(225, 6, 0, 0.08),
+            transparent 72%
+        ),
+        #050505;
+}
+
+@media (max-width: 767px) {
+    .xt-stage,
+    .xt-shell-skeleton {
+        height: min(74vh, 640px);
+        min-height: 440px;
+        border-radius: 20px;
+    }
+
+    .xt-fallback {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+        padding: 12px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .xt-loading span {
+        animation: none;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FOOTER — mot géant tronqué + cubes 3D
+   ═══════════════════════════════════════════════════════════════ */
+
+.fc-stage {
+    position: relative;
+    width: calc(100% + 3rem);
+    height: clamp(230px, 30vw, 400px);
+    overflow: hidden;
+    isolation: isolate;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.fc-word-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    pointer-events: none;
+    /* Le mot se dimensionne sur la largeur du calque (pleine largeur). */
+    container-type: inline-size;
+}
+
+.fc-word {
+    display: block;
+    width: 100%;
+    margin: 0;
+    font-family: var(--font-outfit), system-ui, sans-serif;
+    /* Taille max : le mot remplit exactement la largeur du stage. */
+    font-size: 24.4vw;
+    font-size: 24.6cqw;
+    font-weight: 900;
+    line-height: 0.72;
+    letter-spacing: -0.04em;
+    text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transform: translateY(36%);
+    background: linear-gradient(180deg, #131313 0%, #1c1c1e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    /* Liseré rouge très discret sur le haut des lettres. */
+    filter: drop-shadow(0 -1px 0 rgba(225, 6, 0, 0.15))
+        drop-shadow(0 -14px 26px rgba(225, 6, 0, 0.08));
+    /* Seule zone cliquable : la partie visible du mot. */
+    pointer-events: auto;
+    cursor: pointer;
+    transition: filter 0.3s ease;
+}
+
+.fc-word:hover {
+    filter: drop-shadow(0 -1px 0 rgba(225, 6, 0, 0.5))
+        drop-shadow(0 -16px 30px rgba(225, 6, 0, 0.24));
+}
+
+.fc-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    cursor: default;
+    /* Le canvas et les calques laissent passer les clics vers le mot. */
+    pointer-events: none;
+}
+
+.fc-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.fc-layer[data-status="fallback"] .fc-canvas {
+    display: none;
+}
+
+/* Rangée statique sans WebGL */
+.fc-fallback {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 3;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    gap: clamp(8px, 1.8vw, 18px);
+    padding: 0 4vw 12px;
+    pointer-events: none;
+}
+
+.fc-layer[data-status="fallback"] .fc-fallback {
+    display: flex;
+}
+
+.fc-tile {
+    width: 72px;
+    height: 72px;
+    border-radius: 22px;
+    background-color: #18181a;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 76% 76%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+}
+
+/* Indication « clique ici » */
+.fc-hint {
+    position: absolute;
+    top: 34%;
+    left: 50%;
+    z-index: 4;
+    margin: 0;
+    padding: 6px 10px;
+    transform: translateX(-50%);
+    font-family: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    transition: opacity 0.45s ease;
+}
+
+.fc-layer[data-status="ready"] .fc-hint,
+.fc-layer[data-status="fallback"] .fc-hint {
+    animation: fc-pulse 2.4s ease-in-out infinite;
+}
+
+/* Le premier clic masque définitivement l'indication, en fondu. */
+.fc-layer[data-started="true"] .fc-hint {
+    animation: fc-hint-out 0.45s ease forwards;
+}
+
+@keyframes fc-hint-out {
+    from {
+        opacity: 0.7;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fc-pulse {
+    0%,
+    100% {
+        opacity: 0.34;
+    }
+    50% {
+        opacity: 0.82;
+    }
+}
+
+/* Bouton accessible, visible seulement au focus clavier */
+.fc-burst {
+    position: absolute;
+    left: 50%;
+    bottom: 14px;
+    z-index: 6;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(225, 6, 0, 0.6);
+    background: rgba(5, 5, 5, 0.92);
+    color: #ffffff;
+    font-family: var(--font-jetbrains), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.fc-burst:focus,
+.fc-burst:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+    outline: 2px solid #e10600;
+    outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+    .fc-stage {
+        height: min(42vh, 300px);
+        min-height: 210px;
+    }
+
+    .fc-word {
+        line-height: 0.74;
+    }
+
+    .fc-hint {
+        top: 26%;
+        font-size: 9px;
+        letter-spacing: 0.28em;
+    }
+
+    .fc-tile {
+        width: min(52px, 13.5vw);
+        height: min(52px, 13.5vw);
+        border-radius: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fc-hint {
+        opacity: 0.55;
+        animation: none;
+        transition: none;
+    }
+
+    .fc-layer[data-started="true"] .fc-hint {
+        animation: none;
+        opacity: 0;
+    }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   LIGHT MODE REFINEMENTS
+   The dark theme is the reference design. These rules only run when
+   <html data-theme="light">. Edit palette values in the token block at
+   the top of this file — this section only maps legacy components.
+   ════════════════════════════════════════════════════════════════════ */
+
+:root[data-theme="light"] ::-webkit-scrollbar-track {
+    background: var(--surface);
+}
+
+:root[data-theme="light"] ::-webkit-scrollbar-thumb {
+    background: rgb(var(--line-rgb));
+}
+
+:root[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--muted-rgb));
+}
+
+:root[data-theme="light"] ::selection {
+    background: rgb(var(--accent-rgb) / 0.2);
+    color: var(--text);
+}
+
+:root[data-theme="light"] input:-webkit-autofill,
+:root[data-theme="light"] input:-webkit-autofill:hover,
+:root[data-theme="light"] input:-webkit-autofill:focus,
+:root[data-theme="light"] input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--surface) inset !important;
+    -webkit-text-fill-color: var(--text) !important;
+}
+
+/* NOTE: no blanket light-mode overrides for raw Tailwind utilities such as
+   .text-white / .bg-white / .text-gray-* here. Every .text-white / .bg-white
+   usage in the site sits on a red (accent) background where white must stay
+   white in both themes, and the remaining raw utilities are unused. Components
+   use the semantic tokens (text-ink, bg-bg, text-muted…) instead. */
+
+/* Small red text (#e11d2e = 4.43:1 on the light bg) misses AA at body size,
+   so small accent text and the SEO links' hard-coded reds use --accent-dim
+   (5.9:1). Large accent text keeps the brand #e11d2e (passes 3:1 as large). */
+:root[data-theme="light"] a.text-accent,
+:root[data-theme="light"] .text-xs.text-accent,
+:root[data-theme="light"] .text-sm.text-accent,
+:root[data-theme="light"] .text-red-500,
+:root[data-theme="light"] .hover\:text-accent:hover,
+:root[data-theme="light"] .group:hover .group-hover\:text-accent {
+    color: var(--accent-dim);
+}
+
+/* These links lighten on hover in dark; on light they must darken instead. */
+:root[data-theme="light"] a.text-red-500:hover,
+:root[data-theme="light"] .hover\:text-red-400:hover {
+    color: var(--accent-dim);
+    text-decoration-color: rgb(var(--accent-dim-rgb) / 0.6);
+}
+
+/* Navbar / curtain chrome */
+:root[data-theme="light"] .menu-toggle-btn {
+    background: rgb(var(--ink-rgb) / 0.06);
+    border-color: rgb(var(--ink-rgb) / 0.14);
+    color: var(--text);
+}
+
+:root[data-theme="light"] .menu-toggle-btn:hover {
+    background: rgb(var(--ink-rgb) / 0.12);
+}
+
+:root[data-theme="light"] .lang-switcher {
+    border-color: var(--border);
+    background: rgb(var(--ink-rgb) / 0.04);
+}
+
+:root[data-theme="light"] .lang-sw-btn {
+    /* 0.58 → 5.07:1 on the switch track (AA needs 4.5:1 at 11px). */
+    color: rgb(var(--ink-rgb) / 0.62);
+}
+
+:root[data-theme="light"] .lang-sw-btn:hover {
+    color: var(--text);
+}
+
+:root[data-theme="light"] .lang-sw-btn.active {
+    color: #fff;
+}
+
+/* Curtain FR/EN buttons sit on a transparent background, so the accent is
+   used for the active state and both states stay fully opaque (11px text). */
+:root[data-theme="light"] .lang-btn {
+    color: var(--muted);
+    opacity: 1;
+}
+
+:root[data-theme="light"] .lang-btn.active {
+    color: var(--accent-dim);
+}
+
+:root[data-theme="light"] .nav-slide .sliding-link-bottom,
+:root[data-theme="light"] .curtain-link {
+    color: var(--text);
+}
+
+:root[data-theme="light"] .curtain {
+    background:
+        radial-gradient(1200px 600px at 85% -10%, rgba(225, 29, 46, 0.08), transparent 60%),
+        linear-gradient(to bottom, #ffffff 0%, var(--bg) 55%);
+}
+
+:root[data-theme="light"] .curtain-link .sliding-link-bottom {
+    -webkit-text-stroke-color: var(--accent);
+}
+
+:root[data-theme="light"] .ticker-track {
+    color: rgb(var(--ink-rgb) / 0.06);
+}
+
+/* Services accordion cards */
+:root[data-theme="light"] .service-card-inner {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: 0 20px 40px rgb(var(--shadow-rgb) / 0.08);
+}
+
+:root[data-theme="light"] .service-card-title {
+    color: var(--text);
+}
+
+:root[data-theme="light"] .service-card-text {
+    color: var(--muted);
+}
+
+:root[data-theme="light"] .service-card-tags span {
+    background: rgb(var(--ink-rgb) / 0.05);
+    border-color: rgb(var(--ink-rgb) / 0.12);
+    color: rgb(var(--ink-rgb) / 0.72);
+}
+
+:root[data-theme="light"] .service-card-number {
+    color: rgb(var(--ink-rgb) / 0.35);
+}
+
+/* Signature section */
+:root[data-theme="light"] #signature-section {
+    background: var(--bg);
+}
+
+:root[data-theme="light"] #sig-svg path {
+    stroke: rgb(var(--ink-rgb) / 0.85) !important;
+    filter: drop-shadow(0 0 8px rgb(var(--ink-rgb) / 0.16));
+}
+
+/* Works side stickers (over the page background) */
+:root[data-theme="light"] .works-side-label {
+    color: rgb(var(--ink-rgb) / 0.5);
+}
+
+:root[data-theme="light"] .works-side-value {
+    color: var(--text);
+}
+
+/* Tech stack */
+:root[data-theme="light"] .ts-section {
+    background: var(--bg);
+}
+
+:root[data-theme="light"] .ts-heading--white {
+    color: var(--text);
+}
+
+:root[data-theme="light"] .ts-heading--muted,
+:root[data-theme="light"] .ts-para {
+    color: var(--muted);
+}
+
+:root[data-theme="light"] .ts-uml-text {
+    color: #4f7a00;
+}
+
+:root[data-theme="light"] .ts-label {
+    color: var(--accent-dim);
+}
+
+/* White logos flip to black on light tiles; black logos stay black. */
+:root[data-theme="light"] .ts-icon-content[data-invert-light="true"] {
+    filter: invert(1);
+}
+
+:root[data-theme="dark"] .ts-icon-content[data-invert-dark="true"] {
+    filter: invert(1);
+}
+
+/* Contact form */
+:root[data-theme="light"] .progress-bar-bg {
+    background: rgb(var(--ink-rgb) / 0.1);
+}
+
+:root[data-theme="light"] .step-input-large {
+    color: var(--text);
+    border-color: rgb(var(--ink-rgb) / 0.22);
+    border-bottom-color: var(--accent);
+}
+
+:root[data-theme="light"] .step-input-large::placeholder {
+    color: rgb(var(--ink-rgb) / 0.35);
+}
+
+:root[data-theme="light"] .step-input-large:focus {
+    background: rgb(var(--ink-rgb) / 0.03);
+    border-color: rgb(var(--ink-rgb) / 0.45);
+    border-bottom-color: var(--accent);
+}
+
+:root[data-theme="light"] .press-enter-hint {
+    color: var(--muted);
+}
+
+:root[data-theme="light"] .press-enter-hint span {
+    border-color: var(--border);
+    color: var(--text);
+}
+
+/* Small red labels need the darker accent to pass AA on the light bg. */
+:root[data-theme="light"] .step-label {
+    color: var(--accent-dim);
+}
+
+/* Footer cubes hint (the word/cubes stay dark for contrast) */
+:root[data-theme="light"] .fc-hint {
+    color: rgb(var(--ink-rgb) / 0.6);
+}
+
+/* Footer copyright (11px) — `text-ink/40` is only 2.6:1 on the light page. */
+:root[data-theme="light"] #site-footer p.mt-20 {
+    color: var(--muted);
+}
+
+/* Keep media lightboxes dark — their content is image-led. */
+:root[data-theme="light"] .project-lightbox {
+    background: rgba(8, 8, 9, 0.94);
+}
+
+:root[data-theme="light"] .splash-screen {
+    background: var(--bg);
+}
+
+/* Manifesto (About) — outlined back line + filled front line */
+:root[data-theme="light"] .manifesto-line .front {
+    color: var(--text);
+    text-shadow: 0 10px 30px rgb(var(--shadow-rgb) / 0.12);
+}
+
+:root[data-theme="light"] .manifesto-line .back {
+    -webkit-text-stroke-color: rgb(var(--ink-rgb) / 0.16);
+}
+
+/* Legacy outline marquee */
+:root[data-theme="light"] .marquee-1 {
+    -webkit-text-stroke-color: rgb(var(--ink-rgb) / 0.28);
+}
+
+/* Giant footer word — solid black on a light page.
+   Use background-image (longhand): the `background` shorthand resets
+   `background-clip`, which would paint a solid block over the word. */
+:root[data-theme="light"] .fc-word {
+    background-image: linear-gradient(180deg, #08080a 0%, #1c1c1e 100%);
+}
+
+/* Footer cube fallback tiles */
+:root[data-theme="light"] .fc-tile {
+    background-color: #f3e9e7;
+    border-color: rgb(var(--ink-rgb) / 0.12);
+    box-shadow: 0 12px 30px rgb(var(--shadow-rgb) / 0.14);
+}
+
+

@@ -59,12 +59,12 @@ export default function NavigationDots() {
     const updateActiveDot = (index: number) => {
       dots.forEach((dot, i) => {
         if (i === index) {
-          dot.style.background = "#DC2626";
+          dot.style.background = "rgb(var(--accent-rgb))";
           dot.style.width = "10px";
           dot.style.height = "10px";
-          dot.style.boxShadow = "0 0 8px rgba(220,38,38,0.6)";
+          dot.style.boxShadow = "0 0 8px rgb(var(--accent-rgb) / 0.6)";
         } else {
-          dot.style.background = "rgba(255,255,255,0.3)";
+          dot.style.background = "rgb(var(--ink-rgb) / 0.3)";
           dot.style.width = "8px";
           dot.style.height = "8px";
           dot.style.boxShadow = "none";
@@ -82,7 +82,7 @@ export default function NavigationDots() {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.3);
+        background: rgb(var(--ink-rgb) / 0.3);
         border: none;
         cursor: pointer;
         transition: all 0.3s ease;

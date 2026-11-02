@@ -2,15 +2,17 @@
   "common": {
     "backTop": "Retour en haut",
     "switchToFr": "Passer au français",
-    "switchToEn": "Switch to English"
+    "switchToEn": "Switch to English",
+    "switchToLight": "Activer le thème clair",
+    "switchToDark": "Activer le thème sombre"
   },
   "cursor": {
     "view": "VOIR"
   },
   "nav": {
     "work": "PROJETS",
-    "services": "SERVICES",
     "about": "À PROPOS",
+    "experience": "EXPÉRIENCE",
     "contact": "CONTACT",
     "mainNav": "Navigation principale",
     "openMenu": "Ouvrir le menu",
@@ -20,7 +22,6 @@
   },
   "curtain": {
     "work": "Projets",
-    "services": "Services",
     "about": "À propos",
     "contact": "Contact",
     "name": "ZAKARIA CHAMEKH",
@@ -34,6 +35,10 @@
     "introLabel": "Hero Introduction",
     "nameLabel": "Zakaria Chamekh",
     "role": "Développeur Web Full Stack & Sécurité des Applications Web",
+    "roleShort": "Développeur web full stack",
+    "ctaProjects": "Voir les projets",
+    "ctaContact": "Me contacter",
+    "canvasLabel": "Le nom Zakaria Chamekh en 3D, incliné en perspective",
     "scrollLabel": "Défiler pour explorer",
     "badgeText": "DÉFILEZ POUR EXPLORER • DÉFILEZ POUR EXPLORER •"
   },
@@ -41,6 +46,10 @@
     "titleWhite": "Qui je",
     "titleRed": "Suis",
     "bgAlt": "Zakaria About Background",
+    "profileLabel": "Profil",
+    "intro1": "Je suis Zakaria Chamekh, développeur Full Stack basé à Casablanca, actuellement en Master en Intelligence Artificielle à l'ENSAM Casablanca.",
+    "intro2": "Je construis des applications web sécurisées et évolutives, en combinant architecture backend, sécurité applicative et interfaces modernes.",
+    "sceneLabel": "Portrait de Zakaria Chamekh",
     "tagline1": "Plus qu'un développeur,",
     "tagline2": "un architecte digital.",
     "para1a": "Basé à",
@@ -67,44 +76,90 @@
   "expertise": {
     "titleWhite": "Domaines",
     "titleRed": "d'Expertise",
+    "region": "Domaines d'expertise",
     "cards": [
+      { "title": "Front-End", "subtitle": "Interfaces fluides et immersives" },
+      { "title": "Back-End", "subtitle": "Logiciels robustes et APIs performantes" },
+      { "title": "UI/UX Design", "subtitle": "Design moderne et identité visuelle forte" },
+      { "title": "QA & Tests", "subtitle": "Tests rigoureux et automatisés" },
+      { "title": "Cloud & DevOps", "subtitle": "Infrastructure scalable et CI/CD" },
+      { "title": "Sécurité & OWASP", "subtitle": "Audit de vulnérabilités et bonnes pratiques" },
+      { "title": "SEO & Performance", "subtitle": "Visibilité et applications rapides" }
+    ]
+  },
+  "experience": {
+    "titleWhite": "Mon",
+    "titleRed": "Parcours",
+    "region": "Expérience professionnelle",
+    "projectLabel": "Projet",
+    "expand": "Découvrir les détails",
+    "collapse": "Réduire",
+    "labels": {
+      "problem": "Contexte & problème",
+      "solution": "Solution",
+      "contribution": "Ma contribution",
+      "implementation": "Implémentation technique",
+      "impact": "Résultats"
+    },
+    "items": [
       {
-        "role": "role-frontend",
-        "title": "Front-End Developer",
-        "text": "Interfaces fluides et immersives. Focus sur l'UX et la performance.",
-        "tags": ["REACT", "THREE.JS", "GSAP"]
+        "number": "01",
+        "company": "3LM Solutions — RingOver",
+        "role": "Développeur Web Full Stack — Stage",
+        "location": "Ariana, Tunisie — À distance",
+        "period": "Juillet 2026 – Septembre 2026",
+        "project": "Plateforme CRM & Téléphonie Cloud",
+        "problem": "Les contacts, les opportunités et les appels étaient dispersés entre plusieurs outils.",
+        "solution": "Une plateforme CRM unifiée avec téléphonie cloud.",
+        "contribution": [
+          "Conception et développement complets de l'application, du frontend au backend.",
+          "Mise en place d'une authentification JWT avec les rôles Admin, Manager et Agent.",
+          "Intégration de Twilio pour les appels et les SMS.",
+          "Développement d'un tableau de bord en temps réel.",
+          "Écriture de 106 tests automatisés avec Jest et Supertest."
+        ],
+        "implementation": [
+          "JWT — Admin / Manager / Agent",
+          "Twilio — appels & SMS",
+          "Tableau de bord temps réel",
+          "Jest + Supertest — 106 tests"
+        ],
+        "impact": "Centralisation du flux commercial dans une seule plateforme, avec un suivi d'équipe en temps réel et une base de tests solide."
       },
       {
-        "role": "role-backend",
-        "title": "Back-End Engineer",
-        "text": "Logicielle robuste et APIs performantes. Sécurité & Scalabilité.",
-        "tags": ["LARAVEL", "PHP", "MYSQL"]
-      },
-      {
-        "role": "role-design",
-        "title": "UI/UX Designer",
-        "text": "Design moderne et identité visuelle forte. Maîtrise Figma.",
-        "tags": ["FIGMA", "PS", "UX DESIGN"]
-      },
-      {
-        "role": "role-testing",
-        "title": "QA & Testing",
-        "text": "Garantie de qualité totale via des tests rigoureux et automatisés.",
-        "tags": ["POSTMAN", "UNIT TEST", "JEST"]
-      },
-      {
-        "role": "role-cloud",
-        "title": "Cloud & DevOps",
-        "text": "Infrastructure scalable et CI/CD. Expertise Cloud Solutions.",
-        "tags": ["AWS", "DOCKER", "CI/CD"]
-      },
-      {
-        "role": "role-security",
-        "title": "SÉCURITÉ & OWASP",
-        "text": "Audit de vulnérabilités et bonnes pratiques OWASP Top 10. Code sécurisé par conception.",
-        "tags": ["OWASP", "PENTEST", "JWT"]
+        "number": "02",
+        "company": "M2E Automation",
+        "role": "Développeur Web Full Stack — Stage",
+        "location": "Casablanca — À distance",
+        "period": "Mai 2026 – Juillet 2026",
+        "project": "Marketplace Multi-Vendeurs",
+        "problem": "Le besoin d'une marketplace multi-vendeurs sécurisée et évolutive.",
+        "solution": "Une architecture headless basée sur React et Laravel 12.",
+        "contribution": [
+          "Conception des diagrammes UML et de la structure de la base de données MySQL.",
+          "Création d'une base de données de plus de 20 tables.",
+          "Développement d'API REST sécurisées.",
+          "Mise en place de Laravel Sanctum, de l'authentification OTP et de Google OAuth.",
+          "Intégration du cache Redis.",
+          "Configuration du déploiement avec Docker Compose."
+        ],
+        "implementation": [
+          "UML + MySQL — 20+ tables",
+          "API REST sécurisées",
+          "Sanctum + OTP + Google OAuth",
+          "Cache Redis",
+          "Docker Compose"
+        ],
+        "impact": "Architecture frontend/backend indépendante avec authentification sécurisée, cache et déploiement reproductible."
       }
     ]
+  },
+  "stack": {
+    "label": "Stack Technique",
+    "line1": "Développement",
+    "line2": "Web Moderne",
+    "para": "Je conçois des applications web responsives, performantes et accessibles avec les standards modernes.",
+    "btn": "Voir les projets"
   },
   "projects": {
     "titleWhite": "Mes",
@@ -169,6 +224,8 @@
     "titleWhite": "Toujours en train de",
     "titleRed": "livrer le code",
     "cta": "Télécharger le CV",
+    "cubesHint": "CLIQUE SUR MON NOM",
+    "cubesButton": "Lancer les logos",
     "links": [
       { "label": "Accueil", "href": "#home" },
       { "label": "Réalisations", "href": "#projects" },
@@ -176,45 +233,5 @@
       { "label": "Contact", "href": "#contact" }
     ],
     "copyright": "© 2026 Zakaria Chamekh. Tous droits réservés."
-  },
-  "servicesPage": {
-    "heroTitleWhite": "Mes",
-    "heroTitleRed": "Services",
-    "heroSub": "Des solutions techniques de pointe pour donner vie à vos projets et dominer l'écosystème web digital.",
-    "items": [
-      {
-        "title": "Développement Web Avancé",
-        "desc": "Conception d'applications web ultra-performantes, sécurisées et dynamiques en utilisant les standards modernes du web.",
-        "tags": ["REACT", "LARAVEL"]
-      },
-      {
-        "title": "Web Créatif & 3D",
-        "desc": "Intégration d'expériences 3D interactives et d'animations fluides, offrant un niveau d'interaction premium très immersif.",
-        "tags": ["THREE.JS", "GSAP"]
-      },
-      {
-        "title": "Boutiques E-commerce",
-        "desc": "Création de plateformes e-commerce à fort taux de conversion. Processus de paiement intégrés, gestion de stock simplifiée et dashboard admin.",
-        "tags": ["WORDPRESS", "TAILWIND"]
-      },
-      {
-        "title": "Design UI / UX Minimaliste",
-        "desc": "Design réfléchi, centré sur l'esthétique premium et l'expérience utilisateur, avec des interfaces claires (Figma pixel perfect).",
-        "tags": ["FIGMA", "PROTOTYPING"]
-      },
-      {
-        "title": "Optimisation SEO & Web Perf",
-        "desc": "Accélération drastique des temps de chargement (Lighthouse +95) et structure de code propre pour booster votre visibilité Google.",
-        "tags": ["SEO TECHNIQUE", "ANALYTICS"]
-      },
-      {
-        "title": "Maintenance & Infrastructure",
-        "desc": "Maintien de vos applicatifs en conditions optimales : correctifs sécuritaires de type backend, gestion VPS, et support à long terme.",
-        "tags": ["BACKEND PHP", "MAINTENANCE API"]
-      }
-    ],
-    "ctaTitleWhite": "Prêt à dominer",
-    "ctaTitleRed": "votre marché digital",
-    "ctaButton": "Discuter de Mon Projet"
   }
 }

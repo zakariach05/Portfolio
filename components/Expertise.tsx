@@ -1,22 +1,24 @@
 "use client";
 
 import SectionTitle from "@/components/SectionTitle";
-import ServicesGrid from "@/components/ServicesGrid";
+import ExpertiseTunnel from "@/components/ExpertiseTunnel";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 /**
- * Expertise — portage de la section #expertise de legacy/index.html.
+ * Expertise — « tunnel fold slider » WebGL.
  *
- * 5 cartes rôles (données traduites FR/EN depuis locales/*.json) affichées
- * dans ServicesGrid : icônes SVG multi-couches animées (float idle, rotation
- * des couches, hover amplifié) + entrée au scroll GSAP (chute en rotation).
+ * Les 7 cartes photo (/public/NV-IMG/Domaine-Dexpe/) défilent sur une ellipse :
+ * la caméra est à l'intérieur du tunnel. Le tunnel gère lui-même la physique,
+ * les accents dark/light, la pause hors écran et le fallback grille statique
+ * (WebGL indisponible / reduced motion).
  */
 export default function Expertise() {
   const { t, dict } = useLanguage();
+
   return (
-    <section id="expertise" className="py-24 bg-black relative overflow-clip">
+    <section id="expertise" className="py-24 bg-bg relative overflow-clip">
       <div className="container mx-auto px-6 relative z-10">
-        <div className="section-header text-center mb-20">
+        <div className="section-header text-center mb-12">
           <SectionTitle
             white={t("expertise.titleWhite")}
             red={t("expertise.titleRed")}
@@ -26,7 +28,10 @@ export default function Expertise() {
           <div className="racing-stripe mx-auto"></div>
         </div>
 
-        <ServicesGrid cards={dict.expertise.cards} />
+        <ExpertiseTunnel
+          domains={dict.expertise.cards}
+          labels={{ region: t("expertise.region") }}
+        />
       </div>
     </section>
   );

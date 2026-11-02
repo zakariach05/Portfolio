@@ -7,10 +7,19 @@
  * Design inspiré de "Cronicle" : titre + un CTA + une rangée de liens
  * soulignés. Pas de GSAP, pas de parallax, pas de glitch effect.
  * Garde le thème noir/rouge du site. Textes FR/EN via locales/*.json.
- * Visuel bas de page optimisé via next/image.
+ *
+ * Le bas de page est un mot géant tronqué par le bord, sur lequel des
+ * cubes 3D (FooterCubes) tombent et rebondissent.
  */
-import AppImage from "@/components/AppImage";
+import dynamic from "next/dynamic";
 import { useLanguage } from "@/contexts/LanguageContext";
+
+/** Mot géant du bas de page. Change-le ici uniquement. */
+const FOOTER_WORD = "ZAKARIA";
+
+const FooterCubes = dynamic(() => import("@/components/FooterCubes"), {
+  ssr: false,
+});
 
 const SOCIAL_LINKS = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/zakaria-chamekh-996812319/" },
@@ -24,25 +33,13 @@ export default function Footer() {
   return (
     <footer
       id="site-footer"
-      className="relative z-30 w-full bg-black px-6 py-24 md:py-32 text-center"
+      className="relative z-30 w-full overflow-hidden bg-bg px-6 py-24 text-center md:py-32"
     >
       {/* Titre */}
-      <h2 className="mx-auto max-w-3xl font-outfit text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-white">
+      <h2 className="section-title mx-auto max-w-3xl font-nabla text-4xl uppercase tracking-tight text-ink md:text-6xl">
         {t("footer.titleWhite")}{" "}
         <span className="text-accent-bright">{t("footer.titleRed")}</span>
       </h2>
-
-      {/* CTA */}
-      <div className="mt-8">
-        <a
-          href="/CV_Zakaria_Chamekh.pdf"
-          download
-          className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3 text-sm font-semibold uppercase tracking-wide text-black transition-colors duration-300 hover:bg-accent-bright hover:text-white"
-        >
-          {t("footer.cta")}
-          <span aria-hidden>↗</span>
-        </a>
-      </div>
 
       {/* Liens : pages + réseaux, une seule rangée simple */}
       <nav
@@ -55,7 +52,7 @@ export default function Footer() {
             href={link.href}
             target={link.href.startsWith("http") ? "_blank" : undefined}
             rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="text-sm md:text-base uppercase tracking-wide text-white/70 underline underline-offset-4 decoration-white/30 transition-colors duration-200 hover:text-accent-bright hover:decoration-accent-bright"
+            className="text-sm uppercase tracking-wide text-ink/70 underline underline-offset-4 decoration-ink/30 transition-colors duration-200 hover:text-accent-bright hover:decoration-accent-bright md:text-base"
           >
             {link.label}
           </a>
@@ -63,27 +60,19 @@ export default function Footer() {
       </nav>
 
       {/* Bas de page */}
-      <p className="mt-20 text-[11px] tracking-widest text-white/30 uppercase">
+      <p className="mt-20 text-[11px] uppercase tracking-widest text-ink/40">
         {t("footer.copyright")}
       </p>
 
-      {/* Visuel bas de footer (remplace le mot géant ZAKARIA) */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none relative mt-6 -mx-6 -mb-24 md:-mb-32 select-none overflow-hidden"
-      >
-        <AppImage
-          src="/NV-IMG/vidio/footer%20video.png"
-          alt=""
-          width={1672}
-          height={941}
-          sizes="100vw"
-          loading="lazy"
-          draggable={false}
-          className="block h-[36vh] min-h-[240px] w-full object-cover"
+      {/* Mot géant tronqué + cubes 3D */}
+      <div className="fc-stage mt-6 -mx-6 -mb-24 md:-mb-32">
+        <div className="fc-word-layer" aria-hidden="true">
+          <span className="fc-word">{FOOTER_WORD}</span>
+        </div>
+        <FooterCubes
+          hint={t("footer.cubesHint")}
+          buttonLabel={t("footer.cubesButton")}
         />
-        {/* Fondu haut pour fondre l'image dans le noir du footer */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-transparent" />
       </div>
     </footer>
   );
