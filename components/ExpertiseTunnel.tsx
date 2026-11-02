@@ -82,13 +82,13 @@ export const TUNNEL_CONFIG = {
  * Pour changer une image, modifier uniquement cette liste.
  */
 const CARD_PHOTOS = [
-  "/NV-IMG/Domaine-Dexpe/Front-end_developer_service_card_7428f50f_2K.jpg",
-  "/NV-IMG/Domaine-Dexpe/Developer_portfolio_backend_serv_80874584_2K.jpg",
-  "/NV-IMG/Domaine-Dexpe/UI_UX_design_portfolio_card_a4fb98f5_2K.jpg",
-  "/NV-IMG/Domaine-Dexpe/Developer_portfolio_service_card_a692480f_2K.jpg",
-  "/NV-IMG/Domaine-Dexpe/Cloud_and_DevOps_service_card_278649ec_2K.jpg",
-  "/NV-IMG/Domaine-Dexpe/Web_security_portfolio_card_f7811f33_2K.jpg",
-  "/NV-IMG/Domaine-Dexpe/SEO_and_performance_service_card_a10e0dda_2K.jpg",
+  "/NV-IMG/Domaine-Dexpe/Front-end_developer_service_card_7428f50f_2K.webp",
+  "/NV-IMG/Domaine-Dexpe/Developer_portfolio_backend_serv_80874584_2K.webp",
+  "/NV-IMG/Domaine-Dexpe/UI_UX_design_portfolio_card_a4fb98f5_2K.webp",
+  "/NV-IMG/Domaine-Dexpe/Developer_portfolio_service_card_a692480f_2K.webp",
+  "/NV-IMG/Domaine-Dexpe/Cloud_and_DevOps_service_card_278649ec_2K.webp",
+  "/NV-IMG/Domaine-Dexpe/Web_security_portfolio_card_f7811f33_2K.webp",
+  "/NV-IMG/Domaine-Dexpe/SEO_and_performance_service_card_a10e0dda_2K.webp",
 ] as const;
 
 const ACCENTS: Array<{ dark: string; light: string }> = [
@@ -226,6 +226,7 @@ export default function ExpertiseTunnel({ domains, labels }: Props) {
 
   const [theme, setTheme] = useState<Theme>("dark");
   const [status, setStatus] = useState<"loading" | "ready" | "fallback">("loading");
+  const [nearViewport, setNearViewport] = useState(false);
 
   const themeRef = useRef<Theme>(theme);
   const domainsRef = useRef(domains);
@@ -252,6 +253,24 @@ export default function ExpertiseTunnel({ domains, labels }: Props) {
 
   /* Scène three.js — créée une seule fois. */
   useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setNearViewport(true);
+        observer.disconnect();
+      },
+      { rootMargin: "700px 0px", threshold: 0 }
+    );
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!nearViewport) return;
+
     const stage = stageRef.current;
     const canvas = canvasRef.current;
     if (!stage || !canvas) return;
@@ -679,7 +698,7 @@ export default function ExpertiseTunnel({ domains, labels }: Props) {
     // Scène créée une seule fois : les changements de thème passent par
     // apiRef.setTheme (accents), pas par un remount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [nearViewport]);
 
   /* Changement de thème → accents des cartes. */
   useEffect(() => {

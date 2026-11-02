@@ -26,7 +26,7 @@ import { type Project } from "@/lib/projects";
 import AppImage from "@/components/AppImage";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-function WorksMedia({ project, eager }: { project: Project; eager: boolean }) {
+function WorksMedia({ project }: { project: Project }) {
   const isVideo = project.mediaType === "video" && project.videoSrc;
   if (isVideo) {
     return (
@@ -47,8 +47,8 @@ function WorksMedia({ project, eager }: { project: Project; eager: boolean }) {
       alt=""
       fill
       sizes="(min-width: 768px) 100vw, 100vw"
-      loading={eager ? "eager" : "lazy"}
-      priority={eager}
+      loading="lazy"
+      priority={false}
       aria-hidden="true"
     />
   );
@@ -225,7 +225,7 @@ export default function WorksStack({ projects, className = "" }: WorksStackProps
             </header>
 
             <div className="works-card-media">
-              <WorksMedia project={project} eager={i === 0} />
+              <WorksMedia project={project} />
             </div>
 
             {/* Overlay bas-gauche : titre + description + tags */}
