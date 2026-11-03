@@ -355,9 +355,10 @@ export default function Hero3DText() {
 
     let disposed = false;
     let raf = 0;
+    let isVisible = true;
+    let lastFrameAt = 0;
     const brushTextures: THREE.Texture[] = [];
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setClearColor(0x000000, 0);
 
     const scene = new THREE.Scene();
@@ -521,13 +522,22 @@ export default function Hero3DText() {
     const resize = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
+      const isMobile = width <= 768;
+      renderer.setPixelRatio(
+        Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 2)
+      );
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
 
       // Référence : le plan se réduit sur les viewports étroits.
       const ratio = Math.min(1, width / height / 1.5);
-      const scale = 0.55 + 0.45 * ratio + 0.1;
+      // Sur mobile portrait, le plan incliné dépasse le viewport horizontal :
+      // cette échelle conserve toute la composition visible sans modifier le
+      // canvas, les boutons ou les coordonnées d'interaction.
+      const scale = isMobile
+        ? 0.34 + 0.2 * ratio
+        : 0.55 + 0.45 * ratio + 0.1;
       plane.scale.setScalar(scale);
     };
     resize();
@@ -578,6 +588,17 @@ export default function Hero3DText() {
     canvas.addEventListener("pointerleave", onPointerLeave);
     canvas.addEventListener("click", onClick);
 
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = Boolean(entry?.isIntersecting);
+        if (isVisible && !disposed && !raf) {
+          raf = window.requestAnimationFrame(frame);
+        }
+      },
+      { threshold: 0 }
+    );
+    visibilityObserver.observe(canvas);
+
     // ── Chargement des fonts puis boucle de rendu ────────────────────────
     let fontLink = document.getElementById(
       FONT_LINK_ID
@@ -596,6 +617,15 @@ export default function Hero3DText() {
 
     const frame = (now: number) => {
       if (disposed) return;
+      if (!isVisible) {
+        raf = 0;
+        return;
+      }
+      if (window.innerWidth <= 768 && now - lastFrameAt < 1000 / 45) {
+        raf = window.requestAnimationFrame(frame);
+        return;
+      }
+      lastFrameAt = now;
       raf = window.requestAnimationFrame(frame);
 
       if (!reduceMotion) {
@@ -694,6 +724,7 @@ export default function Hero3DText() {
       disposed = true;
       window.cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      visibilityObserver.disconnect();
       canvas.removeEventListener("pointermove", onPointerMove);
       canvas.removeEventListener("pointerleave", onPointerLeave);
       canvas.removeEventListener("click", onClick);
