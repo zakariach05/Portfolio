@@ -532,11 +532,10 @@ export default function Hero3DText() {
 
       // Référence : le plan se réduit sur les viewports étroits.
       const ratio = Math.min(1, width / height / 1.5);
-      // Sur mobile portrait, le plan incliné dépasse le viewport horizontal :
-      // cette échelle conserve toute la composition visible sans modifier le
-      // canvas, les boutons ou les coordonnées d'interaction.
+      // Sur mobile, la composition est agrandie pour mieux occuper l'écran
+      // tout en conservant le cadrage et le débordement latéral d'origine.
       const scale = isMobile
-        ? 0.34 + 0.2 * ratio
+        ? 0.4 + 0.24 * ratio
         : 0.55 + 0.45 * ratio + 0.1;
       plane.scale.setScalar(scale);
     };
