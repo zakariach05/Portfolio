@@ -48,6 +48,10 @@ const LEFT_ICONS: StackIcon[] = [
   { name: "UML", src: null },
   { name: "Figma", src: "/icons/figma.svg" },
   { name: "Vercel", src: "/NV-IMG/vercel.svg", invertLight: true },
+  { name: "Tailwind CSS", src: "/icons/tailwindcss.svg" },
+  { name: "Sanity CMS", src: "/icons/sanity.svg" },
+  { name: "Supabase", src: "/icons/supabase.svg" },
+  { name: "Resend", src: "/icons/resend.svg", invertLight: true },
 ];
 
 /** Colonne de droite — ces icônes n'apparaissent que dans ce cluster. */
@@ -221,6 +225,7 @@ function BeltTile({ item }: { item: BeltItem }) {
             data-invert-dark={icon.invert ? "true" : undefined}
             data-invert-light={icon.invertLight ? "true" : undefined}
             loading="lazy"
+            decoding="async"
           />
         )}
       </div>
