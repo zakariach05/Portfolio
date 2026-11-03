@@ -66,6 +66,7 @@ export default function CurtainMenu() {
   ];
   const CURTAIN = [
     { label: t("curtain.about"), href: isHome ? "#about" : "/#about" },
+    { label: t("curtain.experience"), href: isHome ? "#experience" : "/#experience" },
     { label: t("curtain.work"), href: isHome ? "#projects" : "/#projects" },
     { label: t("curtain.contact"), href: isHome ? "#contact" : "/#contact" },
   ];
